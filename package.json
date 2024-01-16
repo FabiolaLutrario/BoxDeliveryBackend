@@ -7,8 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FabiolaLutrario/BoxDeliveryBackend.git"
+  },
   "author": "",
   "license": "ISC",
+  "homepage": "https://github.com/FabiolaLutrario/BoxDeliveryBackend#readme",
   "dependencies": {
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
