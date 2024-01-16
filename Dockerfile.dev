@@ -1,6 +1,9 @@
 FROM node:18
-RUN npm i -g nodemon
+COPY package*.json ./
+RUN npm install -g nodemon
+RUN npm install
 RUN mkdir -p /home/app
+COPY . .
 WORKDIR /home/app
 EXPOSE $PORT_LOCAL_APP
-CMD ["nodemon","sever.js"]
+CMD ["npm","start"]
