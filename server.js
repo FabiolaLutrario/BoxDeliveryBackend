@@ -18,7 +18,7 @@ app.use(cookieParser());
   })
 ); */
 /* app.use((err, req, res, next) => {
-  res.status(500).send(err);
+  res.status(500).send(err)
 }); */
 
 db.sync({ force: false }).then(() => {
