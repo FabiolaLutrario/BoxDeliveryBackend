@@ -23,7 +23,8 @@ app.use(cookieParser());
 
 db.sync({ force: false }).then(() => {
   app.listen(process.env.PORT_LOCAL_APP, () =>
-    console.log(`Servidor  en el puerto `, process.env.PORT_LOCAL_APP)
+    console.log(`Server in port `, process.env.PORT_LOCAL_APP)
   );
 });
+
 module.exports = app;
