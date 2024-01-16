@@ -1,8 +1,7 @@
 const Sequelize = require("sequelize");
 
-// const db = new Sequelize("appbox", "postgres", "appbox", {
-const db = new Sequelize("appbox", null, null, {
-  host: "localhost",
+const db = new Sequelize("appbox", "postgres", "appbox", {
+  host: "postgres-db",
   dialect: "postgres",
   logging: false,
 });
