@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/home/app
   postgres-db:
-    image: postgres
+    image: postgres:16.1
     restart: always
     ports:
       - $POSTGRES_DB_LOCAL_PORT:$POSTGRES_DB_DOCKER_PORT
@@ -23,7 +23,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:8.2
     environment:
       - PGADMIN_DEFAULT_EMAIL=$PGADMIN_EMAIL
       - PGADMIN_DEFAULT_PASSWORD=$PGADMIN_PASSWORD
