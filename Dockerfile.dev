@@ -1,9 +1,0 @@
-FROM node:18
-COPY package*.json ./
-RUN npm install -g nodemon
-RUN npm install
-RUN mkdir -p /home/app
-COPY . .
-WORKDIR /home/app
-EXPOSE $PORT_LOCAL_APP
-CMD ["npm","start"]
