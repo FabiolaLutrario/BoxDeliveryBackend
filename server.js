@@ -20,7 +20,9 @@ app.use(cookieParser());
 /* app.use((err, req, res, next) => {
   res.status(500).send(err)
 }); */
-
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
 db.sync({ force: false }).then(() => {
   app.listen(process.env.PORT_LOCAL_APP, () =>
     console.log(`Server in port `, process.env.PORT_LOCAL_APP)
