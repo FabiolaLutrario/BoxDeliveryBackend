@@ -6,8 +6,12 @@
   "scripts": {
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install",
-    "pre-push": "npm version minor"
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm version minor && git push origin develop --tags"
+    }
   },
   "repository": {
     "type": "git",
