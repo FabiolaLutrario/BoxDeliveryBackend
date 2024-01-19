@@ -20,6 +20,7 @@ app.use(cookieParser());
 /* app.use((err, req, res, next) => {
   res.status(500).send(err)
 }); */
+// agrego ruta 
 app.get('/', (req, res) => {
   res.status(200).send('OK');
 });
