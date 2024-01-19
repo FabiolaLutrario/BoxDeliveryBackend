@@ -1,6 +1,6 @@
 {
   "name": "boxdeliverybackend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Este es el repositorio Backend de la página Box Delivery.",
   "main": "server.js",
   "scripts": {
@@ -8,7 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "pre-push": "npm version minor && git push origin develop --tags"
-
   },
   "repository": {
     "type": "git",
