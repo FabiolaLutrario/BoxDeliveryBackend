@@ -23,7 +23,7 @@ app.get("/health", (req, res) => {
   res.status(200).send("The server is up and healthy 😀");
 });
 
-db.sync({ force: true })
+db.sync({ force: false })
   .then(() => {
     app.listen(process.env.PORT_LOCAL_APP, () =>
       console.log(`Server in port `, process.env.PORT_LOCAL_APP)
