@@ -1,11 +1,13 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const cors = require("cors");
-require("dotenv").config();
-const db = require("./api/models/db.js");
+import express from "express";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import cors from "cors";
+import dotenv from "dotenv";
+const db = require("./api/config/db.js");
 const app = express();
 const routes = require("./api/routes/index.routes.js");
+
+dotenv.config();
 
 app.use(express.json());
 app.use(logger("dev"));
@@ -19,7 +21,7 @@ app.use(
   })
 );
 app.use("/api", routes);
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.status(200).send("The server is up and healthy 😀");
 });
 
@@ -29,6 +31,6 @@ db.sync({ force: false })
       console.log(`Server in port `, process.env.PORT_LOCAL_APP)
     );
   })
-  .catch((err) => console.error(err));
+  .catch((err: Error) => console.error(err));
 
 module.exports = app;
