@@ -6,7 +6,7 @@ const db = new Sequelize(
   process.env.POSTGRES_DB_USER,
   process.env.POSTGRES_DB_PASSWORD,
   {
-    host: "localhost",
+    host: "postgres-db",
     port: process.env.POSTGRES_DB_DOCKER_PORT,
     dialect: "postgres",
     logging: false,
