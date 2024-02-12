@@ -1,6 +1,5 @@
 const S = require("sequelize");
 const db = require("../models/db");
-const Package = require("./Package.models");
 
 class City extends S.Model {}
 
@@ -19,7 +18,5 @@ City.init(
   },
   { sequelize: db, modelName: "city" }
 );
-
-City.hasMany(Package, { foreignKey: "city_id" });
 
 module.exports = City;
