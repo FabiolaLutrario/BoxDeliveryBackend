@@ -1,5 +1,6 @@
 const S = require("sequelize");
 const db = require("../models/db");
+const City = require("./City.models");
 
 class Package extends S.Model {}
 
@@ -21,8 +22,19 @@ Package.init(
       type: S.STRING,
       allowNull: false,
     },
+    city_id: {
+      type: S.INTEGER,
+      allowNull: false,
+      references: {
+        model: City,
+        key: "id",
+      },
+    },
   },
   { sequelize: db, modelName: "package" }
 );
+
+//Esto despues va en index.models
+Package.belongsTo(City, { foreignKey: "city_id" });
 
 module.exports = Package;
