@@ -1,6 +1,7 @@
 const S = require("sequelize");
 const db = require("../models/db");
 const City = require("./City.models");
+const State = require("./State.models");
 
 class Package extends S.Model {}
 
@@ -27,6 +28,14 @@ Package.init(
       allowNull: false,
       references: {
         model: City,
+        key: "id",
+      },
+    },
+    state_id: {
+      type: S.STRING,
+      allowNull: false,
+      references: {
+        model: State,
         key: "id",
       },
     },
