@@ -1,9 +1,9 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 const secretKey = process.env.JWT_SECRET_KEY;
 
-const verifyToken = (req, res, next) => {
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
-
   if (!token) {
     return res
       .status(401)
@@ -14,9 +14,11 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, secretKey);
     req.user = decoded.user;
     next();
+    return;
   } catch (error) {
     res.status(401).json({ message: "Invalid token." });
+    return;
   }
 };
 
-module.exports = { verifyToken };
+export default verifyToken;

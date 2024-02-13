@@ -3,9 +3,9 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
-const db = require("./api/config/db.js");
+import db from "./api/config/db";
 const app = express();
-const routes = require("./api/routes/index.routes.js");
+import routes from "./api/routes/index.routes.js";
 
 dotenv.config();
 
@@ -27,10 +27,11 @@ app.get("/health", (_req, res) => {
 
 db.sync({ force: false })
   .then(() => {
-    app.listen(process.env.PORT_LOCAL_APP, () =>
-      console.log(`Server in port `, process.env.PORT_LOCAL_APP)
+    app.listen(
+      process.env.PORT_LOCAL_APP,
+      () => console.log(`Server in port `, process.env.PORT_LOCAL_APP) // eslint-disable-line
     );
   })
-  .catch((err: Error) => console.error(err));
+  .catch((err: Error) => console.error(err)); // eslint-disable-line
 
 module.exports = app;
