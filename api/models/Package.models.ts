@@ -1,7 +1,6 @@
-const S = require("sequelize");
-const db = require("../models/db");
-const City = require("./City.models");
-const State = require("./State.models");
+import S from "sequelize";
+import db from "../config/db";
+import City from "./City.models";
 
 class Package extends S.Model {}
 
@@ -31,14 +30,6 @@ Package.init(
         key: "id",
       },
     },
-    state_id: {
-      type: S.STRING,
-      allowNull: false,
-      references: {
-        model: State,
-        key: "id",
-      },
-    },
   },
   { sequelize: db, modelName: "package" }
 );
@@ -46,4 +37,4 @@ Package.init(
 //Esto despues va en index.models
 Package.belongsTo(City, { foreignKey: "city_id" });
 
-module.exports = Package;
+export default Package;

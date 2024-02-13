@@ -1,5 +1,5 @@
-const S = require("sequelize");
-const db = require("../models/db");
+import S from "sequelize";
+import db from "../config/db";
 
 class State extends S.Model {}
 
@@ -15,4 +15,4 @@ State.init(
   { sequelize: db, modelName: "state" }
 );
 
-module.exports = State;
+export default State;
