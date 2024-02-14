@@ -25,7 +25,7 @@ app.get("/health", (_req, res) => {
   res.status(200).send("The server is up and healthy 😀");
 });
 
-db.sync({ force: false })
+db.sync({ force: true })
   .then(() => {
     app.listen(
       process.env.PORT_LOCAL_APP,
@@ -34,4 +34,4 @@ db.sync({ force: false })
   })
   .catch((err: Error) => console.error(err)); // eslint-disable-line
 
-module.exports = app;
+export default app;
