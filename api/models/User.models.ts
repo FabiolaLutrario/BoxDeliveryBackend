@@ -40,7 +40,7 @@ User.init(
         key: "id",
       },
     },
-    user_type_id: {
+    is_admin_id: {
       type: INTEGER,
       allowNull: false,
       references: {
