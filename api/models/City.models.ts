@@ -16,7 +16,7 @@ City.init(
       unique: true,
     },
   },
-  { sequelize: db, modelName: "city" }
+  { sequelize: db, modelName: "city", tableName: "city" }
 );
 
 export default City;

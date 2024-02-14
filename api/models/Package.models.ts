@@ -49,7 +49,7 @@ Package.init(
       },
     },
   },
-  { sequelize: db, modelName: "package" }
+  { sequelize: db, modelName: "package", tableName: "package" }
 );
 
 export default Package;

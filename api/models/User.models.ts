@@ -49,7 +49,7 @@ User.init(
       },
     },
   },
-  { sequelize: db, modelName: "user" }
+  { sequelize: db, modelName: "user", tableName: "user" }
 );
 
 export default User;

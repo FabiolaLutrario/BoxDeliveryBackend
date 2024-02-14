@@ -6,7 +6,7 @@ import City from "./City.models";
 
 Package.belongsTo(User, { foreignKey: "email_id", as: "user" });
 User.belongsTo(Value, { foreignKey: "confirmation_id", as: "value" });
-User.belongsTo(Value, { foreignKey: "user_Type_id", as: "value" });
+User.belongsTo(Value, { foreignKey: "user_type_id", as: "value" });
 Package.belongsTo(State, { foreignKey: "state_id", as: "state" });
 Package.belongsTo(City, { foreignKey: "city_id", as: "city" });
 

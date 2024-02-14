@@ -12,7 +12,7 @@ State.init(
       unique: true,
     },
   },
-  { sequelize: db, modelName: "state" }
+  { sequelize: db, modelName: "state", tableName: "state" }
 );
 
 export default State;

@@ -12,7 +12,7 @@ Value.init(
       unique: true,
     },
   },
-  { sequelize: db, modelName: "value" }
+  { sequelize: db, modelName: "value", tableName: "value" }
 );
 
 export default Value;

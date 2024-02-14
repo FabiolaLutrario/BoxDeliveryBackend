@@ -1,6 +1,5 @@
 import express from "express";
 const router = express.Router();
-
 const secretKey = process.env.JWT_SECRET_KEY;
 import jwt from "jsonwebtoken";
 import User from "../models/User.models";
@@ -26,7 +25,12 @@ router.post("/login", (_req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  User.create(req.body).then(() => res.send("creado"));
+  User.create(req.body)
+    .then(() => res.send("creado"))
+    .catch(() => {
+      //console.error("Error when trying to register user:", error);
+      return res.status(500).send("Internal Server Error");
+    });
 });
 
 export default router;
