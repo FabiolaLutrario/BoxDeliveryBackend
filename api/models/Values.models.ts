@@ -1,12 +1,12 @@
-const S = require("sequelize");
-const db = require("../models/db");
+import S from "sequelize";
+import db from "../config/db";
 
 class Values extends S.Model {}
 
 Values.init(
   {
     id: {
-      type: S.BOOLEAN,
+      type: S.INTEGER,
       primaryKey: true,
       allowNull: false,
       unique: true,
@@ -15,4 +15,4 @@ Values.init(
   { sequelize: db, modelName: "values" }
 );
 
-module.exports = Values;
+export default Values;

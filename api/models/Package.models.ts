@@ -1,6 +1,8 @@
 import S from "sequelize";
 import db from "../config/db";
 import City from "./City.models";
+import State from "./State.models";
+import User from "./User.models";
 
 class Package extends S.Model {}
 
@@ -18,7 +20,7 @@ Package.init(
       type: S.STRING,
       allowNull: false,
     },
-    adress: {
+    address: {
       type: S.STRING,
       allowNull: false,
     },
@@ -30,11 +32,24 @@ Package.init(
         key: "id",
       },
     },
+    state_id: {
+      type: S.STRING,
+      allowNull: false,
+      references: {
+        model: State,
+        key: "id",
+      },
+    },
+    email_id: {
+      type: S.STRING,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "email",
+      },
+    },
   },
   { sequelize: db, modelName: "package" }
 );
-
-//Esto despues va en index.models
-Package.belongsTo(City, { foreignKey: "city_id" });
 
 export default Package;
