@@ -1,9 +1,9 @@
 import S from "sequelize";
 import db from "../config/db";
 
-class Values extends S.Model {}
+class Value extends S.Model {}
 
-Values.init(
+Value.init(
   {
     id: {
       type: S.INTEGER,
@@ -12,7 +12,7 @@ Values.init(
       unique: true,
     },
   },
-  { sequelize: db, modelName: "values" }
+  { sequelize: db, modelName: "value" }
 );
 
-export default Values;
+export default Value;

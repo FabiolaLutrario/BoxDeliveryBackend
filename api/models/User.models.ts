@@ -1,6 +1,6 @@
 import S, { INTEGER } from "sequelize";
 import db from "../config/db";
-import Values from "./Values.models";
+import Value from "./Value.models";
 
 class User extends S.Model {}
 
@@ -36,7 +36,7 @@ User.init(
       type: INTEGER,
       allowNull: false,
       references: {
-        model: Values,
+        model: Value,
         key: "id",
       },
     },
@@ -44,12 +44,12 @@ User.init(
       type: INTEGER,
       allowNull: false,
       references: {
-        model: Values,
+        model: Value,
         key: "id",
       },
     },
   },
-  { sequelize: db, modelName: "users" }
+  { sequelize: db, modelName: "user" }
 );
 
 export default User;
