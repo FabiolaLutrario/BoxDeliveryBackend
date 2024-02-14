@@ -1,7 +1,5 @@
 import S from "sequelize";
 import db from "../config/db";
-import City from "./City.models";
-import State from "./State.models";
 import User from "./User.models";
 
 class Package extends S.Model {}
@@ -24,21 +22,9 @@ Package.init(
       type: S.STRING,
       allowNull: false,
     },
-    city_id: {
-      type: S.INTEGER,
+    status: {
+      type: S.ENUM(`in-progress`, `delivered`, `pending`),
       allowNull: false,
-      references: {
-        model: City,
-        key: "id",
-      },
-    },
-    state_id: {
-      type: S.STRING,
-      allowNull: false,
-      references: {
-        model: State,
-        key: "id",
-      },
     },
     email_id: {
       type: S.STRING,

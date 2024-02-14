@@ -34,4 +34,4 @@ db.sync({ force: false })
   })
   .catch((err: Error) => console.error(err)); // eslint-disable-line
 
-module.exports = app;
+export default app;

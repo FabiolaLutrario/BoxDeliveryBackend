@@ -1,6 +1,5 @@
-import S, { INTEGER } from "sequelize";
+import S from "sequelize";
 import db from "../config/db";
-import Value from "./Value.models";
 
 class User extends S.Model {}
 
@@ -32,21 +31,13 @@ User.init(
     profile_photo: {
       type: S.STRING,
     },
-    confirmation_id: {
-      type: INTEGER,
+    isAdmin: {
+      type: S.BOOLEAN,
       allowNull: false,
-      references: {
-        model: Value,
-        key: "id",
-      },
     },
-    is_admin_id: {
-      type: INTEGER,
-      allowNull: false,
-      references: {
-        model: Value,
-        key: "id",
-      },
+    isConfirmed: {
+      type: S.BOOLEAN,
+      defaultValue: false,
     },
   },
   { sequelize: db, modelName: "user", tableName: "user" }
