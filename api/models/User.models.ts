@@ -9,6 +9,10 @@ User.init(
       type: S.STRING,
       primaryKey: true,
       allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
     },
     name: {
       type: S.STRING,
@@ -33,7 +37,7 @@ User.init(
     },
     isAdmin: {
       type: S.BOOLEAN,
-      allowNull: false,
+      defaultValue: false,
     },
     isConfirmed: {
       type: S.BOOLEAN,
