@@ -30,7 +30,7 @@ User.init(
   {
     email: {
       type: S.STRING,
-      primaryKey: true,
+      // primaryKey: true,
       allowNull: false,
       unique: true,
       validate: {
