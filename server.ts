@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
-import db from "./api/config/db";
+import db from "./api/config/db.config";
 const app = express();
 import routes from "./api/routes/index.routes";
 
