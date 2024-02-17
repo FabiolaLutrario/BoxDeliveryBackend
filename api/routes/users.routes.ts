@@ -1,16 +1,17 @@
-import express from "express";
+import express, { Request, Response } from "express";
 const router = express.Router();
 const secretKey = process.env.JWT_SECRET_KEY;
 import jwt from "jsonwebtoken";
 import User from "../models/User.models";
+import { UsersController } from "../controllers/users.controller";
 
-router.get("/all", (_req, res) => {
+router.get("/all", (_req: Request, res: Response) => {
   User.findAll()
     .then((users: object) => res.status(200).send(users))
     .catch((err: Error) => res.send(err));
 });
 
-router.post("/login", (_req, res) => {
+router.post("/login", (_req: Request, res: Response) => {
   if (secretKey === undefined) {
     return res.send("Internal server error, refresh and try again");
   } else {
@@ -24,13 +25,15 @@ router.post("/login", (_req, res) => {
   }
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", (req: Request, res: Response) => {
   User.create(req.body)
     .then(() => res.send("creado"))
-    .catch(() => {
-      //console.error("Error when trying to register user:", error);
+    .catch((error: Error) => {
+      console.error("Error when trying to register user:", error);
       return res.status(500).send("Internal Server Error");
     });
 });
+
+router.put("/restore-password", UsersController.sendEmail);
 
 export default router;
