@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import verifyToken from "../controllers/users.controllers";
+import { verifyToken } from "../controllers/users.controllers";
 import dotenv from "dotenv";
 dotenv.config();
 
