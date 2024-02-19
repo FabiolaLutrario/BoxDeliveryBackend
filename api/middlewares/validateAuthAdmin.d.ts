@@ -1,8 +1,11 @@
 import { verifyToken } from "../config/tokens";
-import { Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 
-
-const validateAuthAdmin = (req : Request, res: Response, next : NextFunction) =>{
+export const validateAuthAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const token: string | undefined = req.cookies.token;
 
   const user = verifyToken(token);
@@ -11,7 +14,4 @@ const validateAuthAdmin = (req : Request, res: Response, next : NextFunction) =>
     return res.status(403).json({ error: "No esta autorizado" });
   }
   next();
-}
-
-export {validateAuthAdmin}
-
+};
