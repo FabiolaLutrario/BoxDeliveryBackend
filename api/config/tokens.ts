@@ -12,11 +12,14 @@ interface Payload {
 function createToken(payload: Payload, duration: string) {
   if (!secretKey) throw new Error("Secret Key not found");
 
-  const token: string = jwt.sign(payload, secretKey, {
-    expiresIn: `${duration}`,
-  });
-
-  return token;
+  if (!duration) {
+    return jwt.sign(payload, secretKey);
+  } else {
+    const token: string = jwt.sign(payload, secretKey, {
+      expiresIn: `${duration}`,
+    });
+    return token;
+  }
 }
 
 const verifyToken = (token: string) => {
