@@ -53,7 +53,7 @@ User.init(
       type: S.STRING,
     },
     token: {
-      type: S.STRING,
+      type: S.STRING(1024),
     },
     profile_photo: {
       type: S.STRING,
@@ -70,7 +70,7 @@ User.init(
   { sequelize: db, modelName: "user", tableName: "user" }
 );
 
-User.beforeCreate(async (user) => {
+User.beforeSave(async (user) => {
   try {
     const salt = await bcrypt.genSalt(10);
     user.salt = salt;

@@ -6,6 +6,8 @@ router.get("/all", UsersControllers.getAllUsers);
 
 router.post("/register", UsersControllers.registerUser);
 
+router.put("/confirm-email/:token", UsersControllers.confirmEmail);
+
 router.post("/login", UsersControllers.loginUser);
 
 router.get("/deliverymen", UsersControllers.getDeliverymen);
@@ -22,7 +24,7 @@ router.post("/logout", UsersControllers.logout);
 router.put("/restore-password", UsersControllers.sendEmail);
 
 router.get(
-  "validate-token/:token",
+  "/validate-token/:token",
   UsersControllers.validateTokenToRestorePassword
 );
 

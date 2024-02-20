@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { transporter } from "../config/mailer.config";
 import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
-import { JwtPayload } from "jsonwebtoken";
 import { UsersServices } from "../services/users.services";
+
+const port = process.env.LOCAL_HOST_FRONT;
 
 class UsersControllers {
   static getAllUsers(_req: Request, res: Response) {
@@ -14,8 +15,34 @@ class UsersControllers {
 
   static registerUser(req: Request, res: Response) {
     UsersServices.register(req.body)
-      .then(() => res.status(201).send("Created"))
+      .then((user) => {
+        //Genera el link de confirmación de cuenta y lo envía por correo
+        const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
+        const info = transporter.sendMail({
+          from: '"Confirmación de correo electrónico" <appboxdelivery.mailing@gmail.com>',
+          to: user.email,
+          subject: "Confirmación de correo ✔",
+          html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
+        });
+        info.then(() => {
+          res.status(201).send("Created");
+        });
+      })
       .catch((err: Error) => res.status(500).send(err.message));
+  }
+
+  static confirmEmail(req: Request, res: Response) {
+    const { token } = req.params;
+    if (!token) return res.sendStatus(400);
+
+    return UsersServices.confirmEmail(token)
+      .then(([affectedRows, [updatedUser]]) => {
+        if (affectedRows === 0 || !updatedUser) return res.sendStatus(401);
+        return res.status(200).send(`Usuario ${updatedUser.email} confirmado`);
+      })
+      .catch(() => {
+        res.status(500).send("Error confirming user!");
+      });
   }
 
   static loginUser(req: Request, res: Response) {
@@ -84,30 +111,20 @@ class UsersControllers {
         const token = createToken(payload, "10m");
         user.token = token;
 
-        user
-          .save()
-          .then(() => {
-            //Genera el link de recuperación de contraseña y lo envía por correo
-            const restorePasswordURL = `http://localhost:3000/new-password/${user.token}`;
-            transporter
-              .sendMail({
-                from: '"Recuperación de contraseña" <turnoweb.mailing@gmail.com>',
-                to: user.email,
-                subject: "Recuperación de contraseña ✔",
-                html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para completar el proceso:</b><a href="${restorePasswordURL}">${restorePasswordURL}</a>`,
-              })
-              .then(() => {
-                res.status(200).send(user.email);
-              })
-              .catch((error: Error) => {
-                console.error("Error when trying to send email:", error);
-                res.status(500).send("Internal Server Error");
-              });
-          })
-          .catch((error) => {
-            console.error("Error when trying to save user:", error);
-            res.status(500).send("Internal Server Error");
-          });
+        user.save().then(() => {
+          //Genera el link de recuperación de contraseña y lo envía por correo
+          const restorePasswordURL = `http://localhost:3000/new-password/${user.token}`;
+          transporter
+            .sendMail({
+              from: '"Recuperación de contraseña" <turnoweb.mailing@gmail.com>',
+              to: user.email,
+              subject: "Recuperación de contraseña ✔",
+              html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para completar el proceso:</b><a href="${restorePasswordURL}">${restorePasswordURL}</a>`,
+            })
+            .then(() => {
+              res.status(200).send(user.email);
+            });
+        });
       })
       .catch((error) => {
         console.error("Error when trying to restore password:", error);
@@ -122,12 +139,7 @@ class UsersControllers {
     const token = req.params.token;
     if (!token) return res.sendStatus(401);
 
-    const decoded = verifyToken(token);
-    if (typeof decoded === "string") {
-      // Si decoded es una cadena (string), significa que hubo un error en la verificación del token
-      return res.status(401).send("Invalid token.");
-    }
-    const { user } = decoded as JwtPayload;
+    const user = verifyToken(token);
     if (!user) return res.sendStatus(401);
 
     return UsersServices.findOneUserByToken(token)
@@ -148,12 +160,7 @@ class UsersControllers {
     const token = req.params.token;
     if (!token) return res.sendStatus(401);
 
-    const decoded = verifyToken(token);
-    if (typeof decoded === "string") {
-      // Si decoded es una cadena (string), significa que hubo un error en la verificación del token
-      return res.status(401).send("Invalid token.");
-    }
-    const { user } = decoded as JwtPayload;
+    const user = verifyToken(token);
     if (!user) return res.sendStatus(401);
 
     return UsersServices.findOneUserByToken(token)

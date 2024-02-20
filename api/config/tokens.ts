@@ -27,20 +27,4 @@ const verifyToken = (token: string) => {
   return jwt.verify(token, secretKey);
 };
 
-/* const verifyToken = (token: string) => {
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Access denied. Token not provided." });
-  }
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    return decoded;
-  } catch (error) {
-    res.status(401).json({ message: "Invalid token." });
-    return;
-  }
-}; */
-
 export { createToken, verifyToken };

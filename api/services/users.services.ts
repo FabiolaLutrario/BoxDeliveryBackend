@@ -2,11 +2,12 @@ import User from "../models/User.models";
 import { createToken } from "../config/tokens";
 
 type userDataType = {
-  [key: string]: string;
+  [key: string]: string | boolean | null;
   email: string;
   name: string;
   last_name: string;
   password: string;
+  is_admin: boolean | null;
 };
 
 class UsersServices {
@@ -16,6 +17,8 @@ class UsersServices {
 
   static register(userData: userDataType) {
     const { email, name, last_name, password } = userData;
+    let { is_admin } = userData;
+    if (!is_admin) is_admin = false;
 
     if (!email || !name || !last_name || !password) {
       throw new Error("Please complete all fields");
@@ -27,7 +30,23 @@ class UsersServices {
           throw new Error("Account already associated with this email");
         }
 
-        return User.create(userData);
+        const payload = {
+          email: email,
+          name: name,
+          last_name: last_name,
+          is_admin: is_admin,
+        };
+
+        const token = createToken(payload, "10d");
+
+        return User.create({
+          email,
+          name,
+          last_name,
+          token,
+          password,
+          is_admin,
+        });
       })
       .catch((err) => {
         throw new Error(err);
@@ -71,6 +90,16 @@ class UsersServices {
       .catch((err) => {
         throw new Error(err);
       });
+  }
+
+  static confirmEmail(token: string) {
+    return User.update(
+      {
+        is_confirmed: true,
+        token: null,
+      },
+      { where: { token }, returning: true }
+    );
   }
 
   static getDeliverymen() {
