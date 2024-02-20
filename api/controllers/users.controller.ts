@@ -3,26 +3,23 @@ import { transporter } from "../config/mailer.config";
 import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { JwtPayload } from "jsonwebtoken";
-import * as userService from "../services/user.services";
+import { UsersServices } from "../services/users.services";
 
-class UsersController {
+class UsersControllers {
   static getAllUsers(_req: Request, res: Response) {
-    userService
-      .getAll()
+    UsersServices.getAll()
       .then((users: object) => res.status(200).send(users))
       .catch((err: Error) => res.send(err));
   }
 
   static registerUser(req: Request, res: Response) {
-    userService
-      .register(req.body)
+    UsersServices.register(req.body)
       .then(() => res.status(201).send("Created"))
       .catch((err: Error) => res.status(500).send(err.message));
   }
 
   static loginUser(req: Request, res: Response) {
-    userService
-      .login(req.body)
+    UsersServices.login(req.body)
       .then((response) =>
         res.cookie("auth-token", response.token).send(response.message)
       )
@@ -35,26 +32,23 @@ class UsersController {
   }
 
   static getDeliverymen(_req: Request, res: Response) {
-    userService
-      .getDeliverymen()
+    UsersServices.getDeliverymen()
       .then((deliverymen) => res.status(200).send(deliverymen))
       .catch((err) => res.status(400).send(err));
   }
 
-  static getOneDeliverymen(req: Request, res: Response) {
-    userService
-      .getOneDeliverymen(req.params.id)
-      .then((deliverymen) => {
-        if (!deliverymen || deliverymen.is_admin) return res.sendStatus(204);
-        return res.status(200).send(deliverymen);
+  static getOneDeliveryman(req: Request, res: Response) {
+    UsersServices.getOneDeliveryman(req.params.id)
+      .then((deliveryman) => {
+        if (!deliveryman || deliveryman.is_admin) return res.sendStatus(204);
+        return res.status(200).send(deliveryman);
       })
       .catch((err) => res.status(400).send(err));
   }
 
-  static deleteDeliverymen(req: Request, res: Response) {
-    userService
-      .deleteDeliverymen(req.body.email)
-      .then(() => res.status(200).send("Deliverymen deleted successfully"))
+  static deleteDeliveryman(req: Request, res: Response) {
+    UsersServices.deleteDeliveryman(req.body.email)
+      .then(() => res.status(200).send("Deliveryman deleted successfully"))
       .catch(() =>
         res.status(500).send("Failure when trying to delete delivery man")
       );
@@ -63,8 +57,7 @@ class UsersController {
   static deleteAdmin(req: Request, res: Response) {
     const { email } = req.body;
 
-    userService
-      .deleteAdmin(email)
+    UsersServices.deleteAdmin(email)
       .then((response) => res.status(200).send(response))
       .catch((err) => res.status(500).send(err.message));
   }
@@ -179,4 +172,4 @@ class UsersController {
       });
   }
 }
-export { UsersController };
+export { UsersControllers };
