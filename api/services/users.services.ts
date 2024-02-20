@@ -112,6 +112,14 @@ class UsersServices {
       );
     });
   }
+
+  static findOneUserByEmail(email: string) {
+    return User.findOne({ where: { email } });
+  }
+
+  static findOneUserByToken(token: string) {
+    return User.findOne({ where: { token } });
+  }
 }
 
 export { UsersServices };

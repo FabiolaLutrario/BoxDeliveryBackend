@@ -65,7 +65,7 @@ class UsersControllers {
   static sendEmail(req: Request, res: Response) {
     const email = req.body.email;
 
-    User.findOne({ where: { email } })
+    UsersServices.findOneUserByEmail(email)
       .then((user: User | null) => {
         if (!user) {
           res.sendStatus(401);
@@ -130,7 +130,7 @@ class UsersControllers {
     const { user } = decoded as JwtPayload;
     if (!user) return res.sendStatus(401);
 
-    return User.findOne({ where: { token } })
+    return UsersServices.findOneUserByToken(token)
       .then((user) => {
         if (!user) return res.sendStatus(401);
         return res.sendStatus(200);
@@ -156,7 +156,7 @@ class UsersControllers {
     const { user } = decoded as JwtPayload;
     if (!user) return res.sendStatus(401);
 
-    return User.findOne({ where: { token } })
+    return UsersServices.findOneUserByToken(token)
       .then((user: User | null) => {
         if (!user) return res.sendStatus(401);
 

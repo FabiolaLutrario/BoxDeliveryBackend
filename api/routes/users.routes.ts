@@ -21,4 +21,11 @@ router.post("/logout", UsersControllers.logout);
 
 router.put("/restore-password", UsersControllers.sendEmail);
 
+router.get(
+  "validate-token/:token",
+  UsersControllers.validateTokenToRestorePassword
+);
+
+router.post("/overwrite-password/:token", UsersControllers.overwritePassword);
+
 export default router;
