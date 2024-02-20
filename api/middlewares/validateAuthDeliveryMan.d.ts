@@ -1,4 +1,4 @@
-import { verifyToken } from "../controllers/user.controllers";
+import { verifyToken } from "../controllers/users.controllers";
 import { Request, Response, NextFunction } from "express";
 
 const validateAuthDeliveryMan = (
@@ -13,7 +13,7 @@ const validateAuthDeliveryMan = (
   }
   const user = verifyToken(token);
 
-  if (user.isAdmin) {
+  if (user.is_admin) {
     return res.status(403).json({ error: "No esta autorizado" });
   }
   next();

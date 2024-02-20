@@ -1,5 +1,5 @@
 import User from "../models/User.models";
-import { generateToken } from "../config/token.config";
+import { createToken } from "../config/tokens";
 
 type userDataType = {
   [key: string]: string;
@@ -45,7 +45,7 @@ export const login = (userData: userDataType) => {
         .validatePassword(password)
         .then((isOk) => {
           if (!isOk) throw new Error("Validation error, try again");
-          if (!user.isConfirmed)
+          if (!user.is_confirmed)
             throw new Error(
               "Please confirm your account before trying to log in"
             );
@@ -53,10 +53,10 @@ export const login = (userData: userDataType) => {
             email,
             name: user.name,
             last_name: user.last_name,
-            isAdmin: user.isAdmin,
-            isConfirmed: user.isConfirmed,
+            isAdmin: user.is_admin,
+            isConfirmed: user.is_confirmed,
           };
-          const token = generateToken(payload);
+          const token = createToken(payload);
 
           return {
             token,

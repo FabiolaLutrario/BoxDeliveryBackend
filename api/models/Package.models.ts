@@ -1,5 +1,5 @@
 import S from "sequelize";
-import db from "../config/db";
+import db from "../config/db.config";
 import User from "./User.models";
 
 class Package extends S.Model {}

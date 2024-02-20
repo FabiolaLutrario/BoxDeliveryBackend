@@ -1,5 +1,5 @@
 import S from "sequelize";
-import db from "../config/db";
+import db from "../config/db.config";
 import bcrypt from "bcrypt";
 
 class User extends S.Model {
@@ -8,10 +8,10 @@ class User extends S.Model {
   last_name!: string;
   password!: string;
   salt?: string;
-  token?: string;
+  token?: string | null;
   profile_photo?: string;
-  isAdmin!: boolean;
-  isConfirmed!: boolean;
+  is_admin!: boolean;
+  is_confirmed!: boolean;
 
   hash(password: string, salt: string) {
     return bcrypt.hash(password, salt);
@@ -30,7 +30,7 @@ User.init(
   {
     email: {
       type: S.STRING,
-      // primaryKey: true,
+      primaryKey: true,
       allowNull: false,
       unique: true,
       validate: {
@@ -58,11 +58,11 @@ User.init(
     profile_photo: {
       type: S.STRING,
     },
-    isAdmin: {
+    is_admin: {
       type: S.BOOLEAN,
       defaultValue: false,
     },
-    isConfirmed: {
+    is_confirmed: {
       type: S.BOOLEAN,
       defaultValue: false,
     },

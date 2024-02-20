@@ -1,22 +1,24 @@
-import express from "express";
-const router = express.Router();
-import * as userController from "../controllers/user.controllers";
+import { Router } from "express";
+const router = Router();
+import { UsersController } from "../controllers/users.controller";
 
-router.get("/all", userController.getAllUsers);
+router.get("/all", UsersController.getAllUsers);
 
-router.post("/register", userController.registerUser);
+router.post("/register", UsersController.registerUser);
 
-router.post("/login", userController.loginUser);
+router.post("/login", UsersController.loginUser);
 
-router.get("/deliverymen", userController.getDeliverymen);
+router.get("/deliverymen", UsersController.getDeliverymen);
 
-router.get("/deliverymen/:id", userController.getOneDeliverymen);
+router.get("/deliverymen/:id", UsersController.getOneDeliverymen);
 
 // faltan validaciones
-router.delete("/delete/deliverymen", userController.deleteDeliverymen);
+router.delete("/delete/deliverymen", UsersController.deleteDeliverymen);
 // faltan validaciones
-router.delete("/delete/admin", userController.deleteAdmin);
+router.delete("/delete/admin", UsersController.deleteAdmin);
 
-router.post("/logout", userController.logout);
+router.post("/logout", UsersController.logout);
+
+router.put("/restore-password", UsersController.sendEmail);
 
 export default router;
