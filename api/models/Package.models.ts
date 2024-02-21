@@ -2,7 +2,14 @@ import S from "sequelize";
 import db from "../config/db.config";
 import User from "./User.models";
 
-class Package extends S.Model {}
+class Package extends S.Model {
+  receiver_name!: string;
+  date!: Date;
+  weight!: string;
+  address!: string;
+  status!: "in-progress" | "delivered" | "pending";
+  email_id!: string;
+}
 
 Package.init(
   {
@@ -11,11 +18,11 @@ Package.init(
       allowNull: false,
     },
     date: {
-      type: S.DATE,
+      type: S.DATEONLY,
       allowNull: false,
     },
     weight: {
-      type: S.STRING,
+      type: S.FLOAT,
       allowNull: false,
     },
     address: {
