@@ -1,17 +1,12 @@
 import express from "express";
+import packageController from "../controllers/packages.controllers";
+
 const router = express.Router();
-import Package from "../models/Package.models";
 
-router.get("/all", (_req, res) => {
-  Package.findAll()
-    .then((packages: object) => res.status(200).send(packages))
-    .catch((err: Error) => res.send(err));
-});
+router.post("/add-package", packageController.addPackage);
+router.get("/", packageController.getAllPackages);
 
-router.post("/new", (req, res) => {
-  Package.create(req.body)
-    .then(() => res.status(200).send("Created"))
-    .catch((err: Error) => res.send(err));
-});
+router.get("/single/:id", packageController.getSinglePackage);
+router.get("/:user_id/:status", packageController.getPackagesByUserAndStatus);
 
 export default router;
