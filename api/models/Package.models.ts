@@ -18,11 +18,11 @@ Package.init(
       allowNull: false,
     },
     date: {
-      type: S.DATE,
+      type: S.DATEONLY,
       allowNull: false,
     },
     weight: {
-      type: S.STRING,
+      type: S.FLOAT,
       allowNull: false,
     },
     address: {
