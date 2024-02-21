@@ -10,8 +10,8 @@ type PackageData = {
   // [key: string | symbol]: any;
 };
 
-const PackageServices = {
-  addPackage: (data: PackageData): Promise<PackageData> => {
+class PackagesServices {
+  static addPackage(data: PackageData): Promise<PackageData> {
     return new Promise((resolve, reject) => {
       Package.create(data)
         .then((packageData) => {
@@ -21,27 +21,30 @@ const PackageServices = {
           reject(error);
         });
     });
-  },
-  getAllPackages: () => {
+  }
+
+  static getAllPackages() {
     return Package.findAll();
-  },
-  getSinglePackage: (packageId: number): Promise<PackageData | null> => {
+  }
+
+  static getSinglePackage(packageId: number): Promise<PackageData | null> {
     return new Promise((resolve, reject) => {
       Package.findByPk(packageId)
         .then((singlePackage: PackageData | null) => resolve(singlePackage))
         .catch((error) => reject(error));
     });
-  },
-  getPackagesByUserAndStatus: (
+  }
+
+  static getPackagesByUserAndStatus(
     userId: string,
     status: string
-  ): Promise<PackageData[]> => {
+  ): Promise<PackageData[]> {
     return new Promise((resolve, reject) => {
       Package.findAll({ where: { email_id: userId, status: status } })
         .then((packages: PackageData[]) => resolve(packages))
         .catch((error) => reject(error));
     });
-  },
-};
+  }
+}
 
-export default PackageServices;
+export { PackagesServices };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import PackagesServices from "../services/packages.services";
+import { PackagesServices } from "../services/packages.services";
 
 // interface PackageData {
 //   receiver_name: string;
@@ -10,7 +10,7 @@ import PackagesServices from "../services/packages.services";
 //   email_id: string;
 // }
 
-const packageController = {
+const PackagesControllers = {
   addPackage: (req: Request, res: Response) => {
     // const packageData: PackageData = req.body;
     PackagesServices.addPackage(req.body)
@@ -50,4 +50,4 @@ const packageController = {
   },
 };
 
-export default packageController;
+export { PackagesControllers };

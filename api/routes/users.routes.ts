@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { UsersControllers } from "../controllers/users.controller";
+import { UsersControllers } from "../controllers/users.controllers";
 
 router.get("/all", UsersControllers.getAllUsers);
 
