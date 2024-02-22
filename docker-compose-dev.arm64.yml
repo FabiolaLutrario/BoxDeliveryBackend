@@ -1,10 +1,10 @@
 version: "3.9"
 services:
   appbox:
+    platform: linux/arm64
     build:
       context: .
       dockerfile: Dockerfile.dev
-      platform: linux/arm64
     ports:
       - $PORT_LOCAL_APP:$PORT_PROD_APP
     links:
