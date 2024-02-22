@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - $PORT_LOCAL_APP:$PORT_PROD_APP
+      - $PORT_PROD_APP:$PORT_PROD_APP
     links:
       - postgres-db
     volumes:

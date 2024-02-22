@@ -1,12 +1,11 @@
 {
   "name": "boxdeliverybackend",
   "version": "1.1.0",
-  "description": "Este es el repositorio Backend de la página Box Delivery.",
+  "description": "This is the Backend repository of the Box Delivery page.",
   "main": "server.ts",
   "scripts": {
     "tsc": "tsc",
     "lint": "eslint . --ext .ts",
-    "test": "NODE_ENV=test jest --verbose --silent",
     "start": "nodemon server.ts",
     "prepare": "husky install"
   },
@@ -44,22 +43,17 @@
     "@types/cookie-parser": "^1.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.9",
     "@types/nodemailer": "^6.4.14",
-    "@types/supertest": "^6.0.2",
     "dotenv": "^16.4.2",
     "eslint": "^8.56.0",
     "eslint-plugin-local": "^4.0.0",
     "eslint-plugin-no-null": "^1.0.2",
     "husky": "^8.0.0",
-    "jest": "^29.7.0",
     "lint-staged": "^15.2.0",
     "nodemon": "^3.0.2",
     "standard": "^17.1.0",
-    "supertest": "^6.3.4",
-    "ts-jest": "^29.1.2",
     "typescript": "^5.3.3",
     "typescript-eslint": "^7.0.1"
   }

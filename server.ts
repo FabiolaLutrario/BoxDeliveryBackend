@@ -20,16 +20,18 @@ app.use(
     credentials: true,
   })
 );
-app.use("/api", routes);
+
 app.get("/health", (_req, res) => {
   res.status(200).send("The server is up and healthy 😀");
 });
 
+app.use("/api", routes);
+
 db.sync({ force: false })
   .then(() => {
     app.listen(
-      process.env.PORT_LOCAL_APP,
-      () => console.log(`Server in port `, process.env.PORT_LOCAL_APP) // eslint-disable-line
+      process.env.PORT_PROD_APP,
+      () => console.log(`Server in port `, process.env.PORT_PROD_APP) // eslint-disable-line
     );
   })
   .catch((err: Error) => console.error(err)); // eslint-disable-line
