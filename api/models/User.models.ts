@@ -1,6 +1,6 @@
 import S from "sequelize";
 import db from "../config/db.config";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 class User extends S.Model {
   email!: string;
