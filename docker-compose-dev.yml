@@ -31,5 +31,13 @@ services:
       - "90:80"
     depends_on:
       - postgres-db
+  jest-tests:
+    image: node:20
+    depends_on:
+      - postgres-db
+    working_dir: /home/app
+    volumes:
+      - .:/home/app
+    command: ["npm", "run", "test"]
 volumes:
   postgres-data:
