@@ -34,6 +34,6 @@ db.sync({ force: false })
       () => console.log(`Server in port `, process.env.PORT_PROD_APP) // eslint-disable-line
     );
   })
-  .catch((err: Error) => console.error(err)); // eslint-disable-line
+  .catch((err: Error) => console.error(err));
 
 export default app;

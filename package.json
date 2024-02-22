@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "tsc": "tsc",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --quiet && echo 'Linting completed without errors'",
     "start": "nodemon server.ts",
     "prepare": "husky install"
   },
@@ -46,6 +46,8 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.9",
     "@types/nodemailer": "^6.4.14",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
     "dotenv": "^16.4.2",
     "eslint": "^8.56.0",
     "eslint-plugin-local": "^4.0.0",
