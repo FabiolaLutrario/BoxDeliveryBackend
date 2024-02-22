@@ -8,8 +8,19 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  avoid_reduncy:
+  # avoid_reduncy:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Console Log
+  #       run: echo "Hola Bauti"
+  lint:
     runs-on: ubuntu-20.04
     steps:
-      - name: Console Log
-        run: echo "Hola Bauti"
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Lint
+        run: npm run lint
