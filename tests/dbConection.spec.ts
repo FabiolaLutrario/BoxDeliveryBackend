@@ -1,4 +1,4 @@
-import db from "./api/config/db.config";
+import db from "../api/config/db.config";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 
