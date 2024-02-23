@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1708648801706" clover="3.2.0">
-  <project timestamp="1708648801706" name="All files">
+<coverage generated="1708687890567" clover="3.2.0">
+  <project timestamp="1708687890567" name="All files">
     <metrics statements="8" coveredstatements="7" conditionals="12" coveredconditionals="9" methods="2" coveredmethods="1" elements="22" coveredelements="17" complexity="0" loc="8" ncloc="8" packages="1" files="1" classes="1"/>
     <file name="db.config.ts" path="/home/app/api/config/db.config.ts">
       <metrics statements="8" coveredstatements="7" conditionals="12" coveredconditionals="9" methods="2" coveredmethods="1"/>
