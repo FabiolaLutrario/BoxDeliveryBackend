@@ -8,11 +8,11 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  # avoid_reduncy:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Console Log
-  #       run: echo "Hola Bauti"
+  avoid_reduncy:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Cancel Previous Redundant Builds
+        uses: styfle/cancel-workflow-action@0.9.1
   lint:
     runs-on: ubuntu-20.04
     steps:
