@@ -1,7 +1,7 @@
 const config = {
   preset: "ts-jest",
   testEnvironment: "node",
-  collectCoverage: true,
+  collectCoverage: false,
   coveragePathIgnorePatterns: ["/node_modules/", "/test/", "/dist/"],
 };
 
