@@ -7,8 +7,9 @@ import { UsersServices } from "../services/users.services";
 // const port = process.env.LOCAL_HOST_FRONT;
 
 class UsersControllers {
-  static getAllUsers(_req: Request, res: Response) {
-    UsersServices.getAll()
+  static getAllUsers(req: Request, res: Response) {
+    const page: number = parseInt(req.query.page as string) || 1;
+    UsersServices.getAll(page)
       .then((users: object) => res.status(200).send(users))
       .catch((err: Error) => res.send(err));
   }

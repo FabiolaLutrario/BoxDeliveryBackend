@@ -21,8 +21,9 @@ const PackagesControllers = {
         res.status(500).send({ error: error.message });
       });
   },
-  getAllPackages: (_req: Request, res: Response) => {
-    PackagesServices.getAllPackages()
+  getAllPackages: (req: Request, res: Response) => {
+    const page: number = parseInt(req.query.page as string) || 1;
+    PackagesServices.getAllPackages(page)
       .then((packages) => {
         res.status(200).send(packages);
       })

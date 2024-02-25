@@ -23,8 +23,9 @@ class PackagesServices {
     });
   }
 
-  static getAllPackages() {
-    return Package.findAll();
+  static getAllPackages(page: number = 1, pageSize: number = 15) {
+    const offset = (page - 1) * pageSize;
+    return Package.findAll({ offset, limit: pageSize });
   }
 
   static getSinglePackage(packageId: number): Promise<PackageData | null> {

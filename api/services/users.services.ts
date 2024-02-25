@@ -12,8 +12,9 @@ type userDataType = {
 };
 
 class UsersServices {
-  static getAll() {
-    return User.findAll();
+  static getAll(page: number = 1, pageSize: number = 15) {
+    const offset = (page - 1) * pageSize;
+    return User.findAll({ offset, limit: pageSize });
   }
 
   static register(userData: userDataType) {
