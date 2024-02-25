@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "lint": "eslint . --ext .ts",
     "start": "nodemon server.ts",
-    "test": "jest",
+    "test": "jest --colors --verbose --silent",
     "prepare": "husky install"
   },
   "husky": {
