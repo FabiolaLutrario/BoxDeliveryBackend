@@ -1,8 +1,14 @@
 const config = {
   preset: "ts-jest",
   testEnvironment: "node",
-  collectCoverage: true,
-  coveragePathIgnorePatterns: ["/node_modules/", "/test/", "/dist/"],
+  collectCoverage: false,
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/test/",
+    "/dist/",
+    ".config",
+    ".models",
+  ],
 };
 
 module.exports = config;
