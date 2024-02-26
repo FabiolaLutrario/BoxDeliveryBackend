@@ -13,7 +13,8 @@ jobs:
     steps:
       - name: Cancel Previous Redundant Builds
         uses: styfle/cancel-workflow-action@0.12.1
-  install_dependencies:
+
+  lint_and_jest:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -24,16 +25,8 @@ jobs:
           cache: "npm"
           node-version: "20"
       - name: Install dependencies
-        run: npm install
-  lint:
-    # needs: install_dependencies
-    runs-on: ubuntu-22.04
-    steps:
+        run: npm ci
       - name: Lint
         run: npm run lint
-  jest:
-    needs: install_dependencies
-    runs-on: ubuntu-22.04
-    steps:
-      - name: run tests
+      - name: Jest
         run: docker compose -f docker-compose-dev.yml up jest-tests
