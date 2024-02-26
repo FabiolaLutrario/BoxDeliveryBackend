@@ -4,31 +4,31 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 
-const port = process.env.LOCAL_HOST_FRONT;
+// const port = process.env.LOCAL_HOST_FRONT;
 
 class UsersControllers {
-  static getAllUsers(_req: Request, res: Response) {
-    UsersServices.getAll()
+  static getAllUsers(req: Request, res: Response) {
+    const page: number = parseInt(req.query.page as string) || 1;
+    UsersServices.getAll(page)
       .then((users: object) => res.status(200).send(users))
       .catch((err: Error) => res.send(err));
   }
 
   static registerUser(req: Request, res: Response) {
     UsersServices.register(req.body)
-      .then((user) => {
-        //Genera el link de confirmación de cuenta y lo envía por correo
-        const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
-        const info = transporter.sendMail({
-          from: '"Confirmación de correo electrónico" <appboxdelivery.mailing@gmail.com>',
-          to: user.email,
-          subject: "Confirmación de correo ✔",
-          html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
-        });
-        info.then(() => {
-          res.status(201).send("Created");
-        });
+      .then(() => {
+        // const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
+        // const info = transporter.sendMail({
+        //   from: '"Confirmación de correo electrónico" <appboxdelivery.mailing@gmail.com>',
+        //   to: user.email,
+        //   subject: "Confirmación de correo ✔",
+        //   html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
+        // });
+        // info.then(() => {
+        return res.status(201).send("Created!");
+        // });
       })
-      .catch((err: Error) => res.status(500).send(err.message));
+      .catch((err) => res.status(500).send(err.message));
   }
 
   static confirmEmail(req: Request, res: Response) {

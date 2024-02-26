@@ -8,21 +8,28 @@ type userDataType = {
   last_name: string;
   password: string;
   is_admin: boolean | null;
+  is_confirmed: boolean;
 };
 
 class UsersServices {
-  static getAll() {
-    return User.findAll();
+  static getAll(page: number = 1, pageSize: number = 15) {
+    const offset = (page - 1) * pageSize;
+    return User.findAll({ offset, limit: pageSize });
   }
 
   static register(userData: userDataType) {
-    const { email, name, last_name, password } = userData;
-    let { is_admin } = userData;
-    if (!is_admin) is_admin = false;
-
-    if (!email || !name || !last_name || !password) {
+    if (
+      !userData.email ||
+      !userData.name ||
+      !userData.last_name ||
+      !userData.password
+    )
       throw new Error("Please complete all fields");
-    }
+
+    const { email, name, last_name, password, is_confirmed } = userData;
+    let { is_admin } = userData;
+
+    if (!is_admin) is_admin = false;
 
     return User.findOne({ where: { email } })
       .then((user) => {
@@ -46,6 +53,7 @@ class UsersServices {
           token,
           password,
           is_admin,
+          is_confirmed,
         });
       })
       .catch((err) => {
@@ -64,7 +72,7 @@ class UsersServices {
         return user
           .validatePassword(password)
           .then((isOk) => {
-            if (!isOk) throw new Error("Validation error, try again");
+            if (!isOk) throw new Error("Incorrect password, try again");
             if (!user.is_confirmed)
               throw new Error(
                 "Please confirm your account before trying to log in"
