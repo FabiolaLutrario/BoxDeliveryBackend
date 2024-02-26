@@ -27,3 +27,8 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
+  # jest:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: run tests
+  #       run: docker compose -f docker-compose-dev.yml up jest-tests
