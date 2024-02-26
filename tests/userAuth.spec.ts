@@ -22,6 +22,17 @@ beforeAll(async () => {
     console.error("Unable to connect to the database:", error);
   }
 });
+afterAll(async () => {
+  await api.delete("/api/users/delete/deliveryman").send({
+    email: "newuser@gmail.com",
+  });
+  await api.delete("/api/users/delete/deliveryman").send({
+    email: "notconfirmed@gmail.com",
+  });
+  await api.delete("/api/users/delete/deliveryman").send({
+    email: "confirmed@gmail.com",
+  });
+});
 
 describe("testing endpoints for register", () => {
   beforeAll(async () => {
@@ -33,9 +44,9 @@ describe("testing endpoints for register", () => {
   test("should create a user", async () => {
     const res = await api.post("/api/users/register").send({
       email: "newuser@gmail.com",
-      name: "newuser",
-      last_name: "Gorchs",
-      password: "contraseña",
+      name: "Benajamin",
+      last_name: "Peña",
+      password: "password",
       is_admin: false,
       is_confirmed: true,
     });
@@ -46,9 +57,9 @@ describe("testing endpoints for register", () => {
   test("should return an error message if account already exists", async () => {
     const res = await api.post("/api/users/register").send({
       email: "newuser@gmail.com",
-      name: "newuser",
-      last_name: "Gorchs",
-      password: "contraseña",
+      name: "Benjamin",
+      last_name: "Peña",
+      password: "password",
       is_admin: false,
       is_confirmed: true,
     });
@@ -60,10 +71,10 @@ describe("testing endpoints for register", () => {
 
   test("should return an error because of missing properties", async () => {
     const res = await api.post("/api/users/register").send({
-      email: "newuser@gmail.com",
-      // name: "newuser",
-      last_name: "Gorchs",
-      password: "contraseña",
+      email: "anotheruser@gmail.com",
+      // name: "Benito",
+      last_name: "Maltrera",
+      password: "password",
       is_admin: false,
       is_confirmed: true,
     });
@@ -72,26 +83,45 @@ describe("testing endpoints for register", () => {
 });
 
 describe("testing endpoints for login", () => {
+  beforeAll(async () => {
+    await api.post("/api/users/register").send({
+      email: "notconfirmed@gmail.com",
+      name: "Manuela",
+      last_name: "Pedraza",
+      password: "password",
+      is_admin: false,
+      is_confirmed: false,
+    });
+    await api.post("/api/users/register").send({
+      email: "confirmed@gmail.com",
+      name: "Diego",
+      last_name: "Torres",
+      password: "password",
+      is_admin: false,
+      is_confirmed: true,
+    });
+  });
+
   test("should not be allowed to log in with an incorrect user.", async () => {
     const res = await api.post("/api/users/login").send({
       email: "nonexistent@gmail.com",
-      password: "contraseña",
+      password: "password",
     });
     expect(res.text).toBe("Error: No account associated with that email");
   });
 
   test("should return an error if password is incorrect", async () => {
     const res = await api.post("/api/users/login").send({
-      email: "confirmadooo@gmail.com",
-      password: "incorrect",
+      email: "notconfirmed@gmail.com",
+      password: "wrongpassword",
     });
     expect(res.text).toBe("Error: Incorrect password, try again");
   });
 
   test("should return an error if account is not confirmed", async () => {
     const res = await api.post("/api/users/login").send({
-      email: "b@gmail.com",
-      password: "contraseña",
+      email: "notconfirmed@gmail.com",
+      password: "password",
     });
     expect(res.text).toBe(
       "Error: Please confirm your account before trying to log in"
@@ -99,8 +129,8 @@ describe("testing endpoints for login", () => {
   });
   test("should login with everything in order", async () => {
     const res = await api.post("/api/users/login").send({
-      email: "confirmadooo@gmail.com",
-      password: "contraseña",
+      email: "confirmed@gmail.com",
+      password: "password",
     });
     expect(res.text).toBe("You are now logged in!");
     expect(res.headers["set-cookie"]).toBeDefined();
