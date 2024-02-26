@@ -25,6 +25,8 @@ jobs:
           node-version: "20"
       - name: Install dependencies
         run: npm install
+      - name: Debug
+        run: ls -R
   lint:
     needs: install_dependencies
     runs-on: ubuntu-22.04
