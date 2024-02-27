@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { UsersControllers } from "../controllers/users.controllers";
 
-router.get("/all", UsersControllers.getAllUsers);
+router.get("/", UsersControllers.getAllUsers);
 
 router.post("/register", UsersControllers.registerUser);
 
@@ -12,7 +12,9 @@ router.post("/login", UsersControllers.loginUser);
 
 router.get("/deliverymen", UsersControllers.getDeliverymen);
 
-router.get("/deliveryman/:id", UsersControllers.getOneDeliveryman);
+router.get("/single/:id", UsersControllers.getUser);
+
+router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 // faltan validaciones
 router.delete("/delete/deliveryman", UsersControllers.deleteDeliveryman);
