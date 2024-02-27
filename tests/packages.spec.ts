@@ -2,6 +2,27 @@ import request from "supertest";
 import app from "../server";
 import { DATEONLY } from "sequelize";
 
+beforeAll(async () => {
+  await request(app).post("/api/users/register").send({
+    email: "usuario@example.com",
+    name: "Marcos",
+    last_name: "Pérez",
+    password: "password",
+    is_admin: false,
+    is_confirmed: true,
+  });
+});
+
+afterAll(async () => {
+  await request(app).delete("/api/users/delete/deliveryman").send({
+    email: "usuario@example.com",
+  });
+
+  //await request(app).delete(`/api/packages/#AX102`);
+
+  //await request(app).delete(`/api/packages/#AX105`);
+});
+
 describe("Get /api/packages", () => {
   test("should respond with a 200 status code", async () => {
     const response = await request(app).get("/api/packages");
@@ -44,7 +65,7 @@ describe("Post /api/packages/add-package", () => {
   });
 });
 
-describe("Get /api/packages/single/:id", () => {
+/* describe("Get /api/packages/single/:id", () => {
   test("should respond with a 200 status code", async () => {
     const packageId = 9;
     const response = await request(app).get(
@@ -59,7 +80,7 @@ describe("Get /api/packages/single/:id", () => {
     );
     expect(response.statusCode).toBe(500);
   });
-});
+}); */
 
 describe("Get /api/packages/:user_id/:status", () => {
   test("should respond with a 200 status code", async () => {

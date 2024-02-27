@@ -28,7 +28,7 @@ class PackagesServices {
     return Package.findAll({ offset, limit: pageSize });
   }
 
-  static getSinglePackage(packageId: number): Promise<PackageData | null> {
+  static getSinglePackage(packageId: string): Promise<PackageData | null> {
     return new Promise((resolve, reject) => {
       Package.findByPk(packageId)
         .then((singlePackage: PackageData | null) => resolve(singlePackage))
@@ -44,6 +44,20 @@ class PackagesServices {
       Package.findAll({ where: { email_id: userId, status: status } })
         .then((packages: PackageData[]) => resolve(packages))
         .catch((error) => reject(error));
+    });
+  }
+
+  static deletePackage(id: string) {
+    return Package.findOne({ where: { id } }).then((packageResponse) => {
+      if (packageResponse) {
+        return packageResponse
+          .destroy()
+          .then(() => "Package deleted successfully")
+          .catch(() => {
+            throw new Error("Failure when trying to delete package");
+          });
+      }
+      throw new Error("We could not find an package associated with that id");
     });
   }
 }
