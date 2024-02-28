@@ -66,11 +66,12 @@ class UsersControllers {
 
   static getOneDeliveryman(req: Request, res: Response) {
     UsersServices.getOneDeliveryman(req.params.id)
-      .then((deliveryman) => {
-        if (!deliveryman || deliveryman.is_admin) return res.sendStatus(204);
-        return res.status(200).send(deliveryman);
-      })
-      .catch((err) => res.status(400).send(err));
+    .then((deliveryman) => {
+      if(!deliveryman?.email)return res.status(200).send(deliveryman);
+       throw new Error
+    })
+    .catch((err) => res.status(500).send(err));
+
   }
 
   static deleteDeliveryman(req: Request, res: Response) {
