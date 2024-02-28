@@ -30,7 +30,6 @@ User.init(
   {
     email: {
       type: S.STRING,
-      primaryKey: true,
       allowNull: false,
       unique: true,
       validate: {
@@ -65,6 +64,10 @@ User.init(
     is_confirmed: {
       type: S.BOOLEAN,
       defaultValue: false,
+    },
+    enabled: {
+      type: S.BOOLEAN,
+      defaultValue: true,
     },
   },
   { sequelize: db, modelName: "user", tableName: "user" }
