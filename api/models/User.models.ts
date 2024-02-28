@@ -3,6 +3,7 @@ import db from "../config/db.config";
 import bcrypt from "bcryptjs";
 
 class User extends S.Model {
+  id!: number;
   email!: string;
   name!: string;
   last_name!: string;
@@ -28,9 +29,13 @@ class User extends S.Model {
 
 User.init(
   {
+    id: {
+      type: S.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     email: {
       type: S.STRING,
-      primaryKey: true,
       allowNull: false,
       unique: true,
       validate: {
