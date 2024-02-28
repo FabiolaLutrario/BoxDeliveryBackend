@@ -112,8 +112,15 @@ class UsersServices {
   }
 
   static getDeliverymen() {
-    return User.findAll({ where: { isAdmin: false } });
+    return User.findAll({ where: { isAdmin: false } })
+      .then((resp) => {
+        resp;
+      })
+      .catch((error) => {
+        return error;
+      });
   }
+
 
   static getUser(id: number) {
     return User.findOne({ where: { id: id } });
@@ -135,20 +142,13 @@ class UsersServices {
   }
 
   static deleteAdmin(email: string) {
-    return User.findOne({ where: { email, isAdmin: true } }).then((user) => {
-      if (user) {
-        return user
-          .destroy()
-          .then(() => "Account deleted successfully")
-          .catch(() => {
-            throw new Error("Failure when trying to delete account");
-          });
-      }
-
-      throw new Error(
-        "We could not find an account associated with that email"
-      );
-    });
+  return User.destroy({ where: { email: email, is_admin: true } })
+  .then((resp) => {
+   resp
+  })
+  .catch((error) => {
+    throw new Error(error);
+  });
   }
 
   static findOneUserByEmail(email: string) {

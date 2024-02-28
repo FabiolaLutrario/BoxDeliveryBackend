@@ -71,6 +71,10 @@ User.init(
       type: S.BOOLEAN,
       defaultValue: false,
     },
+    enabled: {
+      type: S.BOOLEAN,
+      defaultValue: true,
+    },
   },
   { sequelize: db, modelName: "user", tableName: "user" }
 );
