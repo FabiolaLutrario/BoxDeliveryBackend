@@ -71,6 +71,7 @@ class UsersControllers {
       .catch((err) => res.status(400).send(err));
   }
 
+
   static getUser(req: Request, res: Response) {
     UsersServices.getUser(parseInt(req.params.id))
       .then((user) => {
@@ -104,6 +105,7 @@ class UsersControllers {
         return res.status(200).send(payload);
       })
       .catch((err) => res.status(400).send(err));
+
   }
 
   static deleteDeliveryman(req: Request, res: Response) {
