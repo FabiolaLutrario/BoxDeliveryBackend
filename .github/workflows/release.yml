@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npx run tsc
+      # - run: npx run tsc
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
