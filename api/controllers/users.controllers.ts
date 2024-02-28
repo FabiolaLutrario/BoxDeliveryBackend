@@ -93,6 +93,7 @@ class UsersControllers {
       .then((user) => {
         if (!user) return res.sendStatus(204);
         const payload = {
+          id: user.id,
           email: user.email,
           name: user.name,
           last_name: user.last_name,

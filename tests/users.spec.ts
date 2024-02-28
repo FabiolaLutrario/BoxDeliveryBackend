@@ -1,5 +1,4 @@
 import supertest from "supertest";
-import db from "../api/config/db.config";
 import app from "../server";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
@@ -12,16 +11,6 @@ beforeAll(async () => {
   expect(res.text).toEqual("The server is up and healthy 😀");
 });
 
-beforeAll(async () => {
-  try {
-    await db.validate();
-    console.info(
-      "Connection to the database has been established successfully."
-    );
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-});
 afterAll(async () => {
   await api.delete("/api/users/delete/deliveryman").send({
     email: "newuser@gmail.com",
@@ -35,12 +24,6 @@ afterAll(async () => {
 });
 
 describe("testing endpoint for register", () => {
-  beforeAll(async () => {
-    await api.delete("/api/users/delete/deliveryman").send({
-      email: "newuser@gmail.com",
-    });
-  });
-
   test("should create a user", async () => {
     const res = await api.post("/api/users/register").send({
       email: "newuser@gmail.com",
