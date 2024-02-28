@@ -4,7 +4,7 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 
-// const port = process.env.LOCAL_HOST_FRONT;
+const port = process.env.LOCAL_HOST_FRONT;
 
 class UsersControllers {
   static getAllUsers(req: Request, res: Response) {
@@ -16,24 +16,31 @@ class UsersControllers {
 
   static registerUser(req: Request, res: Response) {
     UsersServices.register(req.body)
-      .then(() => {
-        // const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
-        // const info = transporter.sendMail({
-        //   from: '"Confirmación de correo electrónico" <appboxdelivery.mailing@gmail.com>',
-        //   to: user.email,
-        //   subject: "Confirmación de correo ✔",
-        //   html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
-        // });
-        // info.then(() => {
-        return res.status(201).send("Created!");
-        // });
+      .then((user) => {
+        // Proceso de envío de correo omitido para entorno de prueba
+        if (process.env.NODE_ENV !== "test") {
+          // Solo enviar el correo electrónico si no estamos en un entorno de prueba
+          const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
+          const info = transporter.sendMail({
+            from: '"Confirmación de correo electrónico" <appboxdelivery.mailing@gmail.com>',
+            to: user.email,
+            subject: "Confirmación de correo ✔",
+            html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
+          });
+          return info.then(() => {
+            return res.status(201).send("Created!");
+          });
+        } else {
+          // En un entorno de prueba, simplemente responde con éxito
+          return res.status(201).send("Created!");
+        }
       })
       .catch((err) => res.status(500).send(err.message));
   }
 
   static confirmEmail(req: Request, res: Response) {
     const { token } = req.params;
-    if (!token) return res.sendStatus(400);
+    if (!token) return res.sendStatus(401);
 
     return UsersServices.confirmEmail(token)
       .then(([affectedRows, [updatedUser]]) => {
@@ -64,13 +71,40 @@ class UsersControllers {
       .catch((err) => res.status(400).send(err));
   }
 
-  static getOneDeliveryman(req: Request, res: Response) {
-    UsersServices.getOneDeliveryman(req.params.id)
-    .then((deliveryman) => {
-      if(!deliveryman?.email)return res.status(200).send(deliveryman);
-       throw new Error
-    })
-    .catch((err) => res.status(500).send(err));
+
+  static getUser(req: Request, res: Response) {
+    UsersServices.getUser(parseInt(req.params.id))
+      .then((user) => {
+        if (!user) return res.sendStatus(204);
+        const payload = {
+          email: user.email,
+          name: user.name,
+          last_name: user.last_name,
+          profile_photo: user.profile_photo,
+          is_admin: user.is_admin,
+          token: user.token,
+        };
+        return res.status(200).send(payload);
+      })
+      .catch((err) => res.status(400).send(err));
+  }
+
+  static getUserByEmail(req: Request, res: Response) {
+    UsersServices.findOneUserByEmail(req.params.email)
+      .then((user) => {
+        if (!user) return res.sendStatus(204);
+        const payload = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          last_name: user.last_name,
+          profile_photo: user.profile_photo,
+          is_admin: user.is_admin,
+          token: user.token,
+        };
+        return res.status(200).send(payload);
+      })
+      .catch((err) => res.status(400).send(err));
 
   }
 
@@ -96,8 +130,7 @@ class UsersControllers {
     UsersServices.findOneUserByEmail(email)
       .then((user: User | null) => {
         if (!user) {
-          res.sendStatus(401);
-          return; // Termina la ejecución de la función después de enviar el estado
+          return res.sendStatus(401);
         }
 
         //Si el usuario existe va a generar un token
@@ -112,19 +145,24 @@ class UsersControllers {
         const token = createToken(payload, "10m");
         user.token = token;
 
-        user.save().then(() => {
-          //Genera el link de recuperación de contraseña y lo envía por correo
-          const restorePasswordURL = `http://localhost:3000/new-password/${user.token}`;
-          transporter
-            .sendMail({
-              from: '"Recuperación de contraseña" <turnoweb.mailing@gmail.com>',
-              to: user.email,
-              subject: "Recuperación de contraseña ✔",
-              html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para completar el proceso:</b><a href="${restorePasswordURL}">${restorePasswordURL}</a>`,
-            })
-            .then(() => {
-              res.status(200).send(user.email);
-            });
+        return user.save().then(() => {
+          if (process.env.NODE_ENV !== "test") {
+            // Genera el link de recuperación de contraseña y lo envía por correo
+            const restorePasswordURL = `http://localhost:3000/new-password/${user.token}`;
+            return transporter
+              .sendMail({
+                from: '"Recuperación de contraseña" <turnoweb.mailing@gmail.com>',
+                to: user.email,
+                subject: "Recuperación de contraseña ✔",
+                html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para completar el proceso:</b><a href="${restorePasswordURL}">${restorePasswordURL}</a>`,
+              })
+              .then(() => {
+                return res.status(200).send(user.email);
+              });
+          } else {
+            // En un entorno de prueba, simplemente responde con éxito sin enviar el correo
+            return res.sendStatus(200);
+          }
         });
       })
       .catch((error) => {
@@ -137,7 +175,7 @@ class UsersControllers {
   se procede a validar el token para mostrar en el front el formulario para 
   ingresar la nueva contraseña*/
   static validateTokenToRestorePassword(req: Request, res: Response) {
-    const token = req.params.token;
+    const { token } = req.params;
     if (!token) return res.sendStatus(401);
 
     const user = verifyToken(token);

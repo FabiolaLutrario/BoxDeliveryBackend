@@ -11,4 +11,7 @@ router.get("/single/:id", PackagesControllers.getSinglePackage);
 
 router.get("/:user_id/:status", PackagesControllers.getPackagesByUserAndStatus);
 
+//Poner ruta delete como privada solo para uso de tests
+router.delete("/package/:id", PackagesControllers.deletePackage);
+
 export default router;

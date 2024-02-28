@@ -32,8 +32,7 @@ const PackagesControllers = {
       });
   },
   getSinglePackage: (req: Request, res: Response) => {
-    const packageId: number = parseInt(req.params.id);
-    PackagesServices.getSinglePackage(packageId)
+    PackagesServices.getSinglePackage(req.params.id)
       .then((singlePackage) => {
         if (singlePackage) {
           res.status(200).send(singlePackage);
@@ -48,6 +47,14 @@ const PackagesControllers = {
     PackagesServices.getPackagesByUserAndStatus(user_id, status)
       .then((packages) => res.status(200).send(packages))
       .catch((error) => res.status(500).send({ error: error.message }));
+  },
+
+  deletePackage: (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    PackagesServices.deletePackage(id)
+      .then((response) => res.status(200).send(response))
+      .catch((err) => res.status(500).send(err.message));
   },
 };
 

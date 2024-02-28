@@ -2,7 +2,8 @@ import User from "../models/User.models";
 import { createToken } from "../config/tokens";
 
 type userDataType = {
-  [key: string]: string | boolean | null;
+  [key: string]: string | boolean | null | number;
+  id: number;
   email: string;
   name: string;
   last_name: string;
@@ -120,9 +121,9 @@ class UsersServices {
       });
   }
 
-  static getOneDeliveryman(id: string) {
-    return User.findOne({ where: { id: id } })
-    .catch((error)=>{throw new Error(error)})
+
+  static getUser(id: number) {
+    return User.findOne({ where: { id: id } });
   }
 
   static deleteDeliveryman(email: string) {
