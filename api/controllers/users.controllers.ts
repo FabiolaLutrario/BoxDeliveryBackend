@@ -17,6 +17,16 @@ class UsersControllers {
   static registerUser(req: Request, res: Response) {
     UsersServices.register(req.body)
       .then((user) => {
+        const payload = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          last_name: user.last_name,
+          profile_photo: user.profile_photo,
+          is_admin: user.is_admin,
+          is_confirmed: user.is_confirmed,
+        };
+
         // Proceso de envío de correo omitido para entorno de prueba
         if (process.env.NODE_ENV !== "test") {
           // Solo enviar el correo electrónico si no estamos en un entorno de prueba
@@ -28,11 +38,11 @@ class UsersControllers {
             html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
           });
           return info.then(() => {
-            return res.status(201).send("Created!");
+            return res.status(201).send(payload);
           });
         } else {
           // En un entorno de prueba, simplemente responde con éxito
-          return res.status(201).send("Created!");
+          return res.status(201).send(payload);
         }
       })
       .catch((err) => res.status(500).send(err.message));

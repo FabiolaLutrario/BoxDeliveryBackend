@@ -33,7 +33,6 @@ describe("testing endpoint for register", () => {
       is_admin: false,
     });
     expect(res.status).toBe(201);
-    expect(res.text).toEqual("Created!");
   });
 
   test("should return an error message if account already exists", async () => {
