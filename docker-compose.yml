@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  appbox:
+    build: .
+    ports:
+      - $PORT_LOCAL_APP:$PORT_PROD_APP
+    links:
+      - postgres-db
+  postgres-db:
+    image: postgres:16.1
+    restart: always
+    ports:
+      - $POSTGRES_DB_LOCAL_PORT:$POSTGRES_DB_DOCKER_PORT
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=$POSTGRES_DB_USER
+      - POSTGRES_PASSWORD=$POSTGRES_DB_PASSWORD
+      - POSTGRES_DB=appbox
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:8.2
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=$PGADMIN_EMAIL
+      - PGADMIN_DEFAULT_PASSWORD=$PGADMIN_PASSWORD
+    ports:
+      - "90:80"
+    depends_on:
+      - postgres-db
+volumes:
+  postgres-data:
