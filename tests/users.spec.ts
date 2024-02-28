@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../server";
 import dotenv from "dotenv";
+import User from "../api/models/User.models";
 dotenv.config({ path: ".env" });
 
 const api = supertest(app);
@@ -9,6 +10,33 @@ beforeAll(async () => {
   const res = await api.get("/health");
   expect(res.status).toBe(200);
   expect(res.text).toEqual("The server is up and healthy 😀");
+
+  try {
+    await User.bulkCreate([
+      {
+        email: "userTest1@gmail.com",
+        name: "userTest",
+        last_name: "testing",
+        password: "HelloWorld123",
+      },
+      {
+        email: "userTest2@gmail.com",
+        name: "userTest2",
+        last_name: "testing2",
+        password: "HelloWorld123",
+      },
+      {
+        email: "userTest3@gmail.com",
+        name: "userTest3",
+        last_name: "testing3",
+        password: "HelloWorld123",
+        is_admin: true,
+        is_confirmed: true,
+      },
+    ]);
+  } catch (error) {
+    console.error("Error setting up test data:", error);
+  }
 });
 
 afterAll(async () => {
@@ -20,6 +48,15 @@ afterAll(async () => {
   });
   await api.delete("/api/users/delete/deliveryman").send({
     email: "confirmed@gmail.com",
+  });
+  await api.delete("/api/users/delete/deliveryman").send({
+    email: "userTest1@gmail.com",
+  });
+  await api.delete("/api/users/delete/deliveryman").send({
+    email: "userTest2@gmail.com",
+  });
+  await api.delete("/api/users/delete/admin").send({
+    email: "userTest3@gmail.com",
   });
 });
 
