@@ -1,18 +1,8 @@
 import { Request, Response } from "express";
 import { PackagesServices } from "../services/packages.services";
 
-// interface PackageData {
-//   receiver_name: string;
-//   date: Date;
-//   weight: string;
-//   address: string;
-//   status: "in-progress" | "delivered" | "pending";
-//   email_id: string;
-// }
-
 const PackagesControllers = {
   addPackage: (req: Request, res: Response) => {
-    // const packageData: PackageData = req.body;
     PackagesServices.addPackage(req.body)
       .then((result) => {
         res.status(201).send(result);
@@ -43,8 +33,11 @@ const PackagesControllers = {
       .catch((error) => res.status(500).send({ error: error.message }));
   },
   getPackagesByUserAndStatus: (req: Request, res: Response) => {
-    const { user_id, status } = req.params;
-    PackagesServices.getPackagesByUserAndStatus(user_id, status)
+    const { status } = req.params;
+    PackagesServices.getPackagesByUserAndStatus(
+      parseInt(req.params.user_id),
+      status
+    )
       .then((packages) => res.status(200).send(packages))
       .catch((error) => res.status(500).send({ error: error.message }));
   },

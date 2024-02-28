@@ -6,10 +6,10 @@ class Package extends S.Model {
   id: string | undefined;
   receiver_name!: string;
   date!: Date;
-  weight!: string;
+  weight!: number;
   address!: string;
   status!: "in-progress" | "delivered" | "pending";
-  email_id!: string;
+  user_id!: number;
 }
 
 Package.init(
@@ -38,12 +38,12 @@ Package.init(
       type: S.ENUM(`in-progress`, `delivered`, `pending`),
       allowNull: false,
     },
-    email_id: {
-      type: S.STRING,
+    user_id: {
+      type: S.INTEGER,
       allowNull: false,
       references: {
         model: User,
-        key: "email",
+        key: "id",
       },
     },
   },

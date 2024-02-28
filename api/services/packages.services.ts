@@ -3,10 +3,10 @@ import Package from "../models/Package.models";
 type PackageData = {
   receiver_name: string;
   date: Date;
-  weight: string;
+  weight: number;
   address: string;
   status: "in-progress" | "delivered" | "pending";
-  email_id: string;
+  user_id: number;
   // [key: string | symbol]: any;
 };
 
@@ -37,11 +37,11 @@ class PackagesServices {
   }
 
   static getPackagesByUserAndStatus(
-    userId: string,
+    userId: number,
     status: string
   ): Promise<PackageData[]> {
     return new Promise((resolve, reject) => {
-      Package.findAll({ where: { email_id: userId, status: status } })
+      Package.findAll({ where: { user_id: userId, status: status } })
         .then((packages: PackageData[]) => resolve(packages))
         .catch((error) => reject(error));
     });
