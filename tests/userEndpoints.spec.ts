@@ -1,4 +1,4 @@
-import supertest from "supertest";
+/* import supertest from "supertest";
 import db from "../api/config/db.config";
 import app from "../server";
 import dotenv from "dotenv";
@@ -16,12 +16,6 @@ beforeAll(async () => {
     );
     await User.destroy({ where: {} }); // Limpiar la base de datos antes de insertar datos de prueba
     await User.bulkCreate([
-      {
-        email: "userTest1@gmail.com",
-        name: "userTest",
-        last_name: "testing",
-        password: "HelloWorld123",
-      },
       {
         email: "userTest2@gmail.com",
         name: "userTest2",
@@ -95,3 +89,5 @@ afterAll(async () => {
   } catch (error) {
     console.error("it was not possible to delete the users", error);
   }});
+
+ */

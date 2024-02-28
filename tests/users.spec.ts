@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../server";
 import dotenv from "dotenv";
+import db from "../api/config/db.config";
 import User from "../api/models/User.models";
 dotenv.config({ path: ".env" });
 
@@ -40,24 +41,29 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await api.delete("/api/users/delete/deliveryman").send({
-    email: "newuser@gmail.com",
-  });
-  await api.delete("/api/users/delete/deliveryman").send({
-    email: "notconfirmed@gmail.com",
-  });
-  await api.delete("/api/users/delete/deliveryman").send({
-    email: "confirmed@gmail.com",
-  });
-  await api.delete("/api/users/delete/deliveryman").send({
-    email: "userTest1@gmail.com",
-  });
-  await api.delete("/api/users/delete/deliveryman").send({
-    email: "userTest2@gmail.com",
-  });
-  await api.delete("/api/users/delete/admin").send({
-    email: "userTest3@gmail.com",
-  });
+  try {
+    await api.delete("/api/users/delete/deliveryman").send({
+      email: "newuser@gmail.com",
+    });
+    await api.delete("/api/users/delete/deliveryman").send({
+      email: "notconfirmed@gmail.com",
+    });
+    await api.delete("/api/users/delete/deliveryman").send({
+      email: "confirmed@gmail.com",
+    });
+    await api.delete("/api/users/delete/deliveryman").send({
+      email: "userTest1@gmail.com",
+    });
+    await api.delete("/api/users/delete/deliveryman").send({
+      email: "userTest2@gmail.com",
+    });
+    await api.delete("/api/users/delete/admin").send({
+      email: "userTest3@gmail.com",
+    });
+    await db.close();
+  } catch (error) {
+    console.error("Error setting up test data:", error);
+  }
 });
 
 describe("testing endpoint for register", () => {
@@ -67,7 +73,6 @@ describe("testing endpoint for register", () => {
       name: "Benajamin",
       last_name: "Peña",
       password: "password",
-      is_admin: false,
     });
     expect(res.status).toBe(201);
   });
@@ -78,7 +83,6 @@ describe("testing endpoint for register", () => {
       name: "Benjamin",
       last_name: "Peña",
       password: "password",
-      is_admin: false,
     });
     expect(res.status).toBe(500);
     expect(res.text).toEqual(
@@ -92,7 +96,6 @@ describe("testing endpoint for register", () => {
       // name: "Benito",
       last_name: "Maltrera",
       password: "password",
-      is_admin: false,
     });
     expect(res.status).toBe(500);
   });
@@ -105,7 +108,6 @@ describe("testing endpoint for login", () => {
       name: "Manuela",
       last_name: "Pedraza",
       password: "password",
-      is_admin: false,
       is_confirmed: false,
     });
     await api.post("/api/users/register").send({
@@ -113,7 +115,6 @@ describe("testing endpoint for login", () => {
       name: "Diego",
       last_name: "Torres",
       password: "password",
-      is_admin: false,
       is_confirmed: true,
     });
   });
@@ -169,6 +170,7 @@ describe("testing endpoint for confirm email after register user", () => {
 
   test("should successfully confirm the users's email", async () => {
     type user = {
+      id: number;
       email: string;
       name: string;
       last_name: string;
@@ -191,6 +193,59 @@ describe("testing endpoint for confirm email after register user", () => {
 describe("testing logout endpoint", () => {
   test("should return a status 200", async () => {
     const res = await api.post("/api/users/logout");
+    expect(res.status).toBe(200);
+  });
+});
+
+describe("endpoint testing obtain delivery users", () => {
+  test("get delivery users", async () => {
+    const res = await api.get("/api/users/deliverymen/");
+    expect(res.statusCode).toBe(200);
+  });
+});
+
+describe("endpoint testing obtain single user", () => {
+  test("get user", async () => {
+    type user = {
+      id: number;
+      email: string;
+      name: string;
+      last_name: string;
+      profile_photo: string;
+      is_admin: boolean;
+      token: string | null;
+    };
+    const getUserResponse = await api.get(
+      `/api/users/single-by-email/userTest1@gmail.com`
+    );
+    const userResult = getUserResponse.body as user;
+    const id: number | null = userResult.id;
+    const res = await api.get(`/api/users/single/${id}`);
+    expect(res.statusCode).toBe(200);
+  });
+});
+
+describe("testing user deletion", () => {
+  test("delete delivery user", async () => {
+    const res = await api.delete("/api/users/delete/deliveryman").send({
+      email: "userTest1@gmail.com",
+    });
+
+    expect(res.status).toBe(200);
+  });
+
+  test("error when deleting an unregistered delivery driver", async () => {
+    const res = await api.delete("/api/users/delete/deliveryman").send({
+      email: "user@gmail.com",
+    });
+
+    expect(res.status).toBe(500);
+  });
+
+  test("delete admin user", async () => {
+    const res = await api.delete("/api/users/delete/admin").send({
+      email: "userTest3@gmail.com",
+    });
     expect(res.status).toBe(200);
   });
 });

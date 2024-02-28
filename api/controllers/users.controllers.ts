@@ -81,12 +81,12 @@ class UsersControllers {
       .catch((err) => res.status(400).send(err));
   }
 
-
   static getUser(req: Request, res: Response) {
     UsersServices.getUser(parseInt(req.params.id))
       .then((user) => {
         if (!user) return res.sendStatus(204);
         const payload = {
+          id: user.id,
           email: user.email,
           name: user.name,
           last_name: user.last_name,
@@ -115,7 +115,6 @@ class UsersControllers {
         return res.status(200).send(payload);
       })
       .catch((err) => res.status(400).send(err));
-
   }
 
   static deleteDeliveryman(req: Request, res: Response) {

@@ -10,6 +10,7 @@ type userDataType = {
   password: string;
   is_admin: boolean | null;
   is_confirmed: boolean;
+  is_enabled: boolean;
 };
 
 class UsersServices {
@@ -105,6 +106,7 @@ class UsersServices {
     return User.update(
       {
         is_confirmed: true,
+        is_enabled: true,
         token: null,
       },
       { where: { token }, returning: true }
@@ -120,7 +122,6 @@ class UsersServices {
         return error;
       });
   }
-
 
   static getUser(id: number) {
     return User.findOne({ where: { id: id } });
@@ -142,13 +143,13 @@ class UsersServices {
   }
 
   static deleteAdmin(email: string) {
-  return User.destroy({ where: { email: email, is_admin: true } })
-  .then((resp) => {
-   resp
-  })
-  .catch((error) => {
-    throw new Error(error);
-  });
+    return User.destroy({ where: { email: email, is_admin: true } })
+      .then((resp) => {
+        resp;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   }
 
   static findOneUserByEmail(email: string) {
