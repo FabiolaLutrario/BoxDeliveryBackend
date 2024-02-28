@@ -30,7 +30,7 @@ db.sync({ force: false })
   .then(() => {
     app.listen(
       process.env.PORT_PROD_APP,
-      () => console.log(`Server in port `, process.env.PORT_PROD_APP) // eslint-disable-line
+      () => console.log(`Servidor en puerto `, process.env.PORT_PROD_APP) // eslint-disable-line
     );
   })
   .catch((err: Error) => console.error(err));
