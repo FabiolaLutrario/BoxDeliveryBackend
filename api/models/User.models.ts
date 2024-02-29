@@ -80,7 +80,7 @@ User.init(
   { sequelize: db, modelName: "user", tableName: "user" }
 );
 
-User.beforeSave(async (user) => {
+User.beforeCreate(async (user) => {
   try {
     const salt = await bcrypt.genSalt(10);
     user.salt = salt;
