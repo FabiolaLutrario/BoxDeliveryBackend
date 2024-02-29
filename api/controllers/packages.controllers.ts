@@ -27,7 +27,7 @@ const PackagesControllers = {
         if (singlePackage) {
           res.status(200).send(singlePackage);
         } else {
-          res.status(404).send({ message: "Package not found" });
+          res.status(404).send("Package not found");
         }
       })
       .catch((error) => res.status(500).send({ error: error.message }));

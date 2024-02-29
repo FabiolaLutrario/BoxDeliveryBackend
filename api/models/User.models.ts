@@ -13,6 +13,7 @@ class User extends S.Model {
   profile_photo?: string;
   is_admin!: boolean;
   is_confirmed!: boolean;
+  //packages!: [];
 
   hash(password: string, salt: string) {
     return bcrypt.hash(password, salt);
