@@ -65,13 +65,13 @@ class UsersControllers {
   static loginUser(req: Request, res: Response) {
     UsersServices.login(req.body)
       .then((response) =>
-        res.cookie("auth-token", response.token).send(response.message)
+        res.cookie("authToken", response.token).send(response.message)
       )
       .catch((err) => res.status(401).send(err.message));
   }
 
   static logout(_req: Request, res: Response) {
-    res.clearCookie("auth-token");
+    res.clearCookie("authToken");
     res.sendStatus(200);
   }
 
@@ -225,6 +225,10 @@ class UsersControllers {
         console.error("Error when trying to overwrite password:", error);
         return res.status(500).send("Internal Server Error");
       });
+  }
+
+  static me(req: Request, res: Response){
+    return res.status(200).send(req.payload);
   }
 }
 export { UsersControllers };
