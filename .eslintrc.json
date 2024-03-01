@@ -14,7 +14,8 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "no-console": ["error", { "allow": ["error", "info"] }]
+    "no-console": ["error", { "allow": ["error", "info"] }],
+    "@typescript-eslint/no-namespace": "off"
     // "@typescript-eslint/no-var-requires": 0
   }
 }

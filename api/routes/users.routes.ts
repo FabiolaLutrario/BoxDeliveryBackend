@@ -32,4 +32,6 @@ router.get(
 
 router.post("/overwrite-password/:token", UsersControllers.overwritePassword);
 
+router.get("/me",UsersControllers.me)
+
 export default router;
