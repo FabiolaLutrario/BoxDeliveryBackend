@@ -1,6 +1,8 @@
 import { Router } from "express";
 const router = Router();
 import { UsersControllers } from "../controllers/users.controllers";
+import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+import { validateAuth } from "../middlewares/auth";
 
 router.get("/", UsersControllers.getAllUsers);
 
@@ -17,9 +19,14 @@ router.get("/single/:id", UsersControllers.getUser);
 router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 // faltan validaciones
-router.delete("/delete/deliveryman", UsersControllers.deleteDeliveryman);
+router.delete(
+  "/delete/deliveryman",
+  validateAuthAdmin,
+
+  UsersControllers.deleteDeliveryman
+);
 // faltan validaciones
-router.delete("/delete/admin", UsersControllers.deleteAdmin);
+router.delete("/delete/admin", validateAuthAdmin, UsersControllers.deleteAdmin);
 
 router.post("/logout", UsersControllers.logout);
 
@@ -32,6 +39,6 @@ router.get(
 
 router.post("/overwrite-password/:token", UsersControllers.overwritePassword);
 
-router.get("/me",UsersControllers.me)
+router.get("/me", validateAuth, UsersControllers.me);
 
 export default router;
