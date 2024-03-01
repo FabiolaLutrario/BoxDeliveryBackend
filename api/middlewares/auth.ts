@@ -18,19 +18,22 @@ declare global {
 
 const validateAuth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.authToken;
-  
-  if (!token) return res.status(401).json({ message: 'Authentication token not provided' });
-  
-  const user = verifyToken(token) 
+
+  if (!token)
+    return res
+      .status(401)
+      .json({ message: "Authentication token not provided" });
+
+  const user = verifyToken(token);
 
   if (!user) {
-    return res.status(403).json({ error: "Not authorized" })  ;
+    return res.status(403).json({ error: "Not authorized" });
   }
 
-  req.payload = user as payloadContent
+  req.payload = user as payloadContent;
 
   next();
-
+  return;
 };
 
-export {validateAuth}
+export { validateAuth };
