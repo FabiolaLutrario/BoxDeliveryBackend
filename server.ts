@@ -6,8 +6,17 @@ import dotenv from "dotenv";
 import db from "./api/config/db.config";
 const app = express();
 import routes from "./api/routes/index.routes";
+import path from "path";
+import fs from "fs";
+//swagger
+import swaggerUI from "swagger-ui-express";
 
 dotenv.config();
+
+// Lee el contenido del archivo swagger.json
+const swaggerSpec = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "swagger.json"), "utf-8")
+);
 
 app.use(express.json());
 app.use(logger("dev"));
@@ -25,6 +34,9 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api", routes);
+
+// Ruta para la documentación de Swagger
+app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 db.sync({ force: false })
   .then(() => {
