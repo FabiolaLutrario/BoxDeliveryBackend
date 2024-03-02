@@ -4,7 +4,7 @@ import { UsersControllers } from "../controllers/users.controllers";
 import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
 import { validateAuth } from "../middlewares/auth";
 
-router.get("/", UsersControllers.getAllUsers);
+router.get("/", validateAuthAdmin, UsersControllers.getAllUsers);
 
 router.post("/register", UsersControllers.registerUser);
 
@@ -14,18 +14,21 @@ router.post("/login", UsersControllers.loginUser);
 
 router.get("/deliverymen", UsersControllers.getDeliverymen);
 
-router.get("/single/:id", UsersControllers.getUser);
+router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
 
-router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
+router.get(
+  "/single-by-email/:email",
+  validateAuthAdmin,
+  UsersControllers.getUserByEmail
+);
 
-// faltan validaciones
 router.delete(
   "/delete/deliveryman",
   validateAuthAdmin,
 
   UsersControllers.deleteDeliveryman
 );
-// faltan validaciones
+
 router.delete("/delete/admin", validateAuthAdmin, UsersControllers.deleteAdmin);
 
 router.post("/logout", UsersControllers.logout);

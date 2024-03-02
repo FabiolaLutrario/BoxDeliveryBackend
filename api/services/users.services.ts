@@ -83,8 +83,8 @@ class UsersServices {
               email,
               name: user.name,
               last_name: user.last_name,
-              isAdmin: user.is_admin,
-              isConfirmed: user.is_confirmed,
+              is_admin: user.is_admin,
+              is_confirmed: user.is_confirmed,
             };
             const token = createToken(payload);
 
@@ -114,7 +114,7 @@ class UsersServices {
   }
 
   static getDeliverymen() {
-    return User.findAll({ where: { isAdmin: false } })
+    return User.findAll({ where: { is_admin: false } })
       .then((resp) => {
         resp;
       })
