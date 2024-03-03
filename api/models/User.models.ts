@@ -11,8 +11,9 @@ class User extends S.Model {
   salt?: string;
   token?: string | null;
   profile_photo?: string;
-  is_admin!: boolean;
-  is_confirmed!: boolean;
+  is_admin?: boolean;
+  is_confirmed?: boolean;
+  is_enabled?: boolean
   //packages!: [];
 
   hash(password: string, salt: string) {

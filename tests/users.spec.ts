@@ -187,7 +187,7 @@ describe("testing logout endpoint", () => {
   });
 });
 
-describe("endpoint testing obtain delivery users", () => {
+describe("endpoint testing obtain delivery men users", () => {
   test("get delivery users", async () => {
     const res = await api.get("/api/users/deliverymen/");
     expect(res.statusCode).toBe(200);
