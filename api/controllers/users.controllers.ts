@@ -3,6 +3,7 @@ import { transporter } from "../config/mailer.config";
 import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
+import { validateAuth } from "../middlewares/auth";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -25,6 +26,7 @@ class UsersControllers {
           profile_photo: user.profile_photo,
           is_admin: user.is_admin,
           is_confirmed: user.is_confirmed,
+          is_enabled:user.is_enabled
         };
 
         // Proceso de envío de correo omitido para entorno de prueba
@@ -65,14 +67,14 @@ class UsersControllers {
   static loginUser(req: Request, res: Response) {
     UsersServices.login(req.body)
       .then((response) =>
-        res.cookie("authToken", response.token).send(response.message)
+        res.status(200).cookie("authToken", response.token).send(response.message)
       )
       .catch((err) => res.status(401).send(err.message));
   }
 
   static logout(_req: Request, res: Response) {
     res.clearCookie("authToken");
-    res.sendStatus(200);
+    res.sendStatus(204);
   }
 
   static getDeliverymen(_req: Request, res: Response) {
@@ -92,7 +94,8 @@ class UsersControllers {
           last_name: user.last_name,
           profile_photo: user.profile_photo,
           is_admin: user.is_admin,
-          token: user.token,
+          is_confirmed:user.is_confirmed,
+          is_enables:user.is_enabled,
         };
         return res.status(200).send(payload);
       })
@@ -149,6 +152,8 @@ class UsersControllers {
           last_name: user.last_name,
           profile_photo: user.profile_photo,
           is_admin: user.is_admin,
+          is_confirmed:user.is_confirmed,
+          is_enabled:user.is_enabled
         };
 
         const token = createToken(payload, "10m");
@@ -228,7 +233,10 @@ class UsersControllers {
   }
 
   static me(req: Request, res: Response){
-    return res.status(200).send(req.payload);
+    validateAuth(req, res, () => {
+      const user = req.payload;
+      res.status(200).send(user);
+    });
   }
 }
 export { UsersControllers };
