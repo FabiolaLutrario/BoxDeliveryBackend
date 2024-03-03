@@ -1,11 +1,14 @@
 import { verifyToken } from "../config/tokens";
 import { Request, Response, NextFunction } from "express";
 interface payloadContent {
+  id:number;
   email: string;
   name: string;
   last_name: string;
   profile_photo: string;
   is_admin: boolean;
+  is_confirmed:boolean;
+  is_enabled:boolean;
 }
 
 declare global {
