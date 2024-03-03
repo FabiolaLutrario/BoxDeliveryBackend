@@ -24,13 +24,21 @@
       "User": {
         "type": "object",
         "properties": {
-          "full_name": {
-            "type": "string",
-            "description": "User first and last name."
+          "fid": {
+            "type": "integer",
+            "description": "User id."
           },
           "email": {
             "type": "string",
             "description": "User email."
+          },
+          "name": {
+            "type": "string",
+            "description": "User name."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User last name."
           },
           "password": {
             "type": "string",
@@ -40,179 +48,86 @@
             "type": "string",
             "description": "Salt code associated with the user password."
           },
-          "dni": {
-            "type": "string",
-            "description": "User identity document."
-          },
-          "phone_number": {
-            "type": "string",
-            "description": "User phone number."
-          },
           "token": {
             "type": "string",
-            "description": "Token for password recovery."
+            "description": "Token for confirm email after registering and password recovery."
           },
-          "confirmation": {
+          "proflie_photo": {
+            "type": "string",
+            "description": "User profile photo."
+          },
+          "id_admin": {
+            "type": "boolean",
+            "description": "User type admin or not."
+          },
+          "id_confirmed": {
             "type": "boolean",
             "description": "Confirmation of user account registration."
           },
-          "role_id": {
-            "type": "string",
-            "description": "User role."
-          },
-          "branch_office_id": {
-            "type": "integer",
-            "description": "Branch office to which a user with the 'operator' role belongs."
+          "id_enabled": {
+            "type": "boolean",
+            "description": "User is enabled or not."
           }
         },
         "required": [
-          "full_name",
           "email",
-          "password",
-          "dni",
-          "phone_number",
-          "role_id"
+          "name",
+          "last_name",
+          "password"
         ],
         "example": {
-          "full_name": "Alan Turing",
           "email": "alan@email.com",
-          "password": "Hello123456",
-          "dni": "123456789",
-          "phone_number": "2231234567"
+          "name": "Alan",
+          "last_name":"Turing",
+          "password": "Hello123456"
         }
       },
-      "Turn": {
+      "Package": {
         "type": "object",
         "properties": {
-          "turn_date": {
-            "type": "dateonly",
-            "description": "Turn date"
-          },
-          "reservation_date": {
-            "type": "dateonly",
-            "description": "Day on which the turn was reserved."
-          },
-          "reservation_time": {
-            "type": "time",
-            "description": "Time in which the turn was reserved."
-          },
-          "confirmation_id": {
+          "id": {
             "type": "string",
-            "description": "State in which the turn is (confirmed, pending, cancelled)."
+            "description": "Package id."
           },
-          "reason_cancellation": {
+          "receiver_name": {
             "type": "string",
-            "description": "If the user cancels a turn, the reason why they canceled it."
+            "description": "Name of the person receiving the package."
+          },
+          "date": {
+            "type": "dateonly",
+            "description": "Package creation date."
+          },
+          "weight": {
+            "type": "float",
+            "description": "Package weight in kilograms."
+          },
+          "address": {
+            "type": "string",
+            "description": "Package delivery address."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["in-progress", "delivered", "pending"],
+            "description": "Package delivery status."
           },
           "user_id": {
             "type": "integer",
             "description": "User id."
-          },
-          "branch_office_id": {
-            "type": "integer",
-            "description": "Branch office in which the user booked the turn."
-          },
-          "horary_id": {
-            "type": "time",
-            "description": "Turn time"
           }
         },
         "required": [
-          "turn_date",
-          "reservation_date",
-          "reservation_time",
-          "user_id",
-          "branch_office_id",
-          "horary_id"
+          "receiver_name",
+          "date",
+          "weight",
+          "address",
+          "status"
         ],
         "example": {
-          "turn_date": "2023-12-07",
-          "branch_office_id": 1,
-          "horary_id": "10:15:00"
-        }
-      },
-      "BranchOffice": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Branch office name"
-          },
-          "email": {
-            "type": "string",
-            "description": "Branch office email."
-          },
-          "phone_number": {
-            "type": "string",
-            "description": "Branch office phone number."
-          },
-          "boxes": {
-            "type": "integer",
-            "description": "Number of boxes for customer service at the branch office."
-          },
-          "opening_time": {
-            "type": "time",
-            "description": "Branch office opening hours to the public."
-          },
-          "closing_time": {
-            "type": "time",
-            "description": "Branch office closing hours to the public."
-          }
-        },
-        "required": [
-          "name",
-          "email",
-          "phone_number",
-          "boxes",
-          "opening_time",
-          "closing_time"
-        ],
-        "example": {
-          "name": "Sucursal 1",
-          "email": "branch1@gmail.com",
-          "phone_number": "2231234567",
-          "boxes": 3,
-          "opening_time": "10:00:00",
-          "closing_time": "15:00:00"
-        }
-      },
-      "Confirmation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Turn confirmation status (pending-confirmed-cancelled)."
-          }
-        },
-        "required": ["id"],
-        "example": {
-          "id": "pending"
-        }
-      },
-      "Role": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "User role name(customer-operator-admin-super admin)."
-          }
-        },
-        "required": ["id"],
-        "example": {
-          "id": "customer"
-        }
-      },
-      "Horary": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "time",
-            "description": "Turns horaries."
-          }
-        },
-        "required": ["id"],
-        "example": {
-          "id": "10:15:00"
+          "receiver_name":"Carlos López",
+          "date": "2024-04-03",
+          "weight": 2,
+          "address": "Av. Independencia 5456, CABA",
+          "status":"pending"
         }
       }
     },
@@ -238,8 +153,8 @@
     "/api/users/register": {
       "post": {
         "tags": ["users"],
-        "summary": "Register new client.",
-        "description": "Create a new user with the role client with the data provided.",
+        "summary": "Register new delivery man or admin.",
+        "description": "Create a new delivery man.",
         "requestBody": {
           "required": true,
           "content": {
@@ -260,21 +175,18 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                    "full_name": "Alan Turing",
+                    "id":1,
                     "email": "alan@email.com",
-                    "dni": "123456789",
-                    "phone_number": "2231234567",
-                    "role_id": "customer"
+                    "name": "Alan",
+                    "last_name":"Turing",
+                    "profile_photo": null,
+                    "is_admin":false,
+                    "is_confirmed":false,
+                    "is_enabled":false
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "All fields are required!"
-          },
-          "409": {
-            "description": "Email already exists."
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
@@ -314,13 +226,14 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                    "id": "1",
-                    "full_name": "Alan Turing",
+                    "id":1,
                     "email": "alan@email.com",
-                    "dni": "123456789",
-                    "phone_number": "2231234567",
-                    "role_id": "customer",
-                    "branch_office_id": "null"
+                    "name": "Alan",
+                    "last_name":"Turing",
+                    "profile_photo": null,
+                    "is_admin":false,
+                    "is_confirmed":true,
+                    "is_enabled":true
                   }
                 }
               }
@@ -330,7 +243,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "412": {
-            "description": "Not confirmed!"
+            "description": "Please confirm your account before trying to log in!"
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
@@ -346,6 +259,83 @@
         "responses": {
           "204": {
             "description": "Logged out"
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Validate user authentication.",
+        "description": "Validates the user's token and returns their data.",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "User authentication token."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "id":1,
+                    "email": "alan@email.com",
+                    "name": "Alan",
+                    "last_name":"Turing",
+                    "profile_photo": null,
+                    "is_admin":false,
+                    "is_confirmed":true,
+                    "is_enabled":true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/users/confirm-email/{token}": {
+      "put": {
+        "tags": ["users"],
+        "summary": "Confirm user account registration.",
+        "description": "Search the database for the user using the confirmation token and confirm the account.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "Token to search."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User confirmed."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
@@ -395,101 +385,51 @@
         }
       }
     },
-    "/api/users/register-operator": {
-      "post": {
-        "tags": ["users"],
-        "summary": "Register new operator.",
-        "description": "Create a new operator with the role operator with the data provided.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              },
-              "example": {
-                "full_name": "Ada Lovelace",
-                "email": "ada@email.com",
-                "password": "Helloada123456",
-                "dni": "12345678910",
-                "phone_number": "2231234565",
-                "branch_office_id": 1
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "example": {
-                    "full_name": "Ada Lovelace",
-                    "email": "ada@email.com",
-                    "dni": "12345678910",
-                    "phone_number": "2231234565",
-                    "branch_office_id": 1
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "All fields are required!"
-          },
-          "409": {
-            "description": "Email already exists."
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/users/me": {
+    "/api/users/deliverymen": {
       "get": {
         "tags": ["users"],
-        "summary": "Validate user authentication.",
-        "description": "Validates the user's token and returns their data.",
-        "parameters": [
-          {
-            "in": "cookie",
-            "name": "token",
-            "schema": {
-              "type": "string",
-              "description": "User authentication token."
-            },
-            "required": true
-          }
-        ],
+        "summary": "Get all users.",
+        "description": "Get all users (Admin permissions are required to access this path.)",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
+                  "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/User"
                   },
-                  "example": {
-                    "id": 1,
-                    "full_name": "Alan Turing",
-                    "email": "alan@email.com",
-                    "dni": "123456789",
-                    "phone_number": "2231234567",
-                    "role_id": "customer",
-                    "branch_office_id": null
-                  }
+                  "example": [
+                    {
+                      "id":1,
+                      "email": "alan@email.com",
+                      "name": "Alan",
+                      "last_name":"Turing",
+                      "profile_photo": null,
+                      "is_admin":false,
+                      "is_confirmed":false,
+                      "is_enabled":false
+                    },
+                    {
+                      "id":2,
+                      "email": "nikola@email.com",
+                      "name": "Nikola",
+                      "last_name":"Tesla",
+                      "profile_photo": null,
+                      "is_admin":true,
+                      "is_confirmed":false,
+                      "is_enabled":false
+                    }
+                  ]
                 }
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
+          "400": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
@@ -520,33 +460,23 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                    "id": 1,
-                    "full_name": "Alan Turing",
-                    "email": "alan@email.com",
-                    "dni": "123456789",
-                    "phone_number": "2231234567",
-                    "role_id": "customer",
-                    "branch_office_id": null,
-                    "turns": [
+                      "id":1,
+                      "email": "alan@email.com",
+                      "name": "Alan",
+                      "last_name":"Turing",
+                      "profile_photo": null,
+                      "is_admin":false,
+                      "is_confirmed":false,
+                      "is_enabled":false,
+                    "packages": [
                       {
-                        "id": 1,
-                        "turn_date": "2023-11-29",
-                        "reservation_date": "2023-11-28",
-                        "reservation_time": "13:21:01",
-                        "confirmation_id": "pending",
-                        "reason_cancellation": null,
-                        "user_id": 1,
-                        "branch_office_id": 1,
-                        "horary_id": "10:15:00",
-                        "branch_office": {
-                          "id": 1,
-                          "name": "Sucursal 1",
-                          "email": "branch1@gmail.com",
-                          "phone_number": "2231234567",
-                          "boxes": 3,
-                          "opening_time": "10:00:00",
-                          "closing_time": "15:00:00"
-                        }
+                        "id":"#AX105",
+                        "receiver_name":"Carlos López",
+                        "date": "2024-04-03",
+                        "weight": 2,
+                        "address": "Av. Independencia 5456, CABA",
+                        "status":"pending",
+                        "user_id":1
                       }
                     ]
                   }
@@ -554,8 +484,8 @@
               }
             }
           },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
@@ -585,109 +515,6 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/users/": {
-      "get": {
-        "tags": ["users"],
-        "summary": "Get all users.",
-        "description": "Get all users (Admin permissions are required to access this path.)",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "example": [
-                    {
-                      "id": 1,
-                      "email": "alan@email.com",
-                      "full_name": "Alan Turing",
-                      "role_id": "customer",
-                      "branch_office_id": null,
-                      "dni": "123456789",
-                      "confirmation": false,
-                      "phone_number": "2231234567",
-                      "createdAt": "2023-11-28T19:37:07.128Z",
-                      "updatedAt": "2023-11-28T19:37:07.128Z"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/users/edit-user/{user_id}": {
-      "put": {
-        "tags": ["users"],
-        "summary": "Edit a user.",
-        "description": "Edit user with the data provided.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "user_id",
-            "schema": {
-              "type": "integer",
-              "description": "User Id to edit."
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              },
-              "example": {
-                "full_name": "Alan Turing Edit",
-                "dni": "12345678",
-                "phone_number": "00542231234567"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "example": {
-                    "id": 1,
-                    "full_name": "Alan Turing Edit",
-                    "email": "alan@email.com",
-                    "dni": "12345678",
-                    "phone_number": "00542231234567",
-                    "role_id": "customer",
-                    "branch_office_id": null
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "All fields are required!"
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
@@ -731,171 +558,6 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/users/confirm-email/{token}": {
-      "put": {
-        "tags": ["users"],
-        "summary": "Confirm user account registration.",
-        "description": "Search the database for the user using the confirmation token and confirm the account.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "token",
-            "schema": {
-              "type": "string",
-              "description": "Token to search."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User confirmed."
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/users/change-role/{user_id}": {
-      "put": {
-        "tags": ["users"],
-        "summary": "Change a user's role.",
-        "description": "Change role for a user other than super admin (Admin permissions are required to access this path.)",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "user_id",
-            "schema": {
-              "type": "integer",
-              "description": "User Id to change role."
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              },
-              "example": {
-                "role_id": "operator"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation!"
-          },
-          "400": {
-            "description": "An administrator by default cannot self-revoke a permission"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/users/{id}": {
-      "delete": {
-        "tags": ["users"],
-        "summary": "Delete a user",
-        "description": "Delete a user based on their Id(Admin permissions are required to access this path.)",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "User Id to delete."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Successful operation!"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/turns/{user_id}": {
-      "post": {
-        "tags": ["turns"],
-        "summary": "Reserve a turn.",
-        "description": "Reserve a turn for a client with the data provided.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "user_id",
-            "schema": {
-              "type": "integer",
-              "description": "User Id to reserve a turn."
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Turn"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Turn"
-                  },
-                  "example": {
-                    "id": 1,
-                    "turn_date": "2023-12-07",
-                    "horary_id": "10:15:00",
-                    "confirmation_id": "pending",
-                    "reservation_date": "2023-11-29",
-                    "reservation_time": "16:17:05",
-                    "branch_office_id": 1,
-                    "user_id": 1,
-                    "reason_cancellation": null
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
@@ -1174,392 +836,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/branch-offices/create": {
-      "post": {
-        "tags": ["branch-offices"],
-        "summary": "Create new branch office.",
-        "description": "Create a new branch office with the data provided (Admin permissions are required to access this path..",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BranchOffice"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/BranchOffice"
-                  },
-                  "example": {
-                    "id": 1,
-                    "name": "Sucursal 1",
-                    "email": "branch1@gmail.com",
-                    "phone_number": "2231234567",
-                    "boxes": 3,
-                    "opening_time": "10:00:00",
-                    "closing_time": "15:00:00"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "All fields are required!"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/branch-offices/": {
-      "get": {
-        "tags": ["branch-offices"],
-        "summary": "Get all branch offices.",
-        "description": "Get all branch offices.",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BranchOffice"
-                  },
-                  "example": [
-                    {
-                      "id": 1,
-                      "name": "Sucursal 1",
-                      "email": "branch1@gmail.com",
-                      "phone_number": "2231234567",
-                      "boxes": 3,
-                      "opening_time": "10:00:00",
-                      "closing_time": "15:00:00"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/branch-offices/single/{id}": {
-      "get": {
-        "tags": ["branch-offices"],
-        "summary": "Get a branch office.",
-        "description": "Get a branch office based on your id.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Id of the branch office to obtain."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BranchOffice"
-                  },
-                  "example": {
-                    "id": 1,
-                    "name": "Sucursal 1",
-                    "email": "branch1@gmail.com",
-                    "phone_number": "2231234567",
-                    "boxes": 3,
-                    "opening_time": "10:00:00",
-                    "closing_time": "15:00:00"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/branch-offices/unavailable-days/{id}": {
-      "get": {
-        "tags": ["branch-offices"],
-        "summary": "Get unvailable days ",
-        "description": "Get unavailable days to take turns at a branch office.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Id branch office."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BranchOffice"
-                  },
-                  "example": ["2023-12-07T00:00:00.000Z"]
-                }
-              }
-            }
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/branch-offices/edit/{id}": {
-      "put": {
-        "tags": ["branch-offices"],
-        "summary": "Edit a branch office.",
-        "description": "Edit branch office with the data provided (Admin permissions are required to access this path).",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Branch office Id to edit."
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BranchOffice"
-              },
-              "example": {
-                "name": "Sucursal 1 Edit",
-                "email": "branch1edit@gmail.com",
-                "phone_number": "2231234566",
-                "boxes": 4,
-                "opening_time": "10:00:00",
-                "closing_time": "16:00:00"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "example": {
-                    "id": 1,
-                    "name": "Sucursal 1 Edit",
-                    "email": "branch1edit@gmail.com",
-                    "phone_number": "2231234566",
-                    "boxes": 4,
-                    "opening_time": "10:00:00",
-                    "closing_time": "16:00:00"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "All fields are required!"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/branch-offices/{id}": {
-      "delete": {
-        "tags": ["branch-offices"],
-        "summary": "Delete a branch office",
-        "description": "Delete a branch office based on their Id (Admin permissions are required to access this path).",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Branch office Id to delete."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Successful operation!"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/roles/": {
-      "get": {
-        "tags": ["roles"],
-        "summary": "Get all roles.",
-        "description": "Get all roles.",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Role"
-                  },
-                  "example": [
-                    {
-                      "id": "admin"
-                    },
-                    {
-                      "id": "super admin"
-                    },
-                    {
-                      "id": "operator"
-                    },
-                    {
-                      "id": "customer"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/horaries/": {
-      "get": {
-        "tags": ["horaries"],
-        "summary": "Get all horaries.",
-        "description": "Get all horaries.",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Horary"
-                  },
-                  "example": [
-                    {
-                      "id": "10:00:00"
-                    },
-                    {
-                      "id": "10:45:00"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/horaries/{date}/{branch_office_id}": {
-      "get": {
-        "tags": ["horaries"],
-        "summary": "Get horaries.",
-        "description": "Get horaries by date and branch office Id.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "dateonly",
-            "schema": {
-              "type": "string",
-              "description": "Date for which available horaries are required to be obtained."
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "branch_office_id",
-            "schema": {
-              "type": "integer",
-              "description": "Branch office Id for which available horaries are required to be obtained."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Horary"
-                  },
-                  "example": [
-                    {
-                      "id": "10:00:00"
-                    },
-                    {
-                      "id": "10:45:00"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
