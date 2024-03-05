@@ -38,7 +38,13 @@ const PackagesControllers = {
       parseInt(req.params.user_id),
       status
     )
-      .then((packages) => res.status(200).send(packages))
+      .then((packages) => {
+        if (packages) {
+          res.status(200).send(packages);
+        } else {
+          res.status(404).send("Packages not found");
+        }
+      })
       .catch((error) => res.status(500).send({ error: error.message }));
   },
 

@@ -553,6 +553,198 @@
           }
         }
       }
+    },
+    "/api/packages/add-package": {
+      "post": {
+        "tags": ["packages"],
+        "summary": "Add a new package.",
+        "description": "Create a new package.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Package"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": {
+                    "id": "#AX105",
+                    "receiver_name": "Carlos López",
+                    "date": "2024-04-03",
+                    "weight": 2,
+                    "address": "Av. Independencia 5456, CABA",
+                    "status": "pending",
+                    "user_id": null
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/": {
+      "get": {
+        "tags": ["packages"],
+        "summary": "Get all packages.",
+        "description": "Get all packages.",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": [
+                    {
+                      "id": "#AX105",
+                      "receiver_name": "Carlos López",
+                      "date": "2024-04-03",
+                      "weight": 2,
+                      "address": "Av. Independencia 5456, CABA",
+                      "status": "pending",
+                      "user_id": null
+                    },
+                    {
+                      "id": "#AX106",
+                      "receiver_name": "María Martínez",
+                      "date": "2024-04-05",
+                      "weight": 25,
+                      "address": "Teodoro Bronzinni 3226, Mar del Plata",
+                      "status": "in-progress",
+                      "user_id": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/single/{id}": {
+      "get": {
+        "tags": ["packages"],
+        "summary": "Get a package.",
+        "description": "Get a package based on it id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "description": "Id of the package to obtain."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": {
+                    "id": "#AX105",
+                    "receiver_name": "Carlos López",
+                    "date": "2024-04-03",
+                    "weight": 2,
+                    "address": "Av. Independencia 5456, CABA",
+                    "status": "pending",
+                    "user_id": null
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/{user_id}/{status}": {
+      "get": {
+        "tags": ["packages"],
+        "summary": "Get packages.",
+        "description": "Get packages by user id and status package.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "integer",
+              "description": "User Id to get packages."
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "description": "Status package to get."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": [
+                    {
+                      "id": "#AX106",
+                      "receiver_name": "María Martínez",
+                      "date": "2024-04-05",
+                      "weight": 25,
+                      "address": "Teodoro Bronzinni 3226, Mar del Plata",
+                      "status": "in-progress",
+                      "user_id": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
     }
   }
 }
