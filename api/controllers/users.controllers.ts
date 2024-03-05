@@ -3,6 +3,7 @@ import { transporter } from "../config/mailer.config";
 import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
+import { validateAuth } from "../middlewares/auth";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -10,7 +11,7 @@ class UsersControllers {
   static getAllUsers(req: Request, res: Response) {
     const page: number = parseInt(req.query.page as string) || 1;
     UsersServices.getAll(page)
-      .then((users: object) => res.status(200).send(users))
+      .then((users) => res.status(200).send(users))
       .catch((err: Error) => res.send(err));
   }
 
@@ -25,6 +26,7 @@ class UsersControllers {
           profile_photo: user.profile_photo,
           is_admin: user.is_admin,
           is_confirmed: user.is_confirmed,
+          is_enabled: user.is_enabled,
         };
 
         // Proceso de envío de correo omitido para entorno de prueba
@@ -65,20 +67,29 @@ class UsersControllers {
   static loginUser(req: Request, res: Response) {
     UsersServices.login(req.body)
       .then((response) =>
-        res.cookie("authToken", response.token).send(response.message)
+        res
+          .status(200)
+          .cookie("authToken", response.token, {
+            sameSite: "none",
+            httpOnly: true,
+            secure: true,
+          })
+          .send(response.payload)
       )
       .catch((err) => res.status(401).send(err.message));
   }
 
   static logout(_req: Request, res: Response) {
     res.clearCookie("authToken");
-    res.sendStatus(200);
+    res.sendStatus(204);
   }
 
   static getDeliverymen(_req: Request, res: Response) {
     UsersServices.getDeliverymen()
       .then((deliverymen) => res.status(200).send(deliverymen))
-      .catch((err) => res.status(400).send(err));
+      .catch(() => {
+        res.status(500).send("Error getting deliverymen!");
+      });
   }
 
   static getUser(req: Request, res: Response) {
@@ -92,11 +103,14 @@ class UsersControllers {
           last_name: user.last_name,
           profile_photo: user.profile_photo,
           is_admin: user.is_admin,
-          token: user.token,
+          is_confirmed: user.is_confirmed,
+          is_enables: user.is_enabled,
         };
         return res.status(200).send(payload);
       })
-      .catch((err) => res.status(400).send(err));
+      .catch(() => {
+        res.status(500).send("Error getting user!");
+      });
   }
 
   static getUserByEmail(req: Request, res: Response) {
@@ -139,9 +153,13 @@ class UsersControllers {
     UsersServices.findOneUserByEmail(email)
       .then((user: User | null) => {
         if (!user) {
-          return res.sendStatus(401);
+          return res.status(404).send("Email does not exist");
         }
-
+        if (!user.is_confirmed) {
+          return res
+            .status(401)
+            .send("You must confirm email before restoring password");
+        }
         //Si el usuario existe va a generar un token
         const payload = {
           email: user.email,
@@ -149,6 +167,8 @@ class UsersControllers {
           last_name: user.last_name,
           profile_photo: user.profile_photo,
           is_admin: user.is_admin,
+          is_confirmed: user.is_confirmed,
+          is_enabled: user.is_enabled,
         };
 
         const token = createToken(payload, "10m");
@@ -205,18 +225,19 @@ class UsersControllers {
   pasado las validaciones del front vuelve a verificar si el token sigue siendo válido o 
   si no ha expirado y luego se guarda la nueva contraseña*/
   static overwritePassword(req: Request, res: Response) {
-    const token = req.params.token;
+    const { token } = req.params;
+    const { password } = req.body;
     if (!token) return res.sendStatus(401);
 
     const user = verifyToken(token);
     if (!user) return res.sendStatus(401);
-
+    if (!password) return res.sendStatus(400).send("Password is required!");
     return UsersServices.findOneUserByToken(token)
       .then((user: User | null) => {
         if (!user) return res.sendStatus(401);
 
         user.token = null;
-        user.password = req.body.password;
+        user.password = password;
         return user.save().then(() => {
           return res.sendStatus(200);
         });
@@ -227,8 +248,11 @@ class UsersControllers {
       });
   }
 
-  static me(req: Request, res: Response){
-    return res.status(200).send(req.payload);
+  static me(req: Request, res: Response) {
+    validateAuth(req, res, () => {
+      const user = req.payload;
+      res.status(200).send(user);
+    });
   }
 }
 export { UsersControllers };

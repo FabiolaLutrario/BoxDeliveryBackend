@@ -40,7 +40,6 @@ Package.init(
     },
     user_id: {
       type: S.INTEGER,
-      allowNull: false,
       references: {
         model: User,
         key: "id",
