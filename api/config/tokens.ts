@@ -6,7 +6,7 @@ dotenv.config();
 const secretKey: string | undefined = process.env.JWT_SECRET_KEY;
 
 interface Payload {
-  [key: string]: string | boolean | undefined | null;
+  [key: string]: string | number | boolean | undefined | null;
 }
 
 function createToken(payload: Payload, duration?: string) {

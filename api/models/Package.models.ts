@@ -3,13 +3,13 @@ import db from "../config/db.config";
 import User from "./User.models";
 
 class Package extends S.Model {
-  id!: string;
+  id?: string;
   receiver_name!: string;
   date!: Date;
   weight!: number;
   address!: string;
   status!: "in-progress" | "delivered" | "pending";
-  user_id!: number;
+  user_id?: number;
 }
 
 Package.init(

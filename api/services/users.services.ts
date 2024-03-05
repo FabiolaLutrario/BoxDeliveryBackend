@@ -85,19 +85,14 @@ class UsersServices {
                 "Please confirm your account before trying to log in"
               );
             const payload = {
-              id: user.id.toString(),
+              id: user.id,
               email: user.email,
               name: user.name,
               last_name: user.last_name,
-
-      
-          
-
               profile_photo: user.profile_photo,
               is_admin: user.is_admin,
               is_confirmed: user.is_confirmed,
               is_enabled: user.is_enabled,
-
             };
             const token = createToken(payload);
 
@@ -127,14 +122,12 @@ class UsersServices {
   }
 
   static getDeliverymen() {
-
     return User.findAll({
       where: { is_admin: false },
       attributes: { exclude: ["password", "salt", "token"] },
     })
       .then((deliverymen) => {
         return deliverymen;
-
       })
       .catch((error) => {
         return error;
