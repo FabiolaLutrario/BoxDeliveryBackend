@@ -1,8 +1,9 @@
 import { Router } from "express";
 const router = Router();
 import { UsersControllers } from "../controllers/users.controllers";
-import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+
 import { validateAuth } from "../middlewares/auth";
+import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
 
 router.get("/", validateAuthAdmin, UsersControllers.getAllUsers);
 
@@ -12,20 +13,19 @@ router.put("/confirm-email/:token", UsersControllers.confirmEmail);
 
 router.post("/login", UsersControllers.loginUser);
 
-router.get("/deliverymen", UsersControllers.getDeliverymen);
+router.get("/deliverymen", validateAuth, UsersControllers.getDeliverymen);
 
-router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
+router.get("/single/:id", UsersControllers.getUser);
 
 router.get(
   "/single-by-email/:email",
-  validateAuthAdmin,
+
   UsersControllers.getUserByEmail
 );
 
 router.delete(
   "/delete/deliveryman",
   validateAuthAdmin,
-
   UsersControllers.deleteDeliveryman
 );
 
