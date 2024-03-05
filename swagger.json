@@ -382,7 +382,7 @@
                     "is_enabled": false,
                     "packages": [
                       {
-                        "id": "#AX105",
+                        "id": "AX105",
                         "receiver_name": "Carlos López",
                         "date": "2024-04-03",
                         "weight": 2,
@@ -579,7 +579,7 @@
                     "$ref": "#/components/schemas/Package"
                   },
                   "example": {
-                    "id": "#AX105",
+                    "id": "AX105",
                     "receiver_name": "Carlos López",
                     "date": "2024-04-03",
                     "weight": 2,
@@ -613,7 +613,7 @@
                   },
                   "example": [
                     {
-                      "id": "#AX105",
+                      "id": "AX105",
                       "receiver_name": "Carlos López",
                       "date": "2024-04-03",
                       "weight": 2,
@@ -622,7 +622,7 @@
                       "user_id": null
                     },
                     {
-                      "id": "#AX106",
+                      "id": "AX106",
                       "receiver_name": "María Martínez",
                       "date": "2024-04-05",
                       "weight": 25,
@@ -667,7 +667,7 @@
                     "$ref": "#/components/schemas/Package"
                   },
                   "example": {
-                    "id": "#AX105",
+                    "id": "AX105",
                     "receiver_name": "Carlos López",
                     "date": "2024-04-03",
                     "weight": 2,
@@ -724,7 +724,7 @@
                   },
                   "example": [
                     {
-                      "id": "#AX106",
+                      "id": "AX106",
                       "receiver_name": "María Martínez",
                       "date": "2024-04-05",
                       "weight": 25,
