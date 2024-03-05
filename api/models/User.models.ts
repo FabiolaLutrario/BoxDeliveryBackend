@@ -13,7 +13,7 @@ class User extends S.Model {
   profile_photo?: string;
   is_admin?: boolean;
   is_confirmed?: boolean;
-  is_enabled?: boolean
+  is_enabled?: boolean;
   //packages!: [];
 
   hash(password: string, salt: string) {
@@ -85,11 +85,29 @@ User.beforeCreate(async (user) => {
   try {
     const salt = await bcrypt.genSalt(10);
     user.salt = salt;
-    const hash = await user.hash(user.password, salt);
+    const hash = await bcrypt.hash(user.password, salt);
     user.password = hash;
   } catch (error) {
     throw new Error("Hashing error");
   }
 });
+
+const hashPasswordHook = async (user: User) => {
+  try {
+    // Verificar si el usuario ya existe en la base de datos
+    const existingUser = await User.findByPk(user.id);
+    if (existingUser) {
+      // Si el usuario existe, aplicar el hash a la contraseña
+      const salt = await bcrypt.genSalt(10);
+      user.salt = salt;
+      const hash = await bcrypt.hash(user.password, salt);
+      user.password = hash;
+    }
+  } catch (error) {
+    throw new Error("Hashing error");
+  }
+};
+
+User.addHook("beforeSave", "hashPasswordBeforeSave", hashPasswordHook);
 
 export default User;

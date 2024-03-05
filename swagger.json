@@ -69,16 +69,11 @@
             "description": "User is enabled or not."
           }
         },
-        "required": [
-          "email",
-          "name",
-          "last_name",
-          "password"
-        ],
+        "required": ["email", "name", "last_name", "password"],
         "example": {
-          "email": "alan@email.com",
+          "email": "appboxdelivery@gmail.com",
           "name": "Alan",
-          "last_name":"Turing",
+          "last_name": "Turing",
           "password": "Hello123456"
         }
       },
@@ -115,19 +110,13 @@
             "description": "User id."
           }
         },
-        "required": [
-          "receiver_name",
-          "date",
-          "weight",
-          "address",
-          "status"
-        ],
+        "required": ["receiver_name", "date", "weight", "address", "status"],
         "example": {
-          "receiver_name":"Carlos López",
+          "receiver_name": "Carlos López",
           "date": "2024-04-03",
           "weight": 2,
           "address": "Av. Independencia 5456, CABA",
-          "status":"pending"
+          "status": "pending"
         }
       }
     },
@@ -175,14 +164,14 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                    "id":1,
-                    "email": "alan@email.com",
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
                     "name": "Alan",
-                    "last_name":"Turing",
+                    "last_name": "Turing",
                     "profile_photo": null,
-                    "is_admin":false,
-                    "is_confirmed":false,
-                    "is_enabled":false
+                    "is_admin": false,
+                    "is_confirmed": false,
+                    "is_enabled": false
                   }
                 }
               }
@@ -209,7 +198,7 @@
                   "$ref": "#/components/schemas/User"
                 },
                 "example": {
-                  "email": "alan@email.com",
+                  "email": "appboxdelivery@gmail.com",
                   "password": "Hello123456"
                 }
               }
@@ -226,14 +215,14 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                    "id":1,
-                    "email": "alan@email.com",
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
                     "name": "Alan",
-                    "last_name":"Turing",
+                    "last_name": "Turing",
                     "profile_photo": null,
-                    "is_admin":false,
-                    "is_confirmed":true,
-                    "is_enabled":true
+                    "is_admin": false,
+                    "is_confirmed": true,
+                    "is_enabled": true
                   }
                 }
               }
@@ -259,83 +248,6 @@
         "responses": {
           "204": {
             "description": "Logged out"
-          }
-        }
-      }
-    },
-    "/api/users/me": {
-      "get": {
-        "tags": ["users"],
-        "summary": "Validate user authentication.",
-        "description": "Validates the user's token and returns their data.",
-        "parameters": [
-          {
-            "in": "cookie",
-            "name": "token",
-            "schema": {
-              "type": "string",
-              "description": "User authentication token."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "example": {
-                    "id":1,
-                    "email": "alan@email.com",
-                    "name": "Alan",
-                    "last_name":"Turing",
-                    "profile_photo": null,
-                    "is_admin":false,
-                    "is_confirmed":true,
-                    "is_enabled":true
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        }
-      }
-    },
-    "/api/users/confirm-email/{token}": {
-      "put": {
-        "tags": ["users"],
-        "summary": "Confirm user account registration.",
-        "description": "Search the database for the user using the confirmation token and confirm the account.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "token",
-            "schema": {
-              "type": "string",
-              "description": "Token to search."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User confirmed."
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
           }
         }
       }
@@ -388,8 +300,8 @@
     "/api/users/deliverymen": {
       "get": {
         "tags": ["users"],
-        "summary": "Get all users.",
-        "description": "Get all users (Admin permissions are required to access this path.)",
+        "summary": "Get all deliverymen.",
+        "description": "Get all deliverymen (Admin permissions are required to access this path.)",
         "responses": {
           "200": {
             "content": {
@@ -401,24 +313,24 @@
                   },
                   "example": [
                     {
-                      "id":1,
-                      "email": "alan@email.com",
+                      "id": 1,
+                      "email": "appboxdelivery@gmail.com",
                       "name": "Alan",
-                      "last_name":"Turing",
+                      "last_name": "Turing",
                       "profile_photo": null,
-                      "is_admin":false,
-                      "is_confirmed":false,
-                      "is_enabled":false
+                      "is_admin": false,
+                      "is_confirmed": false,
+                      "is_enabled": false
                     },
                     {
-                      "id":2,
+                      "id": 2,
                       "email": "nikola@email.com",
                       "name": "Nikola",
-                      "last_name":"Tesla",
+                      "last_name": "Tesla",
                       "profile_photo": null,
-                      "is_admin":true,
-                      "is_confirmed":false,
-                      "is_enabled":false
+                      "is_admin": true,
+                      "is_confirmed": false,
+                      "is_enabled": false
                     }
                   ]
                 }
@@ -460,23 +372,23 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                      "id":1,
-                      "email": "alan@email.com",
-                      "name": "Alan",
-                      "last_name":"Turing",
-                      "profile_photo": null,
-                      "is_admin":false,
-                      "is_confirmed":false,
-                      "is_enabled":false,
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
+                    "name": "Alan",
+                    "last_name": "Turing",
+                    "profile_photo": null,
+                    "is_admin": false,
+                    "is_confirmed": false,
+                    "is_enabled": false,
                     "packages": [
                       {
-                        "id":"#AX105",
-                        "receiver_name":"Carlos López",
+                        "id": "#AX105",
+                        "receiver_name": "Carlos López",
                         "date": "2024-04-03",
                         "weight": 2,
                         "address": "Av. Independencia 5456, CABA",
-                        "status":"pending",
-                        "user_id":1
+                        "status": "pending",
+                        "user_id": 1
                       }
                     ]
                   }
@@ -489,6 +401,51 @@
           },
           "500": {
             "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Validate user authentication.",
+        "description": "Validates the user's token and returns their data.",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "User authentication token."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
+                    "name": "Alan",
+                    "last_name": "Turing",
+                    "profile_photo": null,
+                    "is_admin": false,
+                    "is_confirmed": true,
+                    "is_enabled": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -522,6 +479,38 @@
         }
       }
     },
+    "/api/users/confirm-email/{token}": {
+      "put": {
+        "tags": ["users"],
+        "summary": "Confirm user account registration.",
+        "description": "Search the database for the user using the confirmation token and confirm the account.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "Token to search."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User confirmed."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
     "/api/users/restore-password": {
       "put": {
         "tags": ["users"],
@@ -535,7 +524,7 @@
                 "$ref": "#/components/schemas/User"
               },
               "example": {
-                "email": "alan@email.com"
+                "email": "appboxdelivery@gmail.com"
               }
             }
           }
@@ -550,7 +539,7 @@
                     "$ref": "#/components/schemas/User"
                   },
                   "example": {
-                    "email": "alan@email.com"
+                    "email": "appboxdelivery@gmail.com"
                   }
                 }
               }
@@ -558,284 +547,6 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/turns/by-confirmation-and-branch-office/{confirmation_id}/{branch_office_id}": {
-      "get": {
-        "tags": ["turns"],
-        "summary": "Get turns.",
-        "description": "Get turns by branch office Id and status confirmation turn.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "confirmation_id",
-            "schema": {
-              "type": "string",
-              "description": "Confirmation Id to get turns."
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "branch_office_id",
-            "schema": {
-              "type": "integer",
-              "description": "Branch office Id to get turns."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Turn"
-                  },
-                  "example": [
-                    {
-                      "id": 1,
-                      "turn_date": "2023-12-07",
-                      "reservation_date": "2023-11-29",
-                      "reservation_time": "16:17:05",
-                      "confirmation_id": "pending",
-                      "reason_cancellation": null,
-                      "user_id": 1,
-                      "branch_office_id": 1,
-                      "horary_id": "10:15:00",
-                      "branch_office": {
-                        "id": 1,
-                        "name": "Sucursal 1",
-                        "email": "branch1@gmail.com",
-                        "phone_number": "2231234567",
-                        "boxes": 3,
-                        "opening_time": "10:00:00",
-                        "closing_time": "15:00:00"
-                      },
-                      "user": {
-                        "full_name": "Alan Turing"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/turns/{id}": {
-      "get": {
-        "tags": ["turns"],
-        "summary": "Get a turn.",
-        "description": "Get a turn based on your id.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Id of the turn to obtain."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Turn"
-                  },
-                  "example": {
-                    "id": 1,
-                    "turn_date": "2023-12-07",
-                    "reservation_date": "2023-11-29",
-                    "reservation_time": "16:17:05",
-                    "confirmation_id": "pending",
-                    "reason_cancellation": null,
-                    "user_id": 1,
-                    "branch_office_id": 1,
-                    "horary_id": "10:15:00",
-                    "branch_office": {
-                      "id": 1,
-                      "name": "Sucursal 1",
-                      "email": "branch1@gmail.com",
-                      "phone_number": "2231234567",
-                      "boxes": 3,
-                      "opening_time": "10:00:00",
-                      "closing_time": "15:00:00"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/turns/": {
-      "get": {
-        "tags": ["turns"],
-        "summary": "Get all turns.",
-        "description": "Get all turns.",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Turn"
-                  },
-                  "example": [
-                    {
-                      "id": 1,
-                      "turn_date": "2023-12-07",
-                      "reservation_date": "2023-11-29",
-                      "reservation_time": "16:17:05",
-                      "confirmation_id": "pending",
-                      "reason_cancellation": null,
-                      "user_id": 1,
-                      "branch_office_id": 1,
-                      "horary_id": "10:15:00"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/turns/confirm-turn/{id}": {
-      "put": {
-        "tags": ["turns"],
-        "summary": "Change confirmation status of a turn to confirmed.",
-        "description": "Change confirmation status of a turn to confirmed according to its Id.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Turn Id."
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Turn"
-                  },
-                  "example": {
-                    "id": 1,
-                    "turn_date": "2023-12-07",
-                    "reservation_date": "2023-11-29",
-                    "reservation_time": "16:17:05",
-                    "confirmation_id": "confirmed",
-                    "reason_cancellation": null,
-                    "user_id": 1,
-                    "branch_office_id": 1,
-                    "horary_id": "10:15:00"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
-    "/api/turns/cancel-turn/{id}": {
-      "put": {
-        "tags": ["turns"],
-        "summary": "Change confirmation status of a turn to cancelled.",
-        "description": "Change confirmation status of a turn to cancelled according to its Id.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "description": "Turn Id."
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Turn"
-              },
-              "example": {
-                "reason_cancellation": "Ya no quiero ir."
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Turn"
-                  },
-                  "example": {
-                    "id": 1,
-                    "turn_date": "2023-12-07",
-                    "reservation_date": "2023-11-29",
-                    "reservation_time": "16:17:05",
-                    "confirmation_id": "cancelled",
-                    "reason_cancellation": "Ya no quiero ir.",
-                    "user_id": 1,
-                    "branch_office_id": 1,
-                    "horary_id": "10:15:00"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
           },
           "500": {
             "$ref": "#/components/responses/ServerError"

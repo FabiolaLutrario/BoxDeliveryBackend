@@ -8,16 +8,20 @@ type userDataType = {
   name: string;
   last_name: string;
   password: string;
-  profile_photo:string | null;
+  profile_photo: string | null;
   is_admin: boolean;
   is_confirmed: boolean;
   is_enabled: boolean;
 };
 
 class UsersServices {
-  static getAll(page: number = 1, pageSize: number = 15) {
+  static async getAll(page: number = 1, pageSize: number = 15) {
     const offset = (page - 1) * pageSize;
-    return User.findAll({ offset, limit: pageSize });
+    return await User.findAll({
+      offset,
+      limit: pageSize,
+      attributes: { exclude: ["password", "salt", "token"] },
+    });
   }
 
   static register(userData: userDataType) {
@@ -81,20 +85,20 @@ class UsersServices {
                 "Please confirm your account before trying to log in"
               );
             const payload = {
-              id:user.id.toString(),
-              email:user.email,
+              id: user.id.toString(),
+              email: user.email,
               name: user.name,
               last_name: user.last_name,
-              profile_photo:user.profile_photo,
+              profile_photo: user.profile_photo,
               is_admin: user.is_admin,
               is_confirmed: user.is_confirmed,
-              is_enabled:user.is_enabled
+              is_enabled: user.is_enabled,
             };
             const token = createToken(payload);
 
             return {
               token,
-              message: "You are now logged in!",
+              payload,
             };
           })
           .catch((err) => {
@@ -118,9 +122,12 @@ class UsersServices {
   }
 
   static getDeliverymen() {
-    return User.findAll({ where: { isAdmin: false }, attributes: { exclude: ["password", "salt", "token"] } })
-      .then((resp) => {
-        resp;
+    return User.findAll({
+      where: { is_admin: false },
+      attributes: { exclude: ["password", "salt", "token"] },
+    })
+      .then((deliverymen) => {
+        return deliverymen;
       })
       .catch((error) => {
         return error;
@@ -157,7 +164,9 @@ class UsersServices {
   }
 
   static findOneUserByEmail(email: string) {
-    return User.findOne({ where: { email } });
+    return User.findOne({ where: { email } }).catch((error) => {
+      throw new Error(error);
+    });
   }
 
   static findOneUserByToken(token: string) {

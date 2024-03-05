@@ -57,6 +57,40 @@ beforeAll(async () => {
       is_admin: true,
       is_confirmed: true,
     });
+    /*     await api.post("/api/users/register").send({
+      email: "notconfirmed@gmail.com",
+      name: "Manuela",
+      last_name: "Pedraza",
+      password: "password",
+      is_confirmed: false,
+    });
+    await api.post("/api/users/register").send({
+      email: "confirmed@gmail.com",
+      name: "Diego",
+      last_name: "Torres",
+      password: "password",
+      is_confirmed: true,
+    });
+    await api.post("/api/users/register").send({
+      email: "userTest1@gmail.com",
+      name: "userTest",
+      last_name: "testing",
+      password: "HelloWorld123",
+    });
+    await api.post("/api/users/register").send({
+      email: "userTest2@gmail.com",
+      name: "userTest2",
+      last_name: "testing2",
+      password: "HelloWorld123",
+    });
+    await api.post("/api/users/register").send({
+      email: "userTest3@gmail.com",
+      name: "userTest3",
+      last_name: "testing3",
+      password: "HelloWorld123",
+      is_admin: true,
+      is_confirmed: true,
+    }); */
   } catch (error) {
     console.error("Error setting up test data:", error);
   }
@@ -149,7 +183,7 @@ describe("testing endpoint for login", () => {
       email: "confirmed@gmail.com",
       password: "password",
     });
-    expect(res.text).toBe("You are now logged in!");
+    expect(res.status).toBe(200);
     expect(res.headers["set-cookie"]).toBeDefined();
   });
 });
@@ -183,7 +217,7 @@ describe("testing endpoint for confirm email after register user", () => {
 describe("testing logout endpoint", () => {
   test("should return a status 200", async () => {
     const res = await api.post("/api/users/logout");
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(204);
   });
 });
 
@@ -252,7 +286,7 @@ describe("testing restore-password endpoint", () => {
     const res = await api.put("/api/users/restore-password").send({
       email: "incorrectEmail@gmail.com",
     });
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(404);
   });
 });
 

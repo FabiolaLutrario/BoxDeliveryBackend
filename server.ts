@@ -14,9 +14,18 @@ import swaggerUI from "swagger-ui-express";
 dotenv.config();
 
 // Lee el contenido del archivo swagger.json
-const swaggerSpec = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "swagger.json"), "utf-8")
+const swaggerJsonPath = path.join(__dirname, "swagger.json");
+let swaggerJson = fs.readFileSync(swaggerJsonPath, "utf8");
+
+// Realiza la sustitución de la variable de entorno en el contenido del archivo
+const PORT_LOCAL_APP = process.env.PORT_LOCAL_APP || "5000";
+swaggerJson = swaggerJson.replace(
+  /\$\{process\.env\.PORT_LOCAL_APP\}/g,
+  PORT_LOCAL_APP
 );
+
+// Convierte el JSON modificado en un objeto
+const swaggerSpec = JSON.parse(swaggerJson);
 
 app.use(express.json());
 app.use(logger("dev"));
