@@ -3,6 +3,7 @@ import app from "../server";
 import dotenv from "dotenv";
 import db from "../api/config/db.config";
 import User from "../api/models/User.models";
+import { createToken } from "../api/config/tokens";
 dotenv.config({ path: ".env" });
 
 const api = supertest(app);
@@ -250,26 +251,48 @@ describe("endpoint testing obtain single user", () => {
 });
 
 describe("testing user deletion", () => {
+  const adminToken = createToken({
+    email: "admin@example.com",
+    is_admin: true,
+  });
+
   test("delete delivery user", async () => {
-    const res = await api.delete("/api/users/delete/deliveryman").send({
-      email: "userTest1@gmail.com",
-    });
+    const res = await api
+      .delete("/api/users/delete/deliveryman")
+      .set("Cookie", `authToken=${adminToken}`)
+      .send({
+        email: "userTest1@gmail.com",
+      });
 
     expect(res.status).toBe(200);
   });
 
   test("error when deleting an unregistered delivery driver", async () => {
-    const res = await api.delete("/api/users/delete/deliveryman").send({
-      email: "user@gmail.com",
+    const adminToken = createToken({
+      email: "admin@example.com",
+      is_admin: true,
     });
+    const res = await api
+      .delete("/api/users/delete/deliveryman")
+      .set("Cookie", `authToken=${adminToken}`)
+      .send({
+        email: "user@gmail.com",
+      });
 
     expect(res.status).toBe(500);
   });
 
   test("delete admin user", async () => {
-    const res = await api.delete("/api/users/delete/admin").send({
-      email: "userTest3@gmail.com",
+    const adminToken = createToken({
+      email: "admin@example.com",
+      is_admin: true,
     });
+    const res = await api
+      .delete("/api/users/delete/admin")
+      .set("Cookie", `authToken=${adminToken}`)
+      .send({
+        email: "userTest3@gmail.com",
+      });
     expect(res.status).toBe(200);
   });
 });

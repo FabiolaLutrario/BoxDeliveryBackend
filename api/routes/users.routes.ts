@@ -1,10 +1,11 @@
 import { Router } from "express";
 const router = Router();
 import { UsersControllers } from "../controllers/users.controllers";
-import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
-import { validateAuth } from "../middlewares/auth";
 
-router.get("/", UsersControllers.getAllUsers);
+import { validateAuth } from "../middlewares/auth";
+import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+
+router.get("/", validateAuthAdmin, UsersControllers.getAllUsers);
 
 //Listo en swagger
 router.post("/register", UsersControllers.registerUser);
@@ -15,21 +16,26 @@ router.put("/confirm-email/:token", UsersControllers.confirmEmail);
 //Listo en swagger
 router.post("/login", UsersControllers.loginUser);
 
+
+router.get("/deliverymen", validateAuth, UsersControllers.getDeliverymen);
 //Listo en swagger
-router.get("/deliverymen", UsersControllers.getDeliverymen);
+
 
 //Listo en swagger
 router.get("/single/:id", UsersControllers.getUser);
 
-router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
+router.get(
+  "/single-by-email/:email",
 
-// faltan validaciones
+  UsersControllers.getUserByEmail
+);
+
 router.delete(
   "/delete/deliveryman",
   validateAuthAdmin,
   UsersControllers.deleteDeliveryman
 );
-// faltan validaciones
+
 router.delete("/delete/admin", validateAuthAdmin, UsersControllers.deleteAdmin);
 
 //Listo en swagger
