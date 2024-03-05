@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import dotenv from "dotenv";
 import db from "../api/config/db.config";
 import User from "../api/models/User.models";
@@ -57,40 +57,6 @@ beforeAll(async () => {
       is_admin: true,
       is_confirmed: true,
     });
-    /*     await api.post("/api/users/register").send({
-      email: "notconfirmed@gmail.com",
-      name: "Manuela",
-      last_name: "Pedraza",
-      password: "password",
-      is_confirmed: false,
-    });
-    await api.post("/api/users/register").send({
-      email: "confirmed@gmail.com",
-      name: "Diego",
-      last_name: "Torres",
-      password: "password",
-      is_confirmed: true,
-    });
-    await api.post("/api/users/register").send({
-      email: "userTest1@gmail.com",
-      name: "userTest",
-      last_name: "testing",
-      password: "HelloWorld123",
-    });
-    await api.post("/api/users/register").send({
-      email: "userTest2@gmail.com",
-      name: "userTest2",
-      last_name: "testing2",
-      password: "HelloWorld123",
-    });
-    await api.post("/api/users/register").send({
-      email: "userTest3@gmail.com",
-      name: "userTest3",
-      last_name: "testing3",
-      password: "HelloWorld123",
-      is_admin: true,
-      is_confirmed: true,
-    }); */
   } catch (error) {
     console.error("Error setting up test data:", error);
   }
@@ -112,6 +78,7 @@ afterAll(async () => {
       },
     });
     await db.close();
+    server.close();
   } catch (error) {
     console.error("Error destroying test data:", error);
   }
