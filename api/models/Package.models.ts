@@ -51,11 +51,10 @@ Package.init(
 
 // Función para generar un ID único con el prefijo "#" y un número aleatorio
 const generateUniqueID = (): string => {
-  let uniqueCode = "#";
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const charactersLength = characters.length;
   const randomNumber = Math.floor(Math.random() * 1000);
-  uniqueCode +=
+  const uniqueCode =
     characters.charAt(Math.floor(Math.random() * charactersLength)) +
     randomNumber;
   // Elimina espacios en blanco al final del ID generado

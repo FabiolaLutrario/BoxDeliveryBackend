@@ -1,6 +1,7 @@
 import Package from "../models/Package.models";
 
 type PackageData = {
+  id: string;
   receiver_name: string;
   date: Date;
   weight: number;
