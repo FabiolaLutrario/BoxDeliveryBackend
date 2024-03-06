@@ -223,13 +223,23 @@ describe("testing logout endpoint", () => {
 });
 
 describe("endpoint testing obtain delivery men users", () => {
+  const adminToken = createToken({
+    email: "admin@example.com",
+    is_admin: true,
+  });
   test("get delivery users", async () => {
-    const res = await api.get("/api/users/deliverymen/");
+    const res = await api
+      .get("/api/users/deliverymen/")
+      .set("Cookie", `authToken=${adminToken}`);
     expect(res.statusCode).toBe(200);
   });
 });
 
 describe("endpoint testing obtain single user", () => {
+  const adminToken = createToken({
+    email: "admin@example.com",
+    is_admin: true,
+  });
   test("get user", async () => {
     type user = {
       id: number;
@@ -245,7 +255,9 @@ describe("endpoint testing obtain single user", () => {
     );
     const userResult = getUserResponse.body as user;
     const id: number | null = userResult.id;
-    const res = await api.get(`/api/users/single/${id}`);
+    const res = await api
+      .get(`/api/users/single/${id}`)
+      .set("Cookie", `authToken=${adminToken}`);
     expect(res.statusCode).toBe(200);
   });
 });

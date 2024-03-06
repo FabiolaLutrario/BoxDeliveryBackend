@@ -16,19 +16,13 @@ router.put("/confirm-email/:token", UsersControllers.confirmEmail);
 //Listo en swagger
 router.post("/login", UsersControllers.loginUser);
 
-
-router.get("/deliverymen", validateAuth, UsersControllers.getDeliverymen);
+router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
 //Listo en swagger
 
-
 //Listo en swagger
-router.get("/single/:id", UsersControllers.getUser);
+router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
 
-router.get(
-  "/single-by-email/:email",
-
-  UsersControllers.getUserByEmail
-);
+router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 router.delete(
   "/delete/deliveryman",
