@@ -3,7 +3,7 @@ import db from "../config/db.config";
 import bcrypt from "bcryptjs";
 
 class User extends S.Model {
-  id!: number;
+  id?: number;
   email!: string;
   name!: string;
   last_name!: string;
@@ -14,7 +14,7 @@ class User extends S.Model {
   is_admin?: boolean;
   is_confirmed?: boolean;
   is_enabled?: boolean;
-  //packages!: [];
+  packages?: [];
 
   hash(password: string, salt: string) {
     return bcrypt.hash(password, salt);

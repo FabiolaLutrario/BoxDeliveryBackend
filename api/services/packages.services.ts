@@ -1,6 +1,7 @@
 import Package from "../models/Package.models";
 
 type PackageData = {
+  id: string;
   receiver_name: string;
   date: Date;
   weight: number;
@@ -11,7 +12,7 @@ type PackageData = {
 };
 
 class PackagesServices {
-  static addPackage(data: PackageData): Promise<PackageData> {
+  static addPackage(data: PackageData) {
     return new Promise((resolve, reject) => {
       Package.create(data)
         .then((packageData) => {
@@ -28,10 +29,25 @@ class PackagesServices {
     return Package.findAll({ offset, limit: pageSize });
   }
 
-  static getSinglePackage(packageId: string): Promise<PackageData | null> {
+  static getAllPackagesByUserId(
+    userId: number,
+    page: number = 1,
+    pageSize: number = 15
+  ) {
+    const offset = (page - 1) * pageSize;
+    return Package.findAll({
+      where: {
+        user_id: userId,
+      },
+      offset,
+      limit: pageSize,
+    });
+  }
+
+  static getSinglePackage(packageId: string): Promise<Package | null> {
     return new Promise((resolve, reject) => {
       Package.findByPk(packageId)
-        .then((singlePackage: PackageData | null) => resolve(singlePackage))
+        .then((singlePackage: Package | null) => resolve(singlePackage))
         .catch((error) => reject(error));
     });
   }
@@ -39,10 +55,10 @@ class PackagesServices {
   static getPackagesByUserAndStatus(
     userId: number,
     status: string
-  ): Promise<PackageData[]> {
+  ): Promise<Package[]> {
     return new Promise((resolve, reject) => {
       Package.findAll({ where: { user_id: userId, status: status } })
-        .then((packages: PackageData[]) => resolve(packages))
+        .then((packages: Package[]) => resolve(packages))
         .catch((error) => reject(error));
     });
   }

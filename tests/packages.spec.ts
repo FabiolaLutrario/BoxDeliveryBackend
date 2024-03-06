@@ -1,6 +1,8 @@
 import supertest from "supertest";
-import app from "../server";
+import { app, server } from "../server";
 import db from "../api/config/db.config";
+import User from "../api/models/User.models";
+import Package from "../api/models/Package.models";
 import { DATEONLY } from "sequelize";
 
 const api = supertest(app);
@@ -8,7 +10,7 @@ let createdPackage1Id: string;
 
 beforeAll(async () => {
   try {
-    await api.post("/api/users/register").send({
+    await User.create({
       email: "usuario@example.com",
       name: "Marcos",
       last_name: "Pérez",
@@ -22,11 +24,19 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-    await api.delete("/api/users/delete/deliveryman").send({
-      email: "usuario@example.com",
+
+    await Package.destroy({
+      where: {
+        id: createdPackage1Id,
+      },
     });
-    await api.delete(`/api/packages/package/${createdPackage1Id}`);
+    await User.destroy({
+      where: {
+        email: "usuario@example.com",
+      },
+    });
     await db.close();
+    server.close();
   } catch (error) {
     console.error("Error cleaning up test data:", error);
   }
@@ -87,21 +97,21 @@ describe("Post /api/packages/add-package", () => {
   });
 });
 
-/* describe("Get /api/packages/single/:id", () => {
+
+describe("Get /api/packages/single/:id", () => {
   test("should respond with a 200 status code", async () => {
-    const response = await api.get(
-      `/api/packages/single/${createdPackage1Id}`
-    );
+    const response = await api.get(`/api/packages/single/${createdPackage1Id}`);
+
     expect(response.statusCode).toBe(200);
   });
   test("should respond with a 404 status code", async () => {
     const packageId = "error";
-    const response = await api.get(
-      `/api/packages/single/${packageId}`
-    );
+
+    const response = await api.get(`/api/packages/single/${packageId}`);
     expect(response.statusCode).toBe(404);
   });
-}); */
+});
+
 
 describe("Get /api/packages/:user_id/:status", () => {
   test("should respond with a 200 status code", async () => {
