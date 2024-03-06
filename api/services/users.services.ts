@@ -121,10 +121,13 @@ class UsersServices {
     );
   }
 
-  static getDeliverymen() {
-    return User.findAll({
+  static async getDeliverymen(page: number = 1, pageSize: number = 15) {
+    const offset = (page - 1) * pageSize;
+    return await User.findAll({
       where: { is_admin: false },
       attributes: { exclude: ["password", "salt", "token"] },
+      offset,
+      limit: pageSize,
     })
       .then((deliverymen) => {
         return deliverymen;
