@@ -85,8 +85,9 @@ class UsersControllers {
     res.sendStatus(204);
   }
 
-  static getDeliverymen(_req: Request, res: Response) {
-    UsersServices.getDeliverymen()
+  static getDeliverymen(req: Request, res: Response) {
+    const page: number = parseInt(req.query.page as string) || 1;
+    UsersServices.getDeliverymen(page)
       .then((deliverymen) => res.status(200).send(deliverymen))
       .catch(() => {
         res.status(500).send("Error getting deliverymen!");
