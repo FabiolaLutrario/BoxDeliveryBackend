@@ -12,9 +12,13 @@ router.put("/confirm-email/:token", UsersControllers.confirmEmail);
 
 router.post("/login", UsersControllers.loginUser);
 
-router.get("/deliverymen", validateAuth, UsersControllers.getDeliverymen);
 
-router.get("/single/:id", UsersControllers.getUser);
+router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
+
+
+
+router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
+
 
 router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 

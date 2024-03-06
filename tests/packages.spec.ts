@@ -24,6 +24,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
+
     await Package.destroy({
       where: {
         id: createdPackage1Id,
@@ -96,17 +97,21 @@ describe("Post /api/packages/add-package", () => {
   });
 });
 
+
 describe("Get /api/packages/single/:id", () => {
   test("should respond with a 200 status code", async () => {
     const response = await api.get(`/api/packages/single/${createdPackage1Id}`);
+
     expect(response.statusCode).toBe(200);
   });
   test("should respond with a 404 status code", async () => {
     const packageId = "error";
+
     const response = await api.get(`/api/packages/single/${packageId}`);
     expect(response.statusCode).toBe(404);
   });
 });
+
 
 describe("Get /api/packages/:user_id/:status", () => {
   test("should respond with a 200 status code", async () => {
