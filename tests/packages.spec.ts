@@ -4,6 +4,7 @@ import db from "../api/config/db.config";
 import User from "../api/models/User.models";
 import Package from "../api/models/Package.models";
 import { DATEONLY } from "sequelize";
+import { createToken } from "../api/config/tokens";
 
 const api = supertest(app);
 let createdPackage1Id: string;
@@ -42,13 +43,22 @@ afterAll(async () => {
 });
 
 describe("Get /api/packages", () => {
+  const adminToken = createToken({
+    email: "admin@example.com",
+    is_admin: true,
+  });
   test("should respond with a 200 status code", async () => {
-    const response = await api.get("/api/packages/");
+    const response = await api
+      .get("/api/packages/")
+      .set("Cookie", `authToken=${adminToken}`);
     expect(response.statusCode).toBe(200);
   });
 });
 
 describe("Post /api/packages/add-package", () => {
+  const authToken = createToken({
+    email: "user@example.com",
+  });
   test("should respond with a 201 status code", async () => {
     type user = {
       id: number;
@@ -75,6 +85,7 @@ describe("Post /api/packages/add-package", () => {
     };
     const response = await api
       .post("/api/packages/add-package")
+      .set("Cookie", `authToken=${authToken}`)
       .send(packageData);
     expect(response.status).toBe(201);
 
@@ -91,26 +102,36 @@ describe("Post /api/packages/add-package", () => {
     };
     const response = await api
       .post("/api/packages/add-package")
+      .set("Cookie", `authToken=${authToken}`)
       .send(packageData);
     expect(response.statusCode).toBe(500);
   });
 });
 
 describe("Get /api/packages/single/:id", () => {
+  const authToken = createToken({
+    email: "user@example.com",
+  });
   test("should respond with a 200 status code", async () => {
-    const response = await api.get(`/api/packages/single/${createdPackage1Id}`);
-
+    const response = await api
+      .get(`/api/packages/single/${createdPackage1Id}`)
+      .set("Cookie", `authToken=${authToken}`);
     expect(response.statusCode).toBe(200);
   });
   test("should respond with a 404 status code", async () => {
     const packageId = "error";
 
-    const response = await api.get(`/api/packages/single/${packageId}`);
+    const response = await api
+      .get(`/api/packages/single/${packageId}`)
+      .set("Cookie", `authToken=${authToken}`);
     expect(response.statusCode).toBe(404);
   });
 });
 
 describe("Get /api/packages/:user_id/:status", () => {
+  const authToken = createToken({
+    email: "user@example.com",
+  });
   test("should respond with a 200 status code", async () => {
     type user = {
       id: number;
@@ -127,13 +148,17 @@ describe("Get /api/packages/:user_id/:status", () => {
     const userResult = responseUser.body as user;
     const userId = userResult.id;
     const status = "ongoing";
-    const response = await api.get(`/api/packages/${userId}/${status}`);
+    const response = await api
+      .get(`/api/packages/${userId}/${status}`)
+      .set("Cookie", `authToken=${authToken}`);
     expect(response.statusCode).toBe(200);
   });
   test("should respond with a 500 status code", async () => {
     const userId = 1541584854848484;
     const status = "error";
-    const response = await api.get(`/api/packages/${userId}/${status}`);
+    const response = await api
+      .get(`/api/packages/${userId}/${status}`)
+      .set("Cookie", `authToken=${authToken}`);
     expect(response.statusCode).toBe(500);
   });
 });

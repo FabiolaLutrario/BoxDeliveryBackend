@@ -1,15 +1,21 @@
 import express from "express";
 import { PackagesControllers } from "../controllers/packages.controllers";
+import { validateAuth } from "../middlewares/auth";
+import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
 
 const router = express.Router();
 
-router.post("/add-package", PackagesControllers.addPackage);
+router.post("/add-package", validateAuth, PackagesControllers.addPackage);
 
-router.get("/", PackagesControllers.getAllPackages);
+router.get("/", validateAuthAdmin, PackagesControllers.getAllPackages);
 
-router.get("/single/:id", PackagesControllers.getSinglePackage);
+router.get("/single/:id", validateAuth, PackagesControllers.getSinglePackage);
 
-router.get("/:user_id/:status", PackagesControllers.getPackagesByUserAndStatus);
+router.get(
+  "/:user_id/:status",
+  validateAuth,
+  PackagesControllers.getPackagesByUserAndStatus
+);
 
 router.put(
   "/assign-package/:packageId/:userId",
