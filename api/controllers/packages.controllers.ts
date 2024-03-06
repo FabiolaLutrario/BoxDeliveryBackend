@@ -47,6 +47,45 @@ const PackagesControllers = {
       })
       .catch((error) => res.status(500).send({ error: error.message }));
   },
+  assignPackage: (req: Request, res: Response) => {
+    const { packageId, userId } = req.params;
+    PackagesServices.assign(packageId, userId)
+      .then(() =>
+        res.status(200).send("The package is now assigned to the deliveryman")
+      )
+      .catch((error) =>
+        res.status(400).send(`Error assigning package: ${error.message}`)
+      );
+  },
+
+  startTrip: (req: Request, res: Response) => {
+    const { packageId } = req.params;
+    PackagesServices.updateStatus(packageId)
+      .then(() => res.status(200).send("The trip has started!"))
+      .catch((err) =>
+        res.status(400).send(`Error starting trip: ${err.message}`)
+      );
+  },
+
+  finishTrip: (req: Request, res: Response) => {
+    const { packageId } = req.params;
+    PackagesServices.finishDelivery(packageId)
+      .then(() => res.status(200).send("The package has been delivered"))
+      .catch((err) =>
+        res.status(400).send(`Error finishing trip: ${err.message}`)
+      );
+  },
+
+  removeAssignedUser: (req: Request, res: Response) => {
+    const { packageId } = req.params;
+    PackagesServices.removeUserFromPackage(packageId)
+      .then(() =>
+        res.status(200).send("The deliverman has been removed from the package")
+      )
+      .catch((err) =>
+        res.status(400).send(`Error removing deliveryman: ${err.message}`)
+      );
+  },
 
   deletePackage: (req: Request, res: Response) => {
     const { id } = req.params;

@@ -17,6 +17,17 @@ router.get(
   PackagesControllers.getPackagesByUserAndStatus
 );
 
+router.put(
+  "/assign-package/:packageId/:userId",
+  PackagesControllers.assignPackage
+);
+
+router.put("/start/:packageId", PackagesControllers.startTrip);
+
+router.put("/finish-trip/:packageId", PackagesControllers.finishTrip);
+
+router.put("/remove-assign/:packageId", PackagesControllers.removeAssignedUser);
+
 //Poner ruta delete como privada solo para uso de tests
 router.delete("/package/:id", PackagesControllers.deletePackage);
 

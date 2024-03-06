@@ -6,7 +6,7 @@ type PackageData = {
   date: Date;
   weight: number;
   address: string;
-  status: "in-progress" | "delivered" | "pending";
+  status: "ongoing" | "delivered" | "pending";
   user_id: number;
   // [key: string | symbol]: any;
 };
@@ -62,7 +62,82 @@ class PackagesServices {
         .catch((error) => reject(error));
     });
   }
+  // viejo por ahora no lo uso
+  static update(id: string, status: string) {
+    return Package.findOne({ where: { id: id } })
+      .then((foundPackage) => {
+        if (!foundPackage) {
+          throw new Error("We could not find the package requested");
+        }
+        if (
+          status === `delivered` ||
+          status === `ongoing` ||
+          status === `pending`
+        ) {
+          foundPackage.status = status;
+          foundPackage.save();
+          return foundPackage;
+        } else throw new Error("Status type is invalid");
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
 
+  static updateStatus(packageId: string) {
+    return Package.findOne({ where: { id: packageId } })
+      .then((foundPackage) => {
+        if (!foundPackage) {
+          throw new Error("We could not find the package requested");
+        }
+        foundPackage.status = "ongoing";
+        foundPackage.save();
+        return foundPackage;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
+
+  static assign(packageId: string, userId: string) {
+    return Package.findOne({ where: { id: packageId } })
+      .then((foundPackage) => {
+        if (!foundPackage)
+          throw new Error("We could not find the package requested");
+        foundPackage.user_id = parseInt(userId);
+        foundPackage.save();
+        return foundPackage;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
+
+  static finishDelivery(packageId: string) {
+    return Package.findOne({ where: { id: packageId } })
+      .then((foundPackage) => {
+        if (!foundPackage)
+          throw new Error("We could not find the package requested");
+        foundPackage.status = "delivered";
+        foundPackage.save();
+        return foundPackage;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
+  static removeUserFromPackage(packageId: string) {
+    return Package.findOne({ where: { id: packageId } })
+      .then((foundPackage) => {
+        if (!foundPackage)
+          throw new Error("We could not find the package requested");
+        foundPackage.user_id = null;
+        return foundPackage.save();
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
   static deletePackage(id: string) {
     return Package.findOne({ where: { id } }).then((packageResponse) => {
       if (packageResponse) {

@@ -80,7 +80,7 @@ describe("Post /api/packages/add-package", () => {
       date: new DATEONLY(),
       weight: 45,
       address: "Dirección de entrega",
-      status: "in-progress",
+      status: "ongoing",
       user_id: userId,
     };
     const response = await api
@@ -97,7 +97,7 @@ describe("Post /api/packages/add-package", () => {
       date: new DATEONLY(),
       weight: "Peso del paquete",
       address: "Dirección de entrega",
-      status: "in-progress",
+      status: "ongoing",
       user_id: 2564515247845145,
     };
     const response = await api
@@ -147,7 +147,7 @@ describe("Get /api/packages/:user_id/:status", () => {
     );
     const userResult = responseUser.body as user;
     const userId = userResult.id;
-    const status = "in-progress";
+    const status = "ongoing";
     const response = await api
       .get(`/api/packages/${userId}/${status}`)
       .set("Cookie", `authToken=${authToken}`);

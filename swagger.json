@@ -102,7 +102,7 @@
           },
           "status": {
             "type": "string",
-            "enum": ["in-progress", "delivered", "pending"],
+            "enum": ["ongoing", "delivered", "pending"],
             "description": "Package delivery status."
           },
           "user_id": {
@@ -627,7 +627,7 @@
                       "date": "2024-04-05",
                       "weight": 25,
                       "address": "Teodoro Bronzinni 3226, Mar del Plata",
-                      "status": "in-progress",
+                      "status": "ongoing",
                       "user_id": 1
                     }
                   ]
@@ -729,7 +729,7 @@
                       "date": "2024-04-05",
                       "weight": 25,
                       "address": "Teodoro Bronzinni 3226, Mar del Plata",
-                      "status": "in-progress",
+                      "status": "ongoing",
                       "user_id": 1
                     }
                   ]
