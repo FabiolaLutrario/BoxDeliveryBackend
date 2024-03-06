@@ -9,6 +9,9 @@ const config = {
     ".config",
     ".models",
   ],
+  testEnvironmentOptions: {
+    url: `http://localhost:${process.env.PORT_TESTS}`,
+  },
 };
 
 module.exports = config;

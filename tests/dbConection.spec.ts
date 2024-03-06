@@ -1,6 +1,16 @@
 import db from "../api/config/db.config";
+import { server } from "../server";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
+
+afterAll(async () => {
+  try {
+    await db.close();
+    server.close();
+  } catch (error) {
+    console.error("Error closing db or server:", error);
+  }
+});
 
 describe("Database Connection", () => {
   test("should connect to the database successfully", async () => {
