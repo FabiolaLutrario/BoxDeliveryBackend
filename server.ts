@@ -5,7 +5,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import db from "./api/config/db.config";
 const app = express();
-import http from "http";
 import routes from "./api/routes/index.routes";
 import path from "path";
 import fs from "fs";
@@ -48,14 +47,13 @@ app.use("/api", routes);
 // Ruta para la documentación de Swagger
 app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-let server: http.Server;
 db.sync({ force: false })
   .then(() => {
-    server = app.listen(
+    app.listen(
       process.env.PORT_PROD_APP,
       () => console.log(`Server in port `, process.env.PORT_PROD_APP) // eslint-disable-line
     );
   })
   .catch((err: Error) => console.error(err));
 
-export { app, server };
+export default app;

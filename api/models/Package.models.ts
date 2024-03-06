@@ -8,8 +8,8 @@ class Package extends S.Model {
   date!: Date;
   weight!: number;
   address!: string;
-  status!: "in-progress" | "delivered" | "pending";
-  user_id?: number;
+  status!: "ongoing" | "delivered" | "pending";
+  user_id?: number | null;
 }
 
 Package.init(
@@ -35,7 +35,9 @@ Package.init(
       allowNull: false,
     },
     status: {
-      type: S.ENUM(`in-progress`, `delivered`, `pending`),
+      type: S.ENUM({
+        values: [`delivered`, "ongoing", `pending`],
+      }),
       allowNull: false,
     },
     user_id: {

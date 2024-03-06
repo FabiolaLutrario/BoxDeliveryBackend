@@ -24,7 +24,6 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-
     await Package.destroy({
       where: {
         id: createdPackage1Id,
@@ -71,7 +70,7 @@ describe("Post /api/packages/add-package", () => {
       date: new DATEONLY(),
       weight: 45,
       address: "Dirección de entrega",
-      status: "in-progress",
+      status: "ongoing",
       user_id: userId,
     };
     const response = await api
@@ -87,7 +86,7 @@ describe("Post /api/packages/add-package", () => {
       date: new DATEONLY(),
       weight: "Peso del paquete",
       address: "Dirección de entrega",
-      status: "in-progress",
+      status: "ongoing",
       user_id: 2564515247845145,
     };
     const response = await api
@@ -96,7 +95,6 @@ describe("Post /api/packages/add-package", () => {
     expect(response.statusCode).toBe(500);
   });
 });
-
 
 describe("Get /api/packages/single/:id", () => {
   test("should respond with a 200 status code", async () => {
@@ -111,7 +109,6 @@ describe("Get /api/packages/single/:id", () => {
     expect(response.statusCode).toBe(404);
   });
 });
-
 
 describe("Get /api/packages/:user_id/:status", () => {
   test("should respond with a 200 status code", async () => {
@@ -129,7 +126,7 @@ describe("Get /api/packages/:user_id/:status", () => {
     );
     const userResult = responseUser.body as user;
     const userId = userResult.id;
-    const status = "in-progress";
+    const status = "ongoing";
     const response = await api.get(`/api/packages/${userId}/${status}`);
     expect(response.statusCode).toBe(200);
   });
