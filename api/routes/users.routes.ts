@@ -35,7 +35,7 @@ router.get(
   UsersControllers.validateTokenToRestorePassword
 );
 
-router.post("/overwrite-password/:token", UsersControllers.overwritePassword);
+router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 
 router.get("/me", validateAuth, UsersControllers.me);
 

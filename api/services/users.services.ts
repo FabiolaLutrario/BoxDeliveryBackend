@@ -69,17 +69,18 @@ class UsersServices {
   }
 
   static login(userData: userDataType) {
-    const { email, password } = userData;
+    if (!userData.email || !userData.password)
+      throw new Error("Please complete all the fields");
 
-    if (!email || !password) throw new Error("Please complete all the fields");
+    const { email, password } = userData;
 
     return User.findOne({ where: { email } })
       .then((user) => {
-        if (!user) throw new Error("No account associated with that email");
+        if (!user) throw new Error("Incorrect email or password");
         return user
           .validatePassword(password)
           .then((isOk) => {
-            if (!isOk) throw new Error("Incorrect password, try again");
+            if (!isOk) throw new Error("Incorrect email or password");
             if (!user.is_confirmed)
               throw new Error(
                 "Please confirm your account before trying to log in"
@@ -106,7 +107,7 @@ class UsersServices {
           });
       })
       .catch((err) => {
-        throw new Error(err);
+        throw err;
       });
   }
 
