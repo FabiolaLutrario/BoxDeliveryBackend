@@ -38,7 +38,7 @@ Package.init(
       type: S.ENUM({
         values: [`delivered`, "ongoing", `pending`],
       }),
-      allowNull: false,
+      defaultValue: "pending",
     },
     user_id: {
       type: S.INTEGER,

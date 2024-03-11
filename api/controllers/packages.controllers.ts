@@ -3,8 +3,8 @@ import { PackagesServices } from "../services/packages.services";
 
 const PackagesControllers = {
   addPackage: (req: Request, res: Response) => {
-    const { receiver_name, date, weigth, address } = req.body;
-    if (!receiver_name || !date || !weigth || address)
+    const { receiver_name, date, weight, address } = req.body;
+    if (!receiver_name || !date || !weight || !address)
       return res.status(400).send("Please complete all fields");
     return PackagesServices.addPackage(req.body)
       .then((result) => {
