@@ -58,7 +58,7 @@ class UsersControllers {
     return UsersServices.confirmEmail(token)
       .then(([affectedRows, [updatedUser]]) => {
         if (affectedRows === 0 || !updatedUser) return res.sendStatus(401);
-        return res.status(200).send(`Usuario ${updatedUser.email} confirmado`);
+        return res.status(200).send(`User ${updatedUser.email} confirmed`);
       })
       .catch(() => {
         res.status(500).send("Error confirming user!");
