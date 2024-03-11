@@ -12,13 +12,9 @@ router.put("/confirm-email/:token", UsersControllers.confirmEmail);
 
 router.post("/login", UsersControllers.loginUser);
 
-
 router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
 
-
-
 router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
-
 
 router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
@@ -39,7 +35,7 @@ router.get(
   UsersControllers.validateTokenToRestorePassword
 );
 
-router.post("/overwrite-password/:token", UsersControllers.overwritePassword);
+router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 
 router.get("/me", validateAuth, UsersControllers.me);
 

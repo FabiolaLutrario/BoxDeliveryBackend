@@ -48,7 +48,7 @@ class UsersControllers {
           return res.status(201).send(payload);
         }
       })
-      .catch((err) => res.status(500).send(err.message));
+      .catch((err) => res.status(409).send(err.message));
   }
 
   static confirmEmail(req: Request, res: Response) {
@@ -198,7 +198,7 @@ class UsersControllers {
         return user.save().then(() => {
           if (process.env.NODE_ENV !== "test") {
             // Genera el link de recuperación de contraseña y lo envía por correo
-            const restorePasswordURL = `http://localhost:3000/new-password/${user.token}`;
+            const restorePasswordURL = `http://localhost:3001/new-password/${user.token}`;
             return transporter
               .sendMail({
                 from: '"Recuperación de contraseña" <turnoweb.mailing@gmail.com>',
@@ -248,9 +248,13 @@ class UsersControllers {
   static overwritePassword(req: Request, res: Response) {
     const { token } = req.params;
     const { password } = req.body;
-    if (!token) return res.sendStatus(401);
+    if (!token)
+      return res.status(401).send({ message: "Token does not exist" });
 
     const user = verifyToken(token);
+    // eslint-disable-next-line no-console
+    console.log("respuesta de verify token", user);
+
     if (!user) return res.sendStatus(401);
     if (!password) return res.sendStatus(400).send("Password is required!");
     return UsersServices.findOneUserByToken(token)
@@ -265,7 +269,7 @@ class UsersControllers {
       })
       .catch((error) => {
         console.error("Error when trying to overwrite password:", error);
-        return res.status(500).send("Internal Server Error");
+        return res.status(500).send(error);
       });
   }
 
