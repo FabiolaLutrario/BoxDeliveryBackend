@@ -32,7 +32,7 @@ afterAll(async () => {
     });
     await User.destroy({
       where: {
-        email: "usuario@example.com",
+        email: "usuario2@example.com",
       },
     });
     await db.close();
@@ -56,8 +56,9 @@ describe("Get /api/packages", () => {
 });
 
 describe("Post /api/packages/add-package", () => {
-  const authToken = createToken({
-    email: "usuario@example.com",
+  const adminToken = createToken({
+    email: "admin@example.com",
+    is_admin: true,
   });
   test("should respond with a 201 status code", async () => {
     const packageData = {
@@ -69,7 +70,7 @@ describe("Post /api/packages/add-package", () => {
     };
     const response = await api
       .post("/api/packages/add-package")
-      .set("Cookie", `authToken=${authToken}`)
+      .set("Cookie", `authToken=${adminToken}`)
       .send(packageData);
     expect(response.status).toBe(201);
 
@@ -84,7 +85,7 @@ describe("Post /api/packages/add-package", () => {
     };
     const response = await api
       .post("/api/packages/add-package")
-      .set("Cookie", `authToken=${authToken}`)
+      .set("Cookie", `authToken=${adminToken}`)
       .send(packageData);
     expect(response.statusCode).toBe(400);
   });

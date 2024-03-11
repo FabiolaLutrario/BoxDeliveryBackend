@@ -16,6 +16,7 @@ router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
 
 router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
 
+//Ruta usada sólo para testeo
 router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 router.delete(
