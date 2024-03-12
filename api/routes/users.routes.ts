@@ -7,6 +7,12 @@ import { validateAuthDeliveryMan } from "../middlewares/validateAuthDeliveryMan"
 
 router.get("/", validateAuthAdmin, UsersControllers.getAllUsers);
 
+router.get(
+  "/number-of-deliverymen-and-enabled-deliverymen",
+  validateAuthAdmin,
+  UsersControllers.GetNumberOfDeliverymenAndEnadledDeliverymen
+);
+
 router.post("/register", UsersControllers.registerUser);
 
 router.put("/confirm-email/:token", UsersControllers.confirmEmail);
@@ -41,6 +47,10 @@ router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 
 router.get("/me", validateAuth, UsersControllers.me);
 
-router.put("/delivery-status",validateAuthDeliveryMan, UsersControllers.deliveryStatus)
+router.put(
+  "/delivery-status",
+  validateAuthDeliveryMan,
+  UsersControllers.deliveryStatus
+);
 
 export default router;

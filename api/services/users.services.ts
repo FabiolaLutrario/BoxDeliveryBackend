@@ -138,6 +138,31 @@ class UsersServices {
       });
   }
 
+  static async GetNumberOfDeliverymenAndEnadledDeliverymen() {
+    return await User.findAll({
+      where: { is_admin: false, is_confirmed: true },
+      attributes: {
+        exclude: [
+          "email",
+          "name",
+          "last_name",
+          "password",
+          "salt",
+          "token",
+          "profile_photo",
+          "is_admin",
+          "is_confirmed",
+        ],
+      },
+    })
+      .then((deliverymen) => {
+        return deliverymen;
+      })
+      .catch((error) => {
+        return error;
+      });
+  }
+
   static getUser(id: number) {
     return User.findOne({ where: { id: id } });
   }
@@ -176,16 +201,15 @@ class UsersServices {
   static findOneUserByToken(token: string) {
     return User.findOne({ where: { token } });
   }
-  static updateDeliveryStatus(email:string){
-
-   return User.update({ is_enabled: true }, { where: {email: email }}).then(delivery => {
-     return delivery
-  })
-  .catch((error) => {
-    throw new Error(error);
-  });
+  static updateDeliveryStatus(email: string) {
+    return User.update({ is_enabled: true }, { where: { email: email } })
+      .then((delivery) => {
+        return delivery;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   }
-
 }
 
 export { UsersServices };

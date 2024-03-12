@@ -94,6 +94,29 @@ class UsersControllers {
       });
   }
 
+  static GetNumberOfDeliverymenAndEnadledDeliverymen(
+    _req: Request,
+    res: Response
+  ) {
+    interface Deliveryman {
+      id: number;
+      is_enabled: boolean;
+    }
+    UsersServices.GetNumberOfDeliverymenAndEnadledDeliverymen()
+      .then((deliverymen: Deliveryman[]) => {
+        const enabledDeliverymen = deliverymen.filter(
+          (deliveryman) => deliveryman.is_enabled
+        );
+        res.status(200).send({
+          enabledDeliverymenQuantity: enabledDeliverymen.length,
+          deliverymenQuantity: deliverymen.length,
+        });
+      })
+      .catch(() => {
+        res.status(500).send("Error getting deliverymen!");
+      });
+  }
+
   static getUser(req: Request, res: Response) {
     UsersServices.getUser(parseInt(req.params.id))
       .then((user) => {
@@ -280,16 +303,19 @@ class UsersControllers {
     });
   }
 
-  static deliveryStatus(req: Request, res: Response){
+  static deliveryStatus(req: Request, res: Response) {
     const email = req.body.email;
-    UsersServices.updateDeliveryStatus(email).then((resp) => {
-      if(resp[0]===1) res.status(200).send("user updated successfully")
-      else{res.status(422).send("error updating user")}
-    })
-    .catch((error) => {
-      console.error("Error when trying to overwrite password:", error);
-      return res.status(500).send("Internal Server Error");
-    });
+    UsersServices.updateDeliveryStatus(email)
+      .then((resp) => {
+        if (resp[0] === 1) res.status(200).send("user updated successfully");
+        else {
+          res.status(422).send("error updating user");
+        }
+      })
+      .catch((error) => {
+        console.error("Error when trying to overwrite password:", error);
+        return res.status(500).send("Internal Server Error");
+      });
   }
 }
 export { UsersControllers };
