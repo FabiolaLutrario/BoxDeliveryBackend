@@ -175,6 +175,16 @@ class UsersServices {
   static findOneUserByToken(token: string) {
     return User.findOne({ where: { token } });
   }
+  static updateDeliveryStatus(email:string){
+
+   return User.update({ is_enabled: true }, { where: {email: email }}).then(delivery => {
+     return delivery
+  })
+  .catch((error) => {
+    throw new Error(error);
+  });
+  }
+
 }
 
 export { UsersServices };

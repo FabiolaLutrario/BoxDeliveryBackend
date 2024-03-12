@@ -275,5 +275,17 @@ class UsersControllers {
       res.status(200).send(user);
     });
   }
+
+  static deliveryStatus(req: Request, res: Response){
+    const email = req.body.email;
+    UsersServices.updateDeliveryStatus(email).then((resp) => {
+      if(resp[0]===1) res.status(200).send("user updated successfully")
+      else{res.status(422).send("error updating user")}
+    })
+    .catch((error) => {
+      console.error("Error when trying to overwrite password:", error);
+      return res.status(500).send("Internal Server Error");
+    });
+  }
 }
 export { UsersControllers };
