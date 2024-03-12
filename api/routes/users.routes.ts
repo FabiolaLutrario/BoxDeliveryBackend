@@ -3,6 +3,7 @@ const router = Router();
 import { UsersControllers } from "../controllers/users.controllers";
 import { validateAuth } from "../middlewares/auth";
 import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+import { validateAuthDeliveryMan } from "../middlewares/validateAuthDeliveryMan";
 
 router.get("/", validateAuthAdmin, UsersControllers.getAllUsers);
 
@@ -39,5 +40,7 @@ router.get(
 router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 
 router.get("/me", validateAuth, UsersControllers.me);
+
+router.put("/delivery-status",validateAuthDeliveryMan, UsersControllers.deliveryStatus)
 
 export default router;
