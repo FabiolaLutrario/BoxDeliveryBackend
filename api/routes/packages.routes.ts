@@ -9,6 +9,12 @@ router.post("/add-package", validateAuthAdmin, PackagesControllers.addPackage);
 
 router.get("/", validateAuthAdmin, PackagesControllers.getAllPackages);
 
+router.get(
+  "/number-of-pacakges-and-packages-ongoing-by-date/:date",
+  validateAuthAdmin,
+  PackagesControllers.getNumberOfPacakgesAndPackagesStatusByDate
+);
+
 router.get("/single/:id", validateAuth, PackagesControllers.getSinglePackage);
 
 router.get(

@@ -29,6 +29,21 @@ class PackagesServices {
     return Package.findAll({ offset, limit: pageSize });
   }
 
+  static async getNumberOfPacakgesAndPackagesStatusByDate(date: string) {
+    return await Package.findAll({
+      where: { date: date },
+      attributes: {
+        exclude: ["receiver_name", "date", "weight", "address", "user_id"],
+      },
+    })
+      .then((packages) => {
+        return packages;
+      })
+      .catch((error) => {
+        return error;
+      });
+  }
+
   static getAllPackagesByUserId(
     userId: number,
     page: number = 1,
