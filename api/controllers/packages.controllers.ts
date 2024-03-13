@@ -14,9 +14,9 @@ const PackagesControllers = {
         res.status(500).send({ error: error.message });
       });
   },
-  getAllPackages: (req: Request, res: Response) => {
+  getUnassignedPackages: (req: Request, res: Response) => {
     const page: number = parseInt(req.query.page as string) || 1;
-    PackagesServices.getAllPackages(page)
+    PackagesServices.getPackages(page)
       .then((packages) => {
         res.status(200).send(packages);
       })
@@ -102,21 +102,34 @@ const PackagesControllers = {
       );
   },
 
+  cancelTrip: (req: Request, res: Response) => {
+    const { packageId } = req.params;
+    PackagesServices.cancelDelivery(packageId)
+      .then(() => res.status(200).send("The delivery has been canceled"))
+      .catch((err) =>
+        res.status(400).send(`Error canceling trip: ${err.message}`)
+      );
+  },
+
   removeAssignedUser: (req: Request, res: Response) => {
     const { packageId } = req.params;
     PackagesServices.removeUserFromPackage(packageId)
       .then(() =>
         res.status(200).send("The deliverman has been removed from the package")
       )
-      .catch((err) =>
-        res.status(400).send(`Error removing deliveryman: ${err.message}`)
-      );
+      .catch((err) => res.status(400).send(err.message));
   },
 
   deletePackage: (req: Request, res: Response) => {
     const { id } = req.params;
 
     PackagesServices.deletePackage(id)
+      .then((response) => res.status(200).send(response))
+      .catch((err) => res.status(500).send(err.message));
+  },
+
+  deletePackages: (_req: Request, res: Response) => {
+    PackagesServices.deletePackages()
       .then((response) => res.status(200).send(response))
       .catch((err) => res.status(500).send(err.message));
   },

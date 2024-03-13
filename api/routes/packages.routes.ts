@@ -1,13 +1,18 @@
 import express from "express";
 import { PackagesControllers } from "../controllers/packages.controllers";
 import { validateAuth } from "../middlewares/auth";
-import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+// import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+import { validateAuthDeliveryMan } from "../middlewares/validateAuthDeliveryMan";
 
 const router = express.Router();
 
 router.post("/add-package", validateAuthAdmin, PackagesControllers.addPackage);
 
-router.get("/", validateAuthAdmin, PackagesControllers.getAllPackages);
+router.get(
+  "/",
+  validateAuthDeliveryMan,
+  PackagesControllers.getUnassignedPackages
+);
 
 router.get(
   "/number-of-pacakges-and-packages-ongoing-by-date/:date",
@@ -37,6 +42,8 @@ router.put(
   PackagesControllers.finishTrip
 );
 
+router.put("/cancel-trip/:packageId", PackagesControllers.cancelTrip);
+
 router.put(
   "/remove-assign/:packageId",
   validateAuth,
@@ -49,5 +56,7 @@ router.delete(
   validateAuthAdmin,
   PackagesControllers.deletePackage
 );
+
+router.delete("/packages", PackagesControllers.deletePackages);
 
 export default router;

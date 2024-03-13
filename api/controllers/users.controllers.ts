@@ -77,7 +77,14 @@ class UsersControllers {
           })
           .send(response.payload)
       )
-      .catch((err) => res.status(401).send(err.message));
+      .catch((err) => {
+        if (
+          err.message === "Please confirm your account before trying to log in"
+        )
+          return res.status(412).send(err.message);
+
+        return res.status(401).send(err.message);
+      });
   }
 
   static logout(_req: Request, res: Response) {
