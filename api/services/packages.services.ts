@@ -24,9 +24,13 @@ class PackagesServices {
     });
   }
 
-  static getAllPackages(page: number = 1, pageSize: number = 15) {
+  static getPackages(page: number = 1, pageSize: number = 15) {
     const offset = (page - 1) * pageSize;
-    return Package.findAll({ offset, limit: pageSize });
+    return Package.findAll({
+      where: { user_id: null },
+      offset,
+      limit: pageSize,
+    });
   }
 
   static getAllPackagesByUserId(
@@ -126,16 +130,33 @@ class PackagesServices {
         throw new Error(err);
       });
   }
+
+  static cancelDelivery(packageId: string) {
+    return Package.findOne({ where: { id: packageId } })
+      .then((foundPackage) => {
+        if (!foundPackage)
+          throw new Error("We could not find the package requested");
+        foundPackage.status = "pending";
+        foundPackage.save();
+        return foundPackage;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
+
   static removeUserFromPackage(packageId: string) {
     return Package.findOne({ where: { id: packageId } })
       .then((foundPackage) => {
         if (!foundPackage)
           throw new Error("We could not find the package requested");
+        if (foundPackage.user_id === null)
+          throw new Error("El paquete no estaba asigando a este repartidor");
         foundPackage.user_id = null;
         return foundPackage.save();
       })
       .catch((err) => {
-        throw new Error(err);
+        throw Error(err);
       });
   }
   static deletePackage(id: string) {
@@ -150,6 +171,14 @@ class PackagesServices {
       }
       throw new Error("We could not find an package associated with that id");
     });
+  }
+
+  static deletePackages() {
+    return Package.destroy({ where: { user_id: !null } })
+      .then(() => "Packages deleted succesfully")
+      .catch(() => {
+        throw new Error("Failure when trying to delete packages");
+      });
   }
 }
 

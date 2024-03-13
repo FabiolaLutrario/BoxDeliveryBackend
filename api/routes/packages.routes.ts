@@ -1,13 +1,18 @@
 import express from "express";
 import { PackagesControllers } from "../controllers/packages.controllers";
 import { validateAuth } from "../middlewares/auth";
-import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+// import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+import { validateAuthDeliveryMan } from "../middlewares/validateAuthDeliveryMan";
 
 const router = express.Router();
 
 router.post("/add-package", validateAuth, PackagesControllers.addPackage);
 
-router.get("/", validateAuthAdmin, PackagesControllers.getAllPackages);
+router.get(
+  "/",
+  validateAuthDeliveryMan,
+  PackagesControllers.getUnassignedPackages
+);
 
 router.get("/single/:id", validateAuth, PackagesControllers.getSinglePackage);
 
@@ -26,9 +31,13 @@ router.put("/start/:packageId", PackagesControllers.startTrip);
 
 router.put("/finish-trip/:packageId", PackagesControllers.finishTrip);
 
+router.put("/cancel-trip/:packageId", PackagesControllers.cancelTrip);
+
 router.put("/remove-assign/:packageId", PackagesControllers.removeAssignedUser);
 
 //Poner ruta delete como privada solo para uso de tests
 router.delete("/package/:id", PackagesControllers.deletePackage);
+
+router.delete("/packages", PackagesControllers.deletePackages);
 
 export default router;
