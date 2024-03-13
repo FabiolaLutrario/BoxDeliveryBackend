@@ -303,9 +303,9 @@ class UsersControllers {
     });
   }
 
-  static deliveryStatus(req: Request, res: Response) {
+  static deliverymanStatus(req: Request, res: Response) {
     const email = req.body.email;
-    UsersServices.updateDeliveryStatus(email)
+    UsersServices.updateDeliverymanStatus(email)
       .then((resp) => {
         if (resp[0] === 1) res.status(200).send("user updated successfully");
         else {

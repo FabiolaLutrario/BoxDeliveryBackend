@@ -48,9 +48,9 @@ router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 router.get("/me", validateAuth, UsersControllers.me);
 
 router.put(
-  "/delivery-status",
+  "/deliveryman-status",
   validateAuthDeliveryMan,
-  UsersControllers.deliveryStatus
+  UsersControllers.deliverymanStatus
 );
 
 export default router;

@@ -201,7 +201,7 @@ class UsersServices {
   static findOneUserByToken(token: string) {
     return User.findOne({ where: { token } });
   }
-  static updateDeliveryStatus(email: string) {
+  static updateDeliverymanStatus(email: string) {
     return User.update({ is_enabled: true }, { where: { email: email } })
       .then((delivery) => {
         return delivery;
