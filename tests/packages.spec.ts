@@ -32,7 +32,7 @@ afterAll(async () => {
     });
     await User.destroy({
       where: {
-        email: "usuario@example.com",
+        email: "usuario2@example.com",
       },
     });
     await db.close();
@@ -56,55 +56,38 @@ describe("Get /api/packages", () => {
 });
 
 describe("Post /api/packages/add-package", () => {
-  const authToken = createToken({
-    email: "user@example.com",
+  const adminToken = createToken({
+    email: "admin@example.com",
+    is_admin: true,
   });
   test("should respond with a 201 status code", async () => {
-    type user = {
-      id: number;
-      email: string;
-      name: string;
-      last_name: string;
-      profile_photo: string;
-      is_admin: boolean;
-      token: string | null;
-    };
-    const responseUser = await api.get(
-      `/api/users/single-by-email/usuario@example.com`
-    );
-    const userResult = responseUser.body as user;
-    const userId = userResult.id;
-
     const packageData = {
       receiver_name: "Nombre del receptor",
       date: new DATEONLY(),
       weight: 45,
       address: "Dirección de entrega",
-      status: "ongoing",
-      user_id: userId,
+      //user_id: userId,
     };
     const response = await api
       .post("/api/packages/add-package")
-      .set("Cookie", `authToken=${authToken}`)
+      .set("Cookie", `authToken=${adminToken}`)
       .send(packageData);
     expect(response.status).toBe(201);
 
     createdPackage1Id = response.body.id;
   });
-  test("should respond with a 500 status code if there's an error adding the package", async () => {
+  test("should respond with a 400 status code because of missing properties", async () => {
     const packageData = {
-      receiver_name: "Nombre del receptor",
+      //receiver_name: "Nombre del receptor",
       date: new DATEONLY(),
       weight: "Peso del paquete",
       address: "Dirección de entrega",
-      status: "ongoing",
-      user_id: 2564515247845145,
     };
     const response = await api
       .post("/api/packages/add-package")
-      .set("Cookie", `authToken=${authToken}`)
+      .set("Cookie", `authToken=${adminToken}`)
       .send(packageData);
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toBe(400);
   });
 });
 

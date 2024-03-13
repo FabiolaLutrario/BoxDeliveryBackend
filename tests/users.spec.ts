@@ -103,7 +103,7 @@ describe("testing endpoint for register", () => {
       last_name: "Peña",
       password: "password",
     });
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(409);
     expect(res.text).toEqual(
       "Error: Account already associated with this email"
     );
@@ -126,7 +126,7 @@ describe("testing endpoint for login", () => {
       email: "nonexistent@gmail.com",
       password: "password",
     });
-    expect(res.text).toBe("Error: No account associated with that email");
+    expect(res.text).toBe("Incorrect email or password");
   });
 
   test("should return an error if password is incorrect", async () => {
@@ -134,7 +134,7 @@ describe("testing endpoint for login", () => {
       email: "notconfirmed@gmail.com",
       password: "wrongpassword",
     });
-    expect(res.text).toBe("Error: Incorrect password, try again");
+    expect(res.text).toBe("Incorrect email or password");
   });
 
   test("should return an error if account is not confirmed", async () => {
@@ -143,7 +143,7 @@ describe("testing endpoint for login", () => {
       password: "password",
     });
     expect(res.text).toBe(
-      "Error: Please confirm your account before trying to log in"
+      "Please confirm your account before trying to log in"
     );
   });
   test("should login with everything in order", async () => {
@@ -178,7 +178,7 @@ describe("testing endpoint for confirm email after register user", () => {
     const token: string | null = userResponse.token;
     const res = await api.put(`/api/users/confirm-email/${token}`);
     expect(res.status).toBe(200);
-    expect(res.text).toBe("Usuario newuser@gmail.com confirmado");
+    expect(res.text).toBe("User newuser@gmail.com confirmed");
   });
 });
 
@@ -336,7 +336,7 @@ describe("testing overwrite-password endpoint", () => {
     const userResponse = response.body as user;
     const token: string | null = userResponse.token;
     const res = await api
-      .post(`/api/users/overwrite-password/${token}`)
+      .put(`/api/users/overwrite-password/${token}`)
       .send({ password: "112233" });
     expect(res.status).toBe(200);
   });
@@ -346,6 +346,6 @@ describe("testing overwrite-password endpoint", () => {
     const res = await api
       .post(`/api/users/overwrite-password/${token}`)
       .send({ password: "112233" });
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(404);
   });
 });

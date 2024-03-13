@@ -3,7 +3,10 @@ import { PackagesServices } from "../services/packages.services";
 
 const PackagesControllers = {
   addPackage: (req: Request, res: Response) => {
-    PackagesServices.addPackage(req.body)
+    const { receiver_name, date, weight, address } = req.body;
+    if (!receiver_name || !date || !weight || !address)
+      return res.status(400).send("Please complete all fields");
+    return PackagesServices.addPackage(req.body)
       .then((result) => {
         res.status(201).send(result);
       })
@@ -19,6 +22,29 @@ const PackagesControllers = {
       })
       .catch((error: Error) => {
         res.status(500).send({ error: error.message });
+      });
+  },
+  getNumberOfPacakgesAndPackagesStatusByDate: (
+    _req: Request,
+    res: Response
+  ) => {
+    interface Package {
+      id: string;
+      status: string;
+    }
+    const { date } = _req.params;
+    PackagesServices.getNumberOfPacakgesAndPackagesStatusByDate(date)
+      .then((packages: Package[]) => {
+        const ongoingPackages = packages.filter(
+          (packageResult) => packageResult.status === "ongoing"
+        );
+        res.status(200).send({
+          ongoingPackagesQuantity: ongoingPackages.length,
+          packagesQuantity: packages.length,
+        });
+      })
+      .catch(() => {
+        res.status(500).send("Error getting packages!");
       });
   },
   getSinglePackage: (req: Request, res: Response) => {

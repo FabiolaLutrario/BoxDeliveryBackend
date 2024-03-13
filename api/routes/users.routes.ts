@@ -3,8 +3,15 @@ const router = Router();
 import { UsersControllers } from "../controllers/users.controllers";
 import { validateAuth } from "../middlewares/auth";
 import { validateAuthAdmin } from "../middlewares/validateAuthAdmin";
+import { validateAuthDeliveryMan } from "../middlewares/validateAuthDeliveryMan";
 
 router.get("/", validateAuthAdmin, UsersControllers.getAllUsers);
+
+router.get(
+  "/number-of-deliverymen-and-enabled-deliverymen",
+  validateAuthAdmin,
+  UsersControllers.GetNumberOfDeliverymenAndEnadledDeliverymen
+);
 
 router.post("/register", UsersControllers.registerUser);
 
@@ -16,6 +23,7 @@ router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
 
 router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
 
+//Ruta usada sólo para testeo
 router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 router.delete(
@@ -38,5 +46,11 @@ router.get(
 router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 
 router.get("/me", validateAuth, UsersControllers.me);
+
+router.put(
+  "/deliveryman-status",
+  validateAuthDeliveryMan,
+  UsersControllers.deliverymanStatus
+);
 
 export default router;

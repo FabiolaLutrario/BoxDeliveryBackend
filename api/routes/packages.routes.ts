@@ -6,12 +6,18 @@ import { validateAuthDeliveryMan } from "../middlewares/validateAuthDeliveryMan"
 
 const router = express.Router();
 
-router.post("/add-package", validateAuth, PackagesControllers.addPackage);
+router.post("/add-package", validateAuthAdmin, PackagesControllers.addPackage);
 
 router.get(
   "/",
   validateAuthDeliveryMan,
   PackagesControllers.getUnassignedPackages
+);
+
+router.get(
+  "/number-of-pacakges-and-packages-ongoing-by-date/:date",
+  validateAuthAdmin,
+  PackagesControllers.getNumberOfPacakgesAndPackagesStatusByDate
 );
 
 router.get("/single/:id", validateAuth, PackagesControllers.getSinglePackage);
@@ -24,19 +30,32 @@ router.get(
 
 router.put(
   "/assign-package/:packageId/:userId",
+  validateAuth,
   PackagesControllers.assignPackage
 );
 
-router.put("/start/:packageId", PackagesControllers.startTrip);
+router.put("/start/:packageId", validateAuth, PackagesControllers.startTrip);
 
-router.put("/finish-trip/:packageId", PackagesControllers.finishTrip);
+router.put(
+  "/finish-trip/:packageId",
+  validateAuth,
+  PackagesControllers.finishTrip
+);
 
 router.put("/cancel-trip/:packageId", PackagesControllers.cancelTrip);
 
-router.put("/remove-assign/:packageId", PackagesControllers.removeAssignedUser);
+router.put(
+  "/remove-assign/:packageId",
+  validateAuth,
+  PackagesControllers.removeAssignedUser
+);
 
 //Poner ruta delete como privada solo para uso de tests
-router.delete("/package/:id", PackagesControllers.deletePackage);
+router.delete(
+  "/package/:id",
+  validateAuthAdmin,
+  PackagesControllers.deletePackage
+);
 
 router.delete("/packages", PackagesControllers.deletePackages);
 

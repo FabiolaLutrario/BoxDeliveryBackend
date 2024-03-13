@@ -58,7 +58,7 @@ class UsersControllers {
     return UsersServices.confirmEmail(token)
       .then(([affectedRows, [updatedUser]]) => {
         if (affectedRows === 0 || !updatedUser) return res.sendStatus(401);
-        return res.status(200).send(`Usuario ${updatedUser.email} confirmado`);
+        return res.status(200).send(`User ${updatedUser.email} confirmed`);
       })
       .catch(() => {
         res.status(500).send("Error confirming user!");
@@ -96,6 +96,29 @@ class UsersControllers {
     const page: number = parseInt(req.query.page as string) || 1;
     UsersServices.getDeliverymen(page)
       .then((deliverymen) => res.status(200).send(deliverymen))
+      .catch(() => {
+        res.status(500).send("Error getting deliverymen!");
+      });
+  }
+
+  static GetNumberOfDeliverymenAndEnadledDeliverymen(
+    _req: Request,
+    res: Response
+  ) {
+    interface Deliveryman {
+      id: number;
+      is_enabled: boolean;
+    }
+    UsersServices.GetNumberOfDeliverymenAndEnadledDeliverymen()
+      .then((deliverymen: Deliveryman[]) => {
+        const enabledDeliverymen = deliverymen.filter(
+          (deliveryman) => deliveryman.is_enabled
+        );
+        res.status(200).send({
+          enabledDeliverymenQuantity: enabledDeliverymen.length,
+          deliverymenQuantity: deliverymen.length,
+        });
+      })
       .catch(() => {
         res.status(500).send("Error getting deliverymen!");
       });
@@ -285,6 +308,21 @@ class UsersControllers {
       const user = req.payload;
       res.status(200).send(user);
     });
+  }
+
+  static deliverymanStatus(req: Request, res: Response) {
+    const email = req.body.email;
+    UsersServices.updateDeliverymanStatus(email)
+      .then((resp) => {
+        if (resp[0] === 1) res.status(200).send("user updated successfully");
+        else {
+          res.status(422).send("error updating user");
+        }
+      })
+      .catch((error) => {
+        console.error("Error when trying to overwrite password:", error);
+        return res.status(500).send("Internal Server Error");
+      });
   }
 }
 export { UsersControllers };
