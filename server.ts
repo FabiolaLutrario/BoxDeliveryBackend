@@ -45,7 +45,7 @@ app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 let server: http.Server;
 
-db.sync({ force: true })
+db.sync({ force: false })
   .then(() => {
     server = app.listen(
       process.env.PORT_LOCAL_APP,

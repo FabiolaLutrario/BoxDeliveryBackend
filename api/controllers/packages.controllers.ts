@@ -14,6 +14,7 @@ const PackagesControllers = {
         res.status(500).send({ error: error.message });
       });
   },
+
   getUnassignedPackages: (req: Request, res: Response) => {
     const page: number = parseInt(req.query.page as string) || 1;
     PackagesServices.getPackages(page)
@@ -79,9 +80,15 @@ const PackagesControllers = {
       .then(() =>
         res.status(200).send("The package is now assigned to the deliveryman")
       )
-      .catch((error) =>
-        res.status(400).send(`Error assigning package: ${error.message}`)
-      );
+      .catch((error: Error) => {
+        return res
+          .status(
+            error.message === "We could not find the package requested"
+              ? 404
+              : 400
+          )
+          .send(`${error.message}`);
+      });
   },
 
   startTrip: (req: Request, res: Response) => {
@@ -117,6 +124,12 @@ const PackagesControllers = {
       .then(() =>
         res.status(200).send("The deliverman has been removed from the package")
       )
+      .catch((err) => res.status(400).send(err.message));
+  },
+
+  removeAllAssigned: (_req: Request, res: Response) => {
+    PackagesServices.removeAllUsersFromPackages()
+      .then(() => res.status(200).send("All delivermen removed from packages"))
       .catch((err) => res.status(400).send(err.message));
   },
 
