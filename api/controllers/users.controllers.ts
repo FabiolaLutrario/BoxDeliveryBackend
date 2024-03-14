@@ -4,7 +4,6 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 import { validateAuth } from "../middlewares/auth";
-import { PackagesServices } from "../services/packages.services";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -128,36 +127,17 @@ class UsersControllers {
     UsersServices.getUser(parseInt(req.params.id))
       .then((user) => {
         if (!user) return res.sendStatus(204);
-        if (!user.is_admin) {
-          return PackagesServices.getAllPackagesByUserId(
-            parseInt(req.params.id)
-          ).then((packages) => {
-            const payload = {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-              last_name: user.last_name,
-              profile_photo: user.profile_photo,
-              is_admin: user.is_admin,
-              is_confirmed: user.is_confirmed,
-              is_enabled: user.is_enabled,
-              packages: packages,
-            };
-            return res.status(200).send(payload);
-          });
-        } else {
-          const payload = {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            last_name: user.last_name,
-            profile_photo: user.profile_photo,
-            is_admin: user.is_admin,
-            is_confirmed: user.is_confirmed,
-            is_enabled: user.is_enabled,
-          };
-          return res.status(200).send(payload);
-        }
+        const payload = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          last_name: user.last_name,
+          profile_photo: user.profile_photo,
+          is_admin: user.is_admin,
+          is_confirmed: user.is_confirmed,
+          is_enabled: user.is_enabled,
+        };
+        return res.status(200).send(payload);
       })
       .catch(() => {
         res.status(500).send("Error getting user!");

@@ -14,7 +14,6 @@ class User extends S.Model {
   is_admin?: boolean;
   is_confirmed?: boolean;
   is_enabled?: boolean;
-  packages?: [];
 
   hash(password: string, salt: string) {
     return bcrypt.hash(password, salt);
