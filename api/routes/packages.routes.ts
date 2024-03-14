@@ -50,6 +50,12 @@ router.put(
   PackagesControllers.removeAssignedUser
 );
 
+router.put(
+  "/remove-all-assign",
+  validateAuth,
+  PackagesControllers.removeAllAssigned
+);
+
 //Poner ruta delete como privada solo para uso de tests
 router.delete(
   "/package/:id",

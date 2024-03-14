@@ -23,7 +23,6 @@ class PackagesServices {
         });
     });
   }
-
   static getPackages(page: number = 1, pageSize: number = 15) {
     const offset = (page - 1) * pageSize;
     return Package.findAll({
@@ -103,18 +102,26 @@ class PackagesServices {
       });
   }
 
-  static assign(packageId: string, userId: string) {
-    return Package.findOne({ where: { id: packageId } })
-      .then((foundPackage) => {
+  static async assign(packageId: string, userId: string) {
+    try {
+      const foundpackages = await Package.findAll({
+        where: { user_id: userId },
+      });
+      if (foundpackages.length >= 10) {
+        throw new Error("You can't deliver more than 10 packages per day");
+      } else {
+        const foundPackage = await Package.findOne({
+          where: { id: packageId },
+        });
         if (!foundPackage)
           throw new Error("We could not find the package requested");
         foundPackage.user_id = parseInt(userId);
         foundPackage.save();
         return foundPackage;
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
+      }
+    } catch (err) {
+      throw Error(`${err}`);
+    }
   }
 
   static finishDelivery(packageId: string) {
@@ -159,6 +166,15 @@ class PackagesServices {
         throw Error(err);
       });
   }
+  static removeAllUsersFromPackages() {
+    return Package.update(
+      {
+        user_id: null,
+      },
+      { where: {} }
+    );
+  }
+
   static deletePackage(id: string) {
     return Package.findOne({ where: { id } }).then((packageResponse) => {
       if (packageResponse) {
