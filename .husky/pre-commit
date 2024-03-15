@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-#docker compose -f docker-compose-dev.yml up jest-tests && 
-npx lint-staged
+docker compose -f docker-compose-dev.yml up jest-tests && npx lint-staged
