@@ -201,10 +201,21 @@ class UsersServices {
   static findOneUserByToken(token: string) {
     return User.findOne({ where: { token } });
   }
-  static updateDeliverymanStatus(email: string) {
-    return User.update({ is_enabled: true }, { where: { email: email } })
-      .then((delivery) => {
-        return delivery;
+
+  static enabledDeliveryman(userId: number) {
+    return User.update({ is_enabled: true }, { where: { id: userId } })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+
+  static disabledDeliveryman(userId: number) {
+    return User.update({ is_enabled: false }, { where: { id: userId } })
+      .then((response) => {
+        return response;
       })
       .catch((error) => {
         throw new Error(error);

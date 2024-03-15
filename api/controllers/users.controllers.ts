@@ -290,17 +290,30 @@ class UsersControllers {
     });
   }
 
-  static deliverymanStatus(req: Request, res: Response) {
-    const email = req.body.email;
-    UsersServices.updateDeliverymanStatus(email)
+  static enabledDeliveryman(req: Request, res: Response) {
+    UsersServices.enabledDeliveryman(parseInt(req.params.id))
       .then((resp) => {
-        if (resp[0] === 1) res.status(200).send("user updated successfully");
+        if (resp[0] === 1) res.status(200).send("user enabled successfully");
         else {
           res.status(422).send("error updating user");
         }
       })
       .catch((error) => {
-        console.error("Error when trying to overwrite password:", error);
+        console.error("Error when trying to enabled user:", error);
+        return res.status(500).send("Internal Server Error");
+      });
+  }
+
+  static disabledDeliveryman(req: Request, res: Response) {
+    UsersServices.disabledDeliveryman(parseInt(req.params.id))
+      .then((resp) => {
+        if (resp[0] === 1) res.status(200).send("user disabled successfully");
+        else {
+          res.status(422).send("error updating user");
+        }
+      })
+      .catch((error) => {
+        console.error("Error when trying to disabled user:", error);
         return res.status(500).send("Internal Server Error");
       });
   }
