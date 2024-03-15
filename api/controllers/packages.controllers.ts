@@ -74,6 +74,18 @@ const PackagesControllers = {
       })
       .catch((error) => res.status(500).send({ error: error.message }));
   },
+  getPackagesByStatusAndDate: (req: Request, res: Response) => {
+    const { status, date } = req.params;
+    PackagesServices.getPackagesByStatusAndDate(status, date)
+      .then((packages) => {
+        if (packages) {
+          res.status(200).send(packages);
+        } else {
+          res.status(404).send("Packages not found");
+        }
+      })
+      .catch((error) => res.status(500).send({ error: error.message }));
+  },
   assignPackage: (req: Request, res: Response) => {
     const { packageId, userId } = req.params;
     PackagesServices.assign(packageId, userId)

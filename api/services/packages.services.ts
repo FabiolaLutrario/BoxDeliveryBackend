@@ -65,6 +65,16 @@ class PackagesServices {
         .catch((error) => reject(error));
     });
   }
+  static getPackagesByStatusAndDate(
+    status: string,
+    date: string
+  ): Promise<Package[]> {
+    return new Promise((resolve, reject) => {
+      Package.findAll({ where: { status: status, date: date } })
+        .then((packages: Package[]) => resolve(packages))
+        .catch((error) => reject(error));
+    });
+  }
   // viejo por ahora no lo uso
   static update(id: string, status: string) {
     return Package.findOne({ where: { id: id } })

@@ -28,6 +28,12 @@ router.get(
   PackagesControllers.getPackagesByUserAndStatus
 );
 
+router.get(
+  "/by-status-and-date/:status/:date",
+  validateAuthAdmin,
+  PackagesControllers.getPackagesByStatusAndDate
+);
+
 router.put(
   "/assign-package/:packageId/:userId",
   validateAuth,
