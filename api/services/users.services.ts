@@ -1,5 +1,6 @@
 import User from "../models/User.models";
 import { createToken } from "../config/tokens";
+import Package from "../models/Package.models";
 
 type userDataType = {
   [key: string]: string | boolean | null | number;
@@ -12,6 +13,28 @@ type userDataType = {
   is_admin: boolean;
   is_confirmed: boolean;
   is_enabled: boolean;
+};
+
+type packageItem = {
+  id: string;
+  receiver_name: string;
+  date: Date;
+  weight: number;
+  address: string;
+  status: "ongoing" | "delivered" | "pending";
+  user_id: number;
+};
+
+type deliverymanWithPackages = {
+  id: number;
+  email: string;
+  name: string;
+  last_name: string;
+  profile_photo: string | null;
+  is_admin: boolean;
+  is_confirmed: boolean;
+  is_enabled: boolean;
+  packages: packageItem[];
 };
 
 class UsersServices {
@@ -136,6 +159,61 @@ class UsersServices {
       .catch((error) => {
         return error;
       });
+  }
+
+  static async getDeliverymenWithPackagesByDate(
+    page: number = 1,
+    pageSize: number = 15,
+    date: string
+  ) {
+    const offset = (page - 1) * pageSize;
+    const deliverymenResult: deliverymanWithPackages[] = [];
+
+    const deliverymen = await User.findAll({
+      where: { is_admin: false },
+      attributes: { exclude: ["password", "salt", "token"] },
+      offset,
+      limit: pageSize,
+    });
+
+    await Promise.all(
+      deliverymen.map(async (deliveryman) => {
+        if (deliveryman.id !== undefined) {
+          const userId: number = deliveryman.id;
+          const packages = await Package.findAll({
+            where: {
+              user_id: userId,
+              date: date,
+            },
+          });
+
+          const packagesArray = packages.map((packageItem) => ({
+            id: packageItem.id,
+            receiver_name: packageItem.receiver_name,
+            date: packageItem.date,
+            weight: packageItem.weight,
+            address: packageItem.address,
+            status: packageItem.status,
+            user_id: userId,
+          }));
+
+          const payload = {
+            id: userId,
+            email: deliveryman.email,
+            name: deliveryman.name,
+            last_name: deliveryman.last_name,
+            profile_photo: deliveryman.profile_photo || null,
+            is_admin: deliveryman.is_admin || false,
+            is_confirmed: deliveryman.is_confirmed || false,
+            is_enabled: deliveryman.is_enabled || false,
+            packages: packagesArray,
+          };
+
+          deliverymenResult.push(payload);
+        }
+      })
+    );
+    return deliverymenResult;
   }
 
   static async GetNumberOfDeliverymenAndEnadledDeliverymen() {
