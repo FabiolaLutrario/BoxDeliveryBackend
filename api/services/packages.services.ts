@@ -1,5 +1,4 @@
 import Package from "../models/Package.models";
-import { Sequelize } from "sequelize";
 
 type PackageData = {
   id: string;
@@ -74,7 +73,7 @@ class PackagesServices {
       Package.findAll({
         where: {
           status: status,
-          date: Sequelize.literal(`DATEONLY(date) = '${date}'`),
+          date: date,
         },
       })
         .then((packages: Package[]) => resolve(packages))

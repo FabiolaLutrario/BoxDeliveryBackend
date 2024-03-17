@@ -129,7 +129,6 @@ class UsersServices {
     return User.update(
       {
         is_confirmed: true,
-        is_enabled: true,
         token: null,
       },
       { where: { token }, returning: true }
