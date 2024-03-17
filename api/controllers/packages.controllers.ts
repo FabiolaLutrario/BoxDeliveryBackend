@@ -25,7 +25,7 @@ const PackagesControllers = {
         res.status(500).send({ error: error.message });
       });
   },
-  getNumberOfPacakgesAndPackagesStatusByDate: (
+  getNumberOfPacakgesAndPackagesDeliveredByDate: (
     _req: Request,
     res: Response
   ) => {
@@ -34,10 +34,10 @@ const PackagesControllers = {
       status: string;
     }
     const { date } = _req.params;
-    PackagesServices.getNumberOfPacakgesAndPackagesStatusByDate(date)
+    PackagesServices.getNumberOfPacakgesAndPackagesDeliveredByDate(date)
       .then((packages: Package[]) => {
         const ongoingPackages = packages.filter(
-          (packageResult) => packageResult.status === "ongoing"
+          (packageResult) => packageResult.status === "delivered"
         );
         res.status(200).send({
           ongoingPackagesQuantity: ongoingPackages.length,

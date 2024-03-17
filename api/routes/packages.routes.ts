@@ -15,9 +15,9 @@ router.get(
 );
 
 router.get(
-  "/number-of-pacakges-and-packages-ongoing-by-date/:date",
+  "/number-of-pacakges-and-packages-delivered-by-date/:date",
   validateAuthAdmin,
-  PackagesControllers.getNumberOfPacakgesAndPackagesStatusByDate
+  PackagesControllers.getNumberOfPacakgesAndPackagesDeliveredByDate
 );
 
 router.get("/single/:id", validateAuth, PackagesControllers.getSinglePackage);

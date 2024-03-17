@@ -32,7 +32,7 @@ class PackagesServices {
     });
   }
 
-  static async getNumberOfPacakgesAndPackagesStatusByDate(date: string) {
+  static async getNumberOfPacakgesAndPackagesDeliveredByDate(date: string) {
     return await Package.findAll({
       where: { date: date },
       attributes: {
