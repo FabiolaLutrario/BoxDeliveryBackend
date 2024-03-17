@@ -21,9 +21,9 @@ router.post("/login", UsersControllers.loginUser);
 router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
 
 router.get(
-  "/deliverymen-with-packages-by-date/:date",
+  "/deliverymen-with-packages-quantity-by-date/:date",
   validateAuthAdmin,
-  UsersControllers.getDeliverymenWithPackagesByDate
+  UsersControllers.getDeliverymenWithPackagesQuantityByDate
 );
 
 router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);

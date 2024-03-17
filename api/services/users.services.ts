@@ -15,16 +15,6 @@ type userDataType = {
   is_enabled: boolean;
 };
 
-type packageItem = {
-  id: string;
-  receiver_name: string;
-  date: Date;
-  weight: number;
-  address: string;
-  status: "ongoing" | "delivered" | "pending";
-  user_id: number;
-};
-
 type deliverymanWithPackages = {
   id: number;
   email: string;
@@ -34,7 +24,8 @@ type deliverymanWithPackages = {
   is_admin: boolean;
   is_confirmed: boolean;
   is_enabled: boolean;
-  packages: packageItem[];
+  packagesQuantity: number;
+  packagesDeliveredQuantity: number;
 };
 
 class UsersServices {
@@ -161,7 +152,7 @@ class UsersServices {
       });
   }
 
-  static async getDeliverymenWithPackagesByDate(
+  static async getDeliverymenWithPackagesQuantityByDate(
     page: number = 1,
     pageSize: number = 15,
     date: string
@@ -170,7 +161,7 @@ class UsersServices {
     const deliverymenResult: deliverymanWithPackages[] = [];
 
     const deliverymen = await User.findAll({
-      where: { is_admin: false },
+      where: { is_admin: false, is_confirmed: true },
       attributes: { exclude: ["password", "salt", "token"] },
       offset,
       limit: pageSize,
@@ -180,22 +171,20 @@ class UsersServices {
       deliverymen.map(async (deliveryman) => {
         if (deliveryman.id !== undefined) {
           const userId: number = deliveryman.id;
-          const packages = await Package.findAll({
+          const packagesQuantity = await Package.count({
             where: {
               user_id: userId,
               date: date,
             },
           });
 
-          const packagesArray = packages.map((packageItem) => ({
-            id: packageItem.id,
-            receiver_name: packageItem.receiver_name,
-            date: packageItem.date,
-            weight: packageItem.weight,
-            address: packageItem.address,
-            status: packageItem.status,
-            user_id: userId,
-          }));
+          const packagesDeliveredQuantity = await Package.count({
+            where: {
+              user_id: userId,
+              date: date,
+              status: "delivered",
+            },
+          });
 
           const payload = {
             id: userId,
@@ -206,7 +195,8 @@ class UsersServices {
             is_admin: deliveryman.is_admin || false,
             is_confirmed: deliveryman.is_confirmed || false,
             is_enabled: deliveryman.is_enabled || false,
-            packages: packagesArray,
+            packagesQuantity: packagesQuantity,
+            packagesDeliveredQuantity: packagesDeliveredQuantity,
           };
 
           deliverymenResult.push(payload);

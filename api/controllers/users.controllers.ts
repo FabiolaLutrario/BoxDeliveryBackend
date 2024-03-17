@@ -100,10 +100,10 @@ class UsersControllers {
       });
   }
 
-  static getDeliverymenWithPackagesByDate(req: Request, res: Response) {
+  static getDeliverymenWithPackagesQuantityByDate(req: Request, res: Response) {
     const page: number = parseInt(req.query.page as string) || 1;
     const { date } = req.params;
-    UsersServices.getDeliverymenWithPackagesByDate(page, 15, date)
+    UsersServices.getDeliverymenWithPackagesQuantityByDate(page, 15, date)
       .then((deliverymen) => res.status(200).send(deliverymen))
       .catch(() => {
         res.status(500).send("Error getting deliverymen!");
