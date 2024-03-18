@@ -14,6 +14,14 @@ const db = new Sequelize(
   }
 );
 
+/* const db = new Sequelize(
+  "postgresql://uyw3zp4yythtmky2itkk:UzUqOZsvKFxjBKeRTgCn9x5JEYVC8v@bjuqfle74brsz7bhh74l-postgresql.services.clever-cloud.com:50013/bjuqfle74brsz7bhh74l",
+  {
+    dialect: "postgres",
+    logging: false,
+  }
+); */
+
 db.authenticate()
   .then(() => {
     console.log(`Successfully conected to database ${`appbox`}`); // eslint-disable-line
