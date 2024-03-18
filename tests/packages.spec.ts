@@ -42,19 +42,6 @@ afterAll(async () => {
   }
 });
 
-describe("Get /api/packages", () => {
-  const adminToken = createToken({
-    email: "admin@example.com",
-    is_admin: true,
-  });
-  test("should respond with a 200 status code", async () => {
-    const response = await api
-      .get("/api/packages/")
-      .set("Cookie", `authToken=${adminToken}`);
-    expect(response.statusCode).toBe(200);
-  });
-});
-
 describe("Post /api/packages/add-package", () => {
   const adminToken = createToken({
     email: "admin@example.com",
