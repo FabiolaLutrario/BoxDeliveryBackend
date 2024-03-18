@@ -46,7 +46,13 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Docker Build
+        run: |
+          docker build -t appbox .
       - uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: .
 
   test:
     needs: [lint, build]
