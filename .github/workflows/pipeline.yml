@@ -77,13 +77,11 @@ jobs:
       #   with:
       #     name: build-artifact
       #     path: .
-      - name: Compress artifacts
-        run: zip -r build-artifact.zip .
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: build-artifact
-          path: build-artifact.zip
+          path: .
 
   test:
     needs: [lint, build]
@@ -101,7 +99,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifact
-          path: build-artifact.zip
+          path: .
       - name: Test
         run: npm run test
     #   run: docker compose -f docker-compose-dev.yml up jest-tests
