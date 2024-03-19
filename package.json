@@ -9,7 +9,8 @@
     "start": "nodemon server.ts",
     "build": "tsc",
     "test": "jest --colors --verbose --silent --detectOpenHandles",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate-swagger": "swagger-jsdoc -o ./build/swagger.json ./src/**/*.ts"
   },
   "husky": {
     "hooks": {
