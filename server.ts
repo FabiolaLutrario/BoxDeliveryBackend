@@ -36,7 +36,7 @@ app.use(
   })
 );
 app.get("/health", (_req, res) => {
-  res.status(200).send("The server is up and healthy  😀");
+  res.status(200).send("The server is up and healthy 😀");
 });
 app.use("/api", routes);
 
