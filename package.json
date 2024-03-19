@@ -10,7 +10,7 @@
     "build": "tsc",
     "test": "jest --colors --verbose --silent --detectOpenHandles",
     "prepare": "husky install",
-    "generate-swagger": "mkdir -p ./build && swagger-jsdoc -d ./swagger.json -o ./build/swagger.json ./src/**/*.ts"
+    "generate-swagger": "swagger-jsdoc -d ./swagger.json -o ./build/swagger.json ./src/**/*.ts"
   },
   "husky": {
     "hooks": {
