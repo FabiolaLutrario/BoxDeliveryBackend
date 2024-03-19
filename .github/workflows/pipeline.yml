@@ -62,6 +62,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Generar Swagger JSON
+        run: npm run generate-swagger
+      - name: Copiar Swagger JSON
+        run: cp swagger.json build/swagger.json
       - uses: actions/setup-node@v2
         with:
           cache: "npm"
