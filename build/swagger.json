@@ -1,0 +1,793 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "App Box Delivery API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:${process.env.PORT_LOCAL_APP}"
+    }
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operations related to users."
+    },
+    {
+      "name": "packages",
+      "description": "Operations related to packages."
+    }
+  ],
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "fid": {
+            "type": "integer",
+            "description": "User id."
+          },
+          "email": {
+            "type": "string",
+            "description": "User email."
+          },
+          "name": {
+            "type": "string",
+            "description": "User name."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User last name."
+          },
+          "password": {
+            "type": "string",
+            "description": "User password."
+          },
+          "salt": {
+            "type": "string",
+            "description": "Salt code associated with the user password."
+          },
+          "token": {
+            "type": "string",
+            "description": "Token for confirm email after registering and password recovery."
+          },
+          "proflie_photo": {
+            "type": "string",
+            "description": "User profile photo."
+          },
+          "id_admin": {
+            "type": "boolean",
+            "description": "User type admin or not."
+          },
+          "id_confirmed": {
+            "type": "boolean",
+            "description": "Confirmation of user account registration."
+          },
+          "id_enabled": {
+            "type": "boolean",
+            "description": "User is enabled or not."
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "last_name",
+          "password"
+        ],
+        "example": {
+          "email": "appboxdelivery@gmail.com",
+          "name": "Alan",
+          "last_name": "Turing",
+          "password": "Hello123456"
+        }
+      },
+      "Package": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Package id."
+          },
+          "receiver_name": {
+            "type": "string",
+            "description": "Name of the person receiving the package."
+          },
+          "date": {
+            "type": "dateonly",
+            "description": "Package creation date."
+          },
+          "weight": {
+            "type": "float",
+            "description": "Package weight in kilograms."
+          },
+          "address": {
+            "type": "string",
+            "description": "Package delivery address."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ongoing",
+              "delivered",
+              "pending"
+            ],
+            "description": "Package delivery status."
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "User id."
+          }
+        },
+        "required": [
+          "receiver_name",
+          "date",
+          "weight",
+          "address",
+          "status"
+        ],
+        "example": {
+          "receiver_name": "Carlos López",
+          "date": "2024-04-03",
+          "weight": 2,
+          "address": "Av. Independencia 5456, CABA",
+          "status": "pending"
+        }
+      }
+    },
+    "responses": {
+      "Ok": {
+        "description": "Ok"
+      },
+      "Unauthorized": {
+        "description": "(Unauthorized) There is no authorization to call service."
+      },
+      "NotFound": {
+        "description": "(NotFound) The information was not found."
+      },
+      "BadRequest": {
+        "description": "(BadRequest) The data sent is incorrect or there is mandatory data not sent."
+      },
+      "ServerError": {
+        "description": "InternalServerError"
+      }
+    }
+  },
+  "paths": {
+    "/api/users/register": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Register new delivery man or admin.",
+        "description": "Create a new delivery man.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
+                    "name": "Alan",
+                    "last_name": "Turing",
+                    "profile_photo": null,
+                    "is_admin": false,
+                    "is_confirmed": false,
+                    "is_enabled": false
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Log in",
+        "description": "Log in user and generate an authentication token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "email": "appboxdelivery@gmail.com",
+                  "password": "Hello123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
+                    "name": "Alan",
+                    "last_name": "Turing",
+                    "profile_photo": null,
+                    "is_admin": false,
+                    "is_confirmed": true,
+                    "is_enabled": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "412": {
+            "description": "Please confirm your account before trying to log in!"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Logout",
+        "description": "Logs out the user and removes the authentication token.",
+        "responses": {
+          "204": {
+            "description": "Logged out"
+          }
+        }
+      }
+    },
+    "/api/users/overwrite-password/{token}": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Overwrite password.",
+        "description": "Validate token again and overwrite password.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "Token to validate."
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "password": "Hello654321"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/deliverymen": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get all deliverymen.",
+        "description": "Get all deliverymen (Admin permissions are required to access this path.)",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": [
+                    {
+                      "id": 1,
+                      "email": "appboxdelivery@gmail.com",
+                      "name": "Alan",
+                      "last_name": "Turing",
+                      "profile_photo": null,
+                      "is_admin": false,
+                      "is_confirmed": false,
+                      "is_enabled": false
+                    },
+                    {
+                      "id": 2,
+                      "email": "nikola@email.com",
+                      "name": "Nikola",
+                      "last_name": "Tesla",
+                      "profile_photo": null,
+                      "is_admin": true,
+                      "is_confirmed": false,
+                      "is_enabled": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/single/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get single user.",
+        "description": "Gets information about a user based on their Id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "description": "User Id to obtain."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
+                    "name": "Alan",
+                    "last_name": "Turing",
+                    "profile_photo": null,
+                    "is_admin": false,
+                    "is_confirmed": false,
+                    "is_enabled": false,
+                    "packages": [
+                      {
+                        "id": "AX105",
+                        "receiver_name": "Carlos López",
+                        "date": "2024-04-03",
+                        "weight": 2,
+                        "address": "Av. Independencia 5456, CABA",
+                        "status": "pending",
+                        "user_id": 1
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Validate user authentication.",
+        "description": "Validates the user's token and returns their data.",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "User authentication token."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "id": 1,
+                    "email": "appboxdelivery@gmail.com",
+                    "name": "Alan",
+                    "last_name": "Turing",
+                    "profile_photo": null,
+                    "is_admin": false,
+                    "is_confirmed": true,
+                    "is_enabled": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/users/validate-token/{token}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Validate token.",
+        "description": "Validate the token that was sent to the user by email.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "Token to validate."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/confirm-email/{token}": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Confirm user account registration.",
+        "description": "Search the database for the user using the confirmation token and confirm the account.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "schema": {
+              "type": "string",
+              "description": "Token to search."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User confirmed."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/users/restore-password": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Send email to user.",
+        "description": "Send email with a link and token to recover the password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "email": "appboxdelivery@gmail.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": {
+                    "email": "appboxdelivery@gmail.com"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/add-package": {
+      "post": {
+        "tags": [
+          "packages"
+        ],
+        "summary": "Add a new package.",
+        "description": "Create a new package.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Package"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": {
+                    "id": "AX105",
+                    "receiver_name": "Carlos López",
+                    "date": "2024-04-03",
+                    "weight": 2,
+                    "address": "Av. Independencia 5456, CABA",
+                    "status": "pending",
+                    "user_id": null
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/": {
+      "get": {
+        "tags": [
+          "packages"
+        ],
+        "summary": "Get all packages.",
+        "description": "Get all packages.",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": [
+                    {
+                      "id": "AX105",
+                      "receiver_name": "Carlos López",
+                      "date": "2024-04-03",
+                      "weight": 2,
+                      "address": "Av. Independencia 5456, CABA",
+                      "status": "pending",
+                      "user_id": null
+                    },
+                    {
+                      "id": "AX106",
+                      "receiver_name": "María Martínez",
+                      "date": "2024-04-05",
+                      "weight": 25,
+                      "address": "Teodoro Bronzinni 3226, Mar del Plata",
+                      "status": "ongoing",
+                      "user_id": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/single/{id}": {
+      "get": {
+        "tags": [
+          "packages"
+        ],
+        "summary": "Get a package.",
+        "description": "Get a package based on it id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "description": "Id of the package to obtain."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": {
+                    "id": "AX105",
+                    "receiver_name": "Carlos López",
+                    "date": "2024-04-03",
+                    "weight": 2,
+                    "address": "Av. Independencia 5456, CABA",
+                    "status": "pending",
+                    "user_id": null
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/api/packages/{user_id}/{status}": {
+      "get": {
+        "tags": [
+          "packages"
+        ],
+        "summary": "Get packages.",
+        "description": "Get packages by user id and status package.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "integer",
+              "description": "User Id to get packages."
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "description": "Status package to get."
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  },
+                  "example": [
+                    {
+                      "id": "AX106",
+                      "receiver_name": "María Martínez",
+                      "date": "2024-04-05",
+                      "weight": 25,
+                      "address": "Teodoro Bronzinni 3226, Mar del Plata",
+                      "status": "ongoing",
+                      "user_id": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    }
+  }
+}
