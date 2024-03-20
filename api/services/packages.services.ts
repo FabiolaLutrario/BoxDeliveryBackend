@@ -25,8 +25,19 @@ class PackagesServices {
   }
   static getPackages(page: number = 1, pageSize: number = 15) {
     const offset = (page - 1) * pageSize;
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fullDate = () => {
+      if (month < 10) {
+        return `${year}-0${month}-${day}`;
+      } else {
+        return `${year}-${month}-${day}`;
+      }
+    };
     return Package.findAll({
-      where: { user_id: null },
+      where: { user_id: null, date: fullDate() },
       offset,
       limit: pageSize,
     });
