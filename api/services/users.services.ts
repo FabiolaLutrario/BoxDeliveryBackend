@@ -74,7 +74,7 @@ class UsersServices {
           token,
           password,
           is_admin,
-          is_confirmed: true,
+          is_confirmed,
         });
       })
       .catch((err) => {
