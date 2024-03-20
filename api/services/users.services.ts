@@ -47,7 +47,7 @@ class UsersServices {
     )
       throw new Error("Please complete all fields");
 
-    const { email, name, last_name, password /*is_confirmed*/ } = userData;
+    const { email, name, last_name, password, is_confirmed } = userData;
     let { is_admin } = userData;
 
     if (!is_admin) is_admin = false;
