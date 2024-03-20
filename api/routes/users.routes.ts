@@ -53,15 +53,15 @@ router.put("/overwrite-password/:token", UsersControllers.overwritePassword);
 router.get("/me", validateAuth, UsersControllers.me);
 
 router.put(
-  "/enabled-deliveryman/:id",
+  "/enable-deliveryman/:id",
   validateAuth,
-  UsersControllers.enabledDeliveryman
+  UsersControllers.enableDeliveryman
 );
 
 router.put(
-  "/disabled-deliveryman/:id",
+  "/disable-deliveryman/:id",
   validateAuth,
-  UsersControllers.disabledDeliveryman
+  UsersControllers.disableDeliveryman
 );
 
 export default router;

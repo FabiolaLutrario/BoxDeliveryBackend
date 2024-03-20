@@ -47,7 +47,7 @@ class UsersServices {
     )
       throw new Error("Please complete all fields");
 
-    const { email, name, last_name, password, is_confirmed } = userData;
+    const { email, name, last_name, password /*is_confirmed*/ } = userData;
     let { is_admin } = userData;
 
     if (!is_admin) is_admin = false;
@@ -74,7 +74,7 @@ class UsersServices {
           token,
           password,
           is_admin,
-          is_confirmed,
+          is_confirmed: true,
         });
       })
       .catch((err) => {
@@ -269,24 +269,41 @@ class UsersServices {
     return User.findOne({ where: { token } });
   }
 
-  static enabledDeliveryman(userId: number) {
-    return User.update({ is_enabled: true }, { where: { id: userId } })
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+  static enableDeliveryman(userId: number) {
+    return (
+      User.update(
+        { is_enabled: true },
+        { returning: true, where: { id: userId } }
+      )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .then(([_affectedRows, response]) => {
+          // eslint-disable-next-line no-console
+          // console.log(response);
+          return response;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        })
+    );
   }
 
-  static disabledDeliveryman(userId: number) {
-    return User.update({ is_enabled: false }, { where: { id: userId } })
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+  static disableDeliveryman(userId: number) {
+    return (
+      User.update(
+        { is_enabled: false },
+        { returning: true, where: { id: userId } }
+      )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .then(([_affectedRows, response]) => {
+          // eslint-disable-next-line no-console
+          console.log(response);
+
+          return response;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        })
+    );
   }
 }
 

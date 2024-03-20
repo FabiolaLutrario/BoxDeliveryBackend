@@ -300,30 +300,30 @@ class UsersControllers {
     });
   }
 
-  static enabledDeliveryman(req: Request, res: Response) {
-    UsersServices.enabledDeliveryman(parseInt(req.params.id))
+  static enableDeliveryman(req: Request, res: Response) {
+    UsersServices.enableDeliveryman(parseInt(req.params.id))
       .then((resp) => {
-        if (resp[0] === 1) res.status(200).send("user enabled successfully");
+        if (resp /*[0] === 1*/) res.status(200).send(resp[0]);
         else {
           res.status(422).send("error updating user");
         }
       })
       .catch((error) => {
-        console.error("Error when trying to enabled user:", error);
+        console.error("Error when trying to enable user:", error);
         return res.status(500).send("Internal Server Error");
       });
   }
 
-  static disabledDeliveryman(req: Request, res: Response) {
-    UsersServices.disabledDeliveryman(parseInt(req.params.id))
+  static disableDeliveryman(req: Request, res: Response) {
+    UsersServices.disableDeliveryman(parseInt(req.params.id))
       .then((resp) => {
-        if (resp[0] === 1) res.status(200).send("user disabled successfully");
+        if (resp /*[0] === 1*/) res.status(200).send(resp[0]);
         else {
           res.status(422).send("error updating user");
         }
       })
       .catch((error) => {
-        console.error("Error when trying to disabled user:", error);
+        console.error("Error when trying to disable user:", error);
         return res.status(500).send("Internal Server Error");
       });
   }
