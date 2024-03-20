@@ -277,8 +277,6 @@ class UsersServices {
       )
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .then(([_affectedRows, response]) => {
-          // eslint-disable-next-line no-console
-          // console.log(response);
           return response;
         })
         .catch((error) => {
@@ -295,8 +293,6 @@ class UsersServices {
       )
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .then(([_affectedRows, response]) => {
-          // eslint-disable-next-line no-console
-          console.log(response);
 
           return response;
         })
