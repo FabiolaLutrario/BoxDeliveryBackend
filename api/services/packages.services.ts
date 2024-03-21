@@ -37,7 +37,7 @@ class PackagesServices {
       }
     };
     return Package.findAll({
-      where: { user_id: null, date: fullDate() },
+      where: { user_id: null, date: fullDate(), status: "pending" },
       offset,
       limit: pageSize,
     });
