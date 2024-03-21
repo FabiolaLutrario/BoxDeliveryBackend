@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: Cancel Previous Redundant Builds
         uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
+        # with:
+        #   access_token: ${{ github.token }}
 
   lint:
     runs-on: ubuntu-20.04
@@ -52,8 +52,6 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
-      # - name: run tests
-      #   run: docker compose -f docker-compose-dev.yml up jest-tests
 
   build:
     runs-on: ubuntu-20.04
@@ -69,13 +67,6 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      # - name: Docker Build
-      #   run: |
-      #     docker build -t appbox -f Dockerfile.dev .
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: build-artifact
-      #     path: .
       - name: Generar Swagger JSON
         run: npm run generate-swagger
       - name: Copiar Swagger JSON
