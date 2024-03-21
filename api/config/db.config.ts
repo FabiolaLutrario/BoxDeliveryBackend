@@ -8,7 +8,7 @@ const db = new Sequelize(
   process.env.POSTGRES_DB_PASSWORD ?? "appbox",
   {
     host: "postgres-db",
-    // port: process.env.POSTGRES_DB_DOCKER_PORT,
+    //port: process.env.POSTGRES_DB_DOCKER_PORT,
     dialect: "postgres",
     logging: false,
   }
