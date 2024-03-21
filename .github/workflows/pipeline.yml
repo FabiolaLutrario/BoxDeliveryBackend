@@ -71,11 +71,11 @@ jobs:
         run: npm run generate-swagger
       - name: Copiar Swagger JSON
         run: cp swagger.json build/swagger.json
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifact
-          path: .
+      #- name: Upload artifact
+      #uses: actions/upload-artifact@v2
+      #with:
+      #name: build-artifact
+      #path: .
 
   test:
     needs: [lint, build]
@@ -88,14 +88,14 @@ jobs:
         with:
           cache: "npm"
           node-version: "20"
-      # - name: Install dependencies
-      #   run: npm ci
-      # - uses: actions/download-artifact@v2
-      #   with:
-      #     name: build-artifact
-      #     path: .
+      - name: Install dependencies
+        run: npm ci
+      #- uses: actions/download-artifact@v2
+      #with:
+      #name: build-artifact
+      #path: .
       - name: Test
         env:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-        run: npm run test
-        #run: docker compose -f docker-compose-dev.yml up jest-tests
+        #run: npm run test
+        run: docker compose -f docker-compose-dev.yml up jest-tests
