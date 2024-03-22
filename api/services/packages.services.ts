@@ -10,7 +10,17 @@ type PackageData = {
   user_id: number;
   // [key: string | symbol]: any;
 };
-
+const date = new Date();
+const day = date.getDate();
+const month = date.getMonth() + 1;
+const year = date.getFullYear();
+const fullDate = () => {
+  if (month < 10) {
+    return `${year}-0${month}-${day}`;
+  } else {
+    return `${year}-${month}-${day}`;
+  }
+};
 class PackagesServices {
   static addPackage(data: PackageData) {
     return new Promise((resolve, reject) => {
@@ -25,17 +35,6 @@ class PackagesServices {
   }
   static getPackages(page: number = 1, pageSize: number = 15) {
     const offset = (page - 1) * pageSize;
-    const date = new Date();
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    const fullDate = () => {
-      if (month < 10) {
-        return `${year}-0${month}-${day}`;
-      } else {
-        return `${year}-${month}-${day}`;
-      }
-    };
     return Package.findAll({
       where: { user_id: null, date: fullDate(), status: "pending" },
       offset,
@@ -130,10 +129,10 @@ class PackagesServices {
 
   static async assign(packageId: string, userId: string) {
     try {
-      const foundpackages = await Package.findAll({
-        where: { user_id: userId },
+      const foundpackagesFromToday = await Package.findAll({
+        where: { user_id: userId, date: fullDate() },
       });
-      if (foundpackages.length >= 10) {
+      if (foundpackagesFromToday.length >= 10) {
         throw new Error("You can't deliver more than 10 packages per day");
       } else {
         const foundPackage = await Package.findOne({
@@ -141,6 +140,8 @@ class PackagesServices {
         });
         if (!foundPackage)
           throw new Error("We could not find the package requested");
+        if (foundPackage.user_id !== null)
+          throw new Error("Package already assigned to a delivery man");
         foundPackage.user_id = parseInt(userId);
         foundPackage.save();
         return foundPackage;
