@@ -126,7 +126,7 @@ class PackagesServices {
         throw new Error(err);
       });
   }
-
+  // Hola como estas?
   static async assign(packageId: string, userId: string) {
     try {
       const foundpackagesFromToday = await Package.findAll({
