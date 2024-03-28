@@ -210,7 +210,7 @@ class UsersControllers {
           is_enabled: user.is_enabled,
         };
 
-        const token = createToken(payload, "1m");
+        const token = createToken(payload, "10m");
         user.token = token;
 
         return user.save().then(() => {
