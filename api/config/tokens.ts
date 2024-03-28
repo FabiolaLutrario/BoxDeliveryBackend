@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -24,7 +24,15 @@ function createToken(payload: Payload, duration?: string) {
 
 const verifyToken = (token: string) => {
   if (!secretKey) throw new Error("Secret Key not found");
-  return jwt.verify(token, secretKey);
+  try {
+    return jwt.verify(token, secretKey);
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      throw new Error("Token has expired");
+    } else {
+      throw new Error("Invalid token");
+    }
+  }
 };
 
 export { createToken, verifyToken };

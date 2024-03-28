@@ -210,7 +210,7 @@ class UsersControllers {
           is_enabled: user.is_enabled,
         };
 
-        const token = createToken(payload, "10m");
+        const token = createToken(payload, "1m");
         user.token = token;
 
         return user.save().then(() => {
@@ -269,26 +269,35 @@ class UsersControllers {
     if (!token)
       return res.status(401).send({ message: "Token does not exist" });
 
-    const user = verifyToken(token);
-    // eslint-disable-next-line no-console
-    console.log("respuesta de verify token", user);
+    try {
+      const user = verifyToken(token);
+      // eslint-disable-next-line no-console
+      console.log("respuesta de verify token", user);
 
-    if (!user) return res.sendStatus(401);
-    if (!password) return res.sendStatus(400).send("Password is required!");
-    return UsersServices.findOneUserByToken(token)
-      .then((user: User | null) => {
-        if (!user) return res.sendStatus(401);
+      if (!user) return res.sendStatus(401);
+      if (!password) return res.sendStatus(400).send("Password is required!");
+      return UsersServices.findOneUserByToken(token)
+        .then((user: User | null) => {
+          if (!user) return res.sendStatus(401);
 
-        user.token = null;
-        user.password = password;
-        return user.save().then(() => {
-          return res.sendStatus(200);
+          user.token = null;
+          user.password = password;
+          return user.save().then(() => {
+            return res.sendStatus(200);
+          });
+        })
+        .catch((error) => {
+          console.error("Error when trying to overwrite password:", error);
+          return res.status(500).send(error);
         });
-      })
-      .catch((error) => {
-        console.error("Error when trying to overwrite password:", error);
+    } catch (error) {
+      if ((error as Error).message === "Token has expired") {
+        return res.status(401).send({ message: "Token has expired" });
+      } else {
+        console.error("Error when verifying token:", error);
         return res.status(500).send(error);
-      });
+      }
+    }
   }
 
   static me(req: Request, res: Response) {
