@@ -64,4 +64,7 @@ router.put(
   UsersControllers.disableDeliveryman
 );
 
+// endpoints for testing
+router.delete("/delete/deliveryman/test", UsersControllers.deleteDeliveryman);
+
 export default router;
