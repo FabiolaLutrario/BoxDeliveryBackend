@@ -1,4 +1,5 @@
 import Package from "../models/Package.models";
+import { formattedDate, todayDate } from "../utils/date";
 
 type PackageData = {
   id: string;
@@ -10,17 +11,7 @@ type PackageData = {
   user_id: number;
   // [key: string | symbol]: any;
 };
-const date = new Date();
-const day = date.getDate();
-const month = date.getMonth() + 1;
-const year = date.getFullYear();
-const fullDate = () => {
-  if (month < 10) {
-    return `${year}-0${month}-${day}`;
-  } else {
-    return `${year}-${month}-${day}`;
-  }
-};
+
 class PackagesServices {
   static addPackage(data: PackageData) {
     return new Promise((resolve, reject) => {
@@ -36,7 +27,11 @@ class PackagesServices {
   static getPackages(page: number = 1, pageSize: number = 15) {
     const offset = (page - 1) * pageSize;
     return Package.findAll({
-      where: { user_id: null, date: fullDate(), status: "pending" },
+      where: {
+        user_id: null,
+        date: formattedDate(todayDate),
+        status: "pending",
+      },
       offset,
       limit: pageSize,
     });
@@ -130,7 +125,7 @@ class PackagesServices {
   static async assign(packageId: string, userId: string) {
     try {
       const foundpackagesFromToday = await Package.findAll({
-        where: { user_id: userId, date: fullDate() },
+        where: { user_id: userId, date: formattedDate(todayDate) },
       });
       if (foundpackagesFromToday.length >= 10) {
         throw new Error("You can't deliver more than 10 packages per day");
