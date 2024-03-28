@@ -4,7 +4,6 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 import { validateAuth } from "../middlewares/auth";
-import { escapeHtml } from "../utils/escape";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -17,19 +16,7 @@ class UsersControllers {
   }
 
   static registerUser(req: Request, res: Response) {
-    const userData = {
-      id: 1,
-      email: escapeHtml(req.body.email),
-      password: escapeHtml(req.body.password),
-      name: escapeHtml(req.body.name),
-      last_name: escapeHtml(req.body.last_name),
-      profile_photo: null,
-      is_admin: false,
-      is_confirmed: false,
-      is_enabled: false,
-    };
-
-    UsersServices.register(userData)
+    UsersServices.register(req.body)
       .then((user) => {
         const payload = {
           id: user.id,
@@ -41,7 +28,6 @@ class UsersControllers {
           is_confirmed: user.is_confirmed,
           is_enabled: user.is_enabled,
         };
-
         // Proceso de envío de correo omitido para entorno de prueba
         if (process.env.NODE_ENV !== "test") {
           // Solo enviar el correo electrónico si no estamos en un entorno de prueba
@@ -78,20 +64,7 @@ class UsersControllers {
   }
 
   static loginUser(req: Request, res: Response) {
-    const userData = {
-      id: 1,
-      email: escapeHtml(req.body.email),
-      password: req.body.password,
-      name: req.body.name,
-      last_name: req.body.last_name,
-      profile_photo: null,
-      is_admin: false,
-      is_confirmed: false,
-      is_enabled: false,
-    };
-
-    UsersServices.login(userData)
-
+    UsersServices.login(req.body)
       .then((response) =>
         res
           .status(200)
@@ -107,7 +80,6 @@ class UsersControllers {
           err.message === "Please confirm your account before trying to log in"
         )
           return res.status(412).send(err.message);
-
         return res.status(401).send(err.message);
       });
   }

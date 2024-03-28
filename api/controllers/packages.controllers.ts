@@ -36,11 +36,11 @@ const PackagesControllers = {
     const { date } = _req.params;
     PackagesServices.getNumberOfPacakgesAndPackagesDeliveredByDate(date)
       .then((packages: Package[]) => {
-        const ongoingPackages = packages.filter(
+        const deliveredPackages = packages.filter(
           (packageResult) => packageResult.status === "delivered"
         );
         res.status(200).send({
-          ongoingPackagesQuantity: ongoingPackages.length,
+          deliveredPackagesQuantity: deliveredPackages.length,
           packagesQuantity: packages.length,
         });
       })
